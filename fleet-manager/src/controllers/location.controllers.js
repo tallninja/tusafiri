@@ -38,7 +38,7 @@ exports.addLocation = async (req, res) => {
 };
 
 exports.editLocation = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   let data = null;
   try {
     data = await EditLocationSchema.validateAsync(req.body);
@@ -54,7 +54,7 @@ exports.editLocation = async (req, res) => {
 };
 
 exports.deleteLocation = (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   if (!location_id) {
     return res
       .status(Sc.BAD_REQUEST)
@@ -69,7 +69,7 @@ exports.deleteLocation = (req, res) => {
 };
 
 exports.getLocation = (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   if (!id) {
     return res.status(Sc.BAD_REQUEST).json({
       message: 'Please provide the location id in the URL parameters.',

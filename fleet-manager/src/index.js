@@ -19,7 +19,7 @@ app.use('/', routes);
 
 connectToDb();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5100;
 
 app.listen(PORT, (err) => {
   if (err) {

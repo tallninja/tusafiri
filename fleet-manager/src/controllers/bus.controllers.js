@@ -50,7 +50,7 @@ exports.addNewBus = async (req, res) => {
 };
 
 exports.editBus = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   const data = await EditBusSchema.validateAsync(req.body);
   if (!id) {
     return res
@@ -66,7 +66,7 @@ exports.editBus = async (req, res) => {
 };
 
 exports.deleteBus = (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
@@ -81,7 +81,7 @@ exports.deleteBus = (req, res) => {
 };
 
 exports.getBus = (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   if (!id) {
     return res
       .status(Sc.BAD_REQUEST)

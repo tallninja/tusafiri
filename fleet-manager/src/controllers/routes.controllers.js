@@ -76,7 +76,7 @@ exports.addRoute = async (req, res) => {
 };
 
 exports.editRoute = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   let data = null;
   try {
     data = await EditRouteSchema.validateAsync(req.body);
@@ -97,7 +97,7 @@ exports.editRoute = async (req, res) => {
 };
 
 exports.deleteRoute = (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
@@ -112,7 +112,7 @@ exports.deleteRoute = (req, res) => {
 };
 
 exports.getRoute = (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
