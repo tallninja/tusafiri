@@ -1,10 +1,20 @@
 const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const { StatusCodes: Sc } = require('http-status-codes');
+
+const routes = require('./routes');
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send({ message: 'Fleet Manager' });
-});
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  process.env.NODE_ENV === 'production' ? morgan('common') : morgan('dev')
+);
+
+app.use('/', routes);
 
 const PORT = process.env.PORT || 5000;
 
