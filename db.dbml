@@ -1,0 +1,130 @@
+Table passengers as Pass {
+  id int [pk, increment]
+  first_name varchar
+  last_name varchar
+  id_no int
+  email varchar
+  phone_number varchar
+  password varchar
+  created_at datetime
+  updated_at datetime
+}
+
+Enum role_names {
+  driver
+  fleet_manager
+  helpdesk
+  snm_manager // service and maintenance
+  admin
+}
+
+Table roles {
+  id int [pk, increment]
+  name role_names
+}
+
+Table employees as Emp {
+  id int [pk, increment]
+  first_name varchar
+  last_name varchar
+  id_no int
+  email varchar
+  phone_number varchar
+  employee_id varchar
+  password varchar
+  roles_id int
+  created_at datetime
+  updated_at datetime
+}
+
+Ref: Emp.roles_id < roles.id // one-to-many
+
+Table locations as Loc {
+  id int [pk, increment]
+  name varchar
+  lat float       // latitude
+  lng float       // longitude
+}
+
+Table routes as Rt {
+  id int [pk, increment]
+  name varchar
+  loc1_id int [ref: > Loc.id]
+  loc2_id int [ref: > Loc.id]
+}
+
+Table buses {
+  id int [pk, increment]
+  reg_no varchar
+  make varchar
+  yom int         // year of manufacture
+  capacity int
+  routes int [ref: > Rt.id]
+}
+
+Table journey {
+  id int [pk, increment]
+  bus_id int [ref: > buses.id]
+  route_id int [ref: > Rt.id]
+  from int [ref: > Loc.id]
+  to int [ref: > Loc.id]
+  departure_time datetime
+  arrival_time datetime
+}
+
+Table tickets {
+  id int [pk, increment]
+  passenger_id int [ref: > Pass.id]
+  bus_id int [ref: > buses.id]
+  seat_number int
+  payment_id int [ref: > payments.id]
+  from int [ref: > Loc.id]
+  to int [ref: > Loc.id]
+  valid_until datetime
+}
+
+Ref: bookings.ticket_id - tickets.id
+
+Table bookings {
+  id int [pk, increment]
+  passenger_id int [ref: > Pass.id]
+  bus_id int [ref: > buses.id]
+  from int [ref: > Loc.id]
+  to int [ref: > Loc.id]
+  ticket_id int
+  cancelled boolean [default: false]
+  created_at datetime
+  updated_at datetime
+}
+
+Table payments {
+  id int [pk, increment]
+  passenger int [ref: > Pass.id]
+  amount float
+  mpesa_id varchar
+  time datetime
+}
+
+
+Table couriers {
+  id int [pk, increment]
+  journey_id int [ref: > journey.id]
+  sender_name varchar
+  sender_phone varchar
+  recipient_name varchar
+  recipient_phone varchar
+  packages_id int [ref: > packages.id]
+}
+
+Table packages {
+  id int [pk, increment]
+  type package_types
+  weight float
+  description text
+}
+
+Enum package_types {
+  fragile
+  perishable
+  bulky
+}
