@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const { StatusCodes: Sc } = require('http-status-codes');
 
+const { connectToDb } = require('./models');
 const routes = require('./routes');
 
 const app = express();
@@ -15,6 +16,8 @@ app.use(
 );
 
 app.use('/', routes);
+
+connectToDb();
 
 const PORT = process.env.PORT || 5000;
 
