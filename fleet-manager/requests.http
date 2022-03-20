@@ -40,10 +40,10 @@ Content-Type: application/json
     "pointB": "KMG"
 }
 
-### GET routes
+### FETCH routes
 GET http://localhost:5100/api/routes/
 
-### GET route
+### FETCH route
 GET http://localhost:5100/api/routes/62376daf14f74e0e7313f31c
 
 ### EDIT route
@@ -65,7 +65,7 @@ POST http://localhost:5100/api/buses/new
 Content-Type: application/json
 
 {
-    "regNo": "KCX 220L",
+    "regNo": "KCX 220P",
     "make": "Scania",
     "yom": 2019,
     "capacity": 50,
@@ -76,10 +76,10 @@ Content-Type: application/json
 GET http://localhost:5100/api/buses/
 
 ### FETCH bus
-GET http://localhost:5100/api/buses/6237826a9679682ca36af034
+GET http://localhost:5100/api/buses/623787d9cc9806f8625c803e
 
 ### EDIT bus
-PATCH http://localhost:5100/api/buses/edit/6237826a9679682ca36af034
+PATCH http://localhost:5100/api/buses/edit/623787d9cc9806f8625c803e
 Content-Type: application/json
 
 {
@@ -88,9 +88,20 @@ Content-Type: application/json
 }
 
 ### ADD_ROUTE
-PATCH http://localhost:5100/api/buses/add-route?bus_id=6237826a9679682ca36af034
+PATCH http://localhost:5100/api/buses/add-route?bus_id=623787d9cc9806f8625c803e
 Content-Type: application/json
 
 {
-    "route_name": "A5"
+    "route_name": "A2"
 }
+
+### REMOVE_ROUTE
+PATCH http://localhost:5100/api/buses/remove-route?bus_id=623787d9cc9806f8625c803e
+Content-Type: application/json
+
+{
+    "route_name": "A2"
+}
+
+### DELETE route
+DELETE http://localhost:5100/api/buses/delete/623787d9cc9806f8625c803e
