@@ -7,7 +7,7 @@ const handleDbError = (err, res) => {
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
 
-const BusSchema = Joi.object({
+const CreateBusSchema = Joi.object({
   regNo: Joi.string(),
   make: Joi.string(),
   yom: Joi.number().min(2010).max(new Date().getFullYear()),
@@ -15,8 +15,15 @@ const BusSchema = Joi.object({
   routes: Joi.array().optional(),
 });
 
+const EditBusSchema = Joi.object({
+  regNo: Joi.string().optional(),
+  make: Joi.string().optional(),
+  yom: Joi.number().min(2010).max(new Date().getFullYear()).optional(),
+  capacity: Joi.number().min(1).max(50).optional(),
+});
+
 exports.addNewBus = async (req, res) => {
-  const busDetails = await BusSchema.validateAsync(req.body);
+  const busDetails = await CreateBusSchema.validateAsync(req.body);
   new Bus(busDetails).save((err, bus) => {
     if (err) {
       return handleDbError(err, res);
@@ -42,58 +49,50 @@ exports.addNewBus = async (req, res) => {
   });
 };
 
-exports.editBus = (req, res) => {
-  const { bus_id } = req.query;
-  const data = req.body;
-  if (bus_id) {
-    Bus.updateOne(
-      {
-        _id: bus_id,
-      },
-      data
-    ).exec((err) => {
-      if (err) {
-        return handleDbError(err, res);
-      }
-      return res.status(Sc.OK).json({ message: 'Bus details edited.' });
-    });
-  } else {
+exports.editBus = async (req, res) => {
+  const { id } = req.query;
+  const data = await EditBusSchema.validateAsync(req.body);
+  if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
-      .json({ message: 'Please provide the bus_id in the URL parameters.' });
+      .json({ message: 'Please provide the id in the URL parameters.' });
   }
+  Bus.findByIdAndUpdate(id, data).exec((err) => {
+    if (err) {
+      return handleDbError(err, res);
+    }
+    return res.status(Sc.OK).json({ message: 'Bus details edited.' });
+  });
 };
 
 exports.deleteBus = (req, res) => {
-  const { bus_id } = req.query;
-  if (bus_id) {
-    Bus.findByIdAndDelete(bus_id, (err) => {
-      if (err) {
-        return handleDbError(err, res);
-      }
-      return res.status(Sc.OK).json({ message: 'Bus deleted from DB.' });
-    });
-  } else {
+  const { id } = req.query;
+  if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
-      .json({ message: 'Please provide the bus_id in the URL parameters.' });
+      .json({ message: 'Please provide the bus id in the URL parameters.' });
   }
+  Bus.findByIdAndDelete(bus_id, (err) => {
+    if (err) {
+      return handleDbError(err, res);
+    }
+    return res.status(Sc.OK).json({ message: 'Bus deleted from DB.' });
+  });
 };
 
 exports.getBus = (req, res) => {
-  const { bus_id } = req.query;
-  if (bus_id) {
-    Bus.findById(bus_id).exec((err, bus) => {
-      if (err) {
-        handleDbError(err, res);
-      }
-      return res.status(Sc.OK).json(bus);
-    });
-  } else {
+  const { id } = req.query;
+  if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
-      .json({ message: 'Please provide the bus_id in the URL parameters.' });
+      .json({ message: 'Please provide the bus id in the URL parameters.' });
   }
+  Bus.findById(bus_id).exec((err, bus) => {
+    if (err) {
+      handleDbError(err, res);
+    }
+    return res.status(Sc.OK).json(bus);
+  });
 };
 
 exports.getBuses = (req, res) => {
