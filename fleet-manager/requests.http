@@ -1,1 +1,96 @@
-GET http://localhost:5000/
+### Root route
+GET http://localhost:5100/
+
+### CREATE Location
+POST http://localhost:5100/api/locations/new
+Content-Type: application/json
+
+{
+    "name": "Kakamega",
+    "code": "KMG",
+    "lat": 3.2247590,
+    "lng": 6.3330776
+}
+
+### FETCH Locations
+GET http://localhost:5100/api/locations/
+
+### FETCH Location
+GET http://localhost:5100/api/locations/623751033312c2f1e6a35ce0
+
+### EDIT Location
+PATCH http://localhost:5100/api/locations/edit/623751033312c2f1e6a35ce0
+Content-Type: application/json
+
+{
+    "lat": 15.000001,
+    "lng": 70.000002
+}
+
+### DELETE Location
+DELETE http://localhost:5100/api/locations/delete/623751033312c2f1e6a35ce0
+
+### CREATE route
+POST http://localhost:5100/api/routes/new
+Content-Type: application/json
+
+{
+    "name": "A4",
+    "pointA": "MSA",
+    "pointB": "KMG"
+}
+
+### GET routes
+GET http://localhost:5100/api/routes/
+
+### GET route
+GET http://localhost:5100/api/routes/62376daf14f74e0e7313f31c
+
+### EDIT route
+PATCH http://localhost:5100/api/routes/edit/62376daf14f74e0e7313f31c
+Content-Type: application/json
+
+{
+    "name": "A6",
+    "pointA": "NRB",
+    "pointB": "ELD"
+}
+
+### Delete route
+DELETE http://localhost:5100/api/routes/delete/62376daf14f74e0e7313f31c
+
+
+### CREATE Bus
+POST http://localhost:5100/api/buses/new
+Content-Type: application/json
+
+{
+    "regNo": "KCX 220L",
+    "make": "Scania",
+    "yom": 2019,
+    "capacity": 50,
+    "routes": ["A1"]
+}
+
+### FETCH all buses
+GET http://localhost:5100/api/buses/
+
+### FETCH bus
+GET http://localhost:5100/api/buses/6237826a9679682ca36af034
+
+### EDIT bus
+PATCH http://localhost:5100/api/buses/edit/6237826a9679682ca36af034
+Content-Type: application/json
+
+{
+    "yom": 2018,
+    "capacity": 45
+}
+
+### ADD_ROUTE
+PATCH http://localhost:5100/api/buses/add-route?bus_id=6237826a9679682ca36af034
+Content-Type: application/json
+
+{
+    "route_name": "A5"
+}

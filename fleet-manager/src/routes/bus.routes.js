@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const {
-  addNewBus,
+  addBus,
   editBus,
   deleteBus,
   getBus,
@@ -12,10 +12,10 @@ const {
 
 router.get('/', getBuses);
 router.get('/:id', getBus);
-router.post('/new', addNewBus);
+router.post('/new', addBus);
 router.patch('/edit/:id', editBus);
 router.delete('/delete/:id', deleteBus);
-router.post('/add-route', addRoute);
-router.post('/remove-route', removeRoute);
+router.patch('/add-route', addRoute);
+router.patch('/remove-route', removeRoute);
 
 module.exports = router;

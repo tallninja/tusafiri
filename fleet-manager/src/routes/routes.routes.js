@@ -11,7 +11,7 @@ const {
 router.get('/', getRoutes);
 router.get('/:id', getRoute);
 router.post('/new', addRoute);
-router.patch('/edit', editRoute);
+router.patch('/edit/:id', editRoute);
 router.delete('/delete/:id', deleteRoute);
 
 module.exports = router;

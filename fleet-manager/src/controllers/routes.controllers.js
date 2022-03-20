@@ -2,7 +2,6 @@ const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Route, Location } = require('../models');
-const res = require('express/lib/response');
 
 const handleDbError = (err, res) => {
   console.log('Error:', err);
@@ -12,88 +11,168 @@ const handleDbError = (err, res) => {
 const CreateRouteSchema = Joi.object({
   name: Joi.string(),
   pointA: Joi.string().length(3),
-  pontB: Joi.string().length(3),
+  pointB: Joi.string().length(3),
 });
 
 const EditRouteSchema = Joi.object({
   name: Joi.string().optional(),
   pointA: Joi.string().length(3).optional(),
-  pontB: Joi.string().length(3).optional(),
+  pointB: Joi.string().length(3).optional(),
 });
 
 exports.addRoute = async (req, res) => {
-  let routeDetails = null;
-  try {
-    routeDetails = CreateRouteSchema.validateAsync(req.body);
-  } catch (err) {
-    return res.status(Sc.BAD_REQUEST).json(err);
-  }
+  CreateRouteSchema.validateAsync(req.body)
+    .then((validatedData) => {
+      let routeDetails = validatedData;
 
-  let { name, pointA, pointB } = routeDetails;
+      let { name, pointA, pointB } = routeDetails;
 
-  Location.findOne({
-    code: pointA,
-  }).exec((err, location) => {
-    if (err) {
-      return handleDbError(err, res);
-    }
-    if (!location) {
-      return res
-        .status(Sc.BAD_REQUEST)
-        .json({ message: `${location} location does not exist.` });
-    }
-
-    pointA = location._id;
-
-    Location.findOne({
-      code: pointB,
-    }).exec((err, location) => {
-      if (err) {
-        return handleDbError(err, res);
-      }
-      if (!location) {
-        return res
-          .status(Sc.BAD_REQUEST)
-          .json({ message: `${location} location does not exist.` });
-      }
-
-      pointB = location._id;
-
-      new Route({
-        name: name,
-        pointA: pointA,
-        pointB: pointB,
-      }).save((err, route) => {
+      Route.findOne({ name: name }).exec((err, route) => {
         if (err) {
           return handleDbError(err, res);
         }
-        return res
-          .status(Sc.OK)
-          .json({ message: `${route.name} route has beed added.` });
+        if (route) {
+          return res
+            .status(Sc.BAD_REQUEST)
+            .json({ message: `${route.name} already exists.` });
+        }
+        Location.findOne({
+          code: pointA,
+        }).exec((err, location) => {
+          if (err) {
+            return handleDbError(err, res);
+          }
+          if (!location) {
+            return res
+              .status(Sc.BAD_REQUEST)
+              .json({ message: `${location} location does not exist.` });
+          }
+
+          pointA = location._id;
+
+          Location.findOne({
+            code: pointB,
+          }).exec((err, location) => {
+            if (err) {
+              return handleDbError(err, res);
+            }
+            if (!location) {
+              return res
+                .status(Sc.BAD_REQUEST)
+                .json({ message: `${location} location does not exist.` });
+            }
+
+            pointB = location._id;
+
+            new Route({
+              name: name,
+              pointA: pointA,
+              pointB: pointB,
+            }).save((err, route) => {
+              if (err) {
+                return handleDbError(err, res);
+              }
+              console.log('Info:', `${route.name} was created.`);
+              return res.status(Sc.OK).json(route);
+            });
+          });
+        });
       });
+    })
+    .catch((err) => {
+      if (err) {
+        return res.status(Sc.BAD_REQUEST).json(err);
+      }
     });
-  });
 };
 
 exports.editRoute = async (req, res) => {
   const { id } = req.params;
-  let data = null;
-  try {
-    data = await EditRouteSchema.validateAsync(req.body);
-  } catch (err) {
-    return res.status(Sc.BAD_REQUEST).json(err);
-  }
   if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
-      .json({ message: 'Please provide the route_id in the URL parameters.' });
+      .json({ message: 'Please provide the route id.' });
   }
-  Route.findByIdAndUpdate(id, data).exec((err, route) => {
-    if (err) {
-      return handleDbError(err, res);
-    }
-    return res.status(Sc.OK).json({ message: `${route.name} route edited.` });
-  });
+
+  EditRouteSchema.validateAsync(req.body)
+    .then((validatedData) => {
+      let updatedFields = validatedData;
+
+      if (updatedFields.pointA) {
+        let locationCode = updatedFields.pointA;
+        Location.findOne({ code: locationCode }).exec((err, location) => {
+          if (err) {
+            return handleDbError(location);
+          }
+          if (!location) {
+            return res
+              .status(Sc.BAD_REQUEST)
+              .json({ message: `${locationCode} not found.` });
+          }
+          updatedFields.pointA = location._id;
+        });
+      }
+
+      if (updatedFields.pointB) {
+        let locationCode = updatedFields.pointB;
+        Location.findOne({ code: locationCode }).exec((err, location) => {
+          if (err) {
+            return handleDbError(location);
+          }
+          if (!location) {
+            return res
+              .status(Sc.BAD_REQUEST)
+              .json({ message: `${locationCode} not found.` });
+          }
+          updatedFields.pointB = location._id;
+        });
+      }
+
+      Route.findOne({ name: updatedFields.name }).exec((err, route) => {
+        if (err) {
+          return handleDbError(err);
+        }
+
+        if (route) {
+          return res
+            .status(Sc.BAD_REQUEST)
+            .json({ message: `${route.name} exists.` });
+        }
+
+        Route.findById(id).exec((err, route) => {
+          if (err) {
+            return handleDbError(err, res);
+          }
+
+          if (!route) {
+            return res
+              .status(Sc.BAD_REQUEST)
+              .json({ message: 'Route not found' });
+          }
+
+          route.update({ $set: updatedFields }, (err) => {
+            if (err) {
+              return handleDbError(err, res);
+            }
+
+            console.log('Info:', `${route.name} was edited.`);
+
+            Route.findById(route._id)
+              .populate(['pointA', 'pointB'])
+              .exec((err, updatedRoute) => {
+                if (err) {
+                  return handleDbError(err, res);
+                }
+
+                return res.status(Sc.OK).json(updatedRoute);
+              });
+          });
+        });
+      });
+    })
+    .catch((err) => {
+      return res.status(Sc.BAD_REQUEST).json(err);
+    });
 };
 
 exports.deleteRoute = (req, res) => {
@@ -101,13 +180,22 @@ exports.deleteRoute = (req, res) => {
   if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
-      .json({ message: 'Please provide the route id in the URL parameters.' });
+      .json({ message: 'Please provide the route id.' });
   }
-  Route.findByIdAndDelete(route_id, (err, route) => {
+  Route.findById(id, (err, route) => {
     if (err) {
       return handleDbError(err, res);
     }
-    return res.status(Sc.OK).json({ message: `${route.name} deleted.` });
+    if (!route) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Route not found' });
+    }
+    route.delete((err) => {
+      if (err) {
+        return handleDbError(err, res);
+      }
+      console.log('Info:', `${route.name} deleted.`);
+      return res.status(Sc.OK).json(route);
+    });
   });
 };
 
@@ -116,20 +204,28 @@ exports.getRoute = (req, res) => {
   if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
-      .json({ message: 'Please provide the route id in the URL parameters.' });
+      .json({ message: 'Please provide the route id.' });
   }
-  Route.findById(id).exec((err, route) => {
-    if (err) {
-      return handleDbError(err, res);
-    }
-  });
+  Route.findById(id)
+    .populate(['pointA', 'pointB'])
+    .exec((err, route) => {
+      if (err) {
+        return handleDbError(err, res);
+      }
+      if (!route) {
+        return res.status(Sc.BAD_REQUEST).json({ message: 'Route not found' });
+      }
+      return res.status(Sc.BAD_REQUEST).json(route);
+    });
 };
 
 exports.getRoutes = (req, res) => {
-  Route.find().exec((err, routes) => {
-    if (err) {
-      return handleDbError(err, res);
-    }
-    return res.status(Sc.OK).json(routes);
-  });
+  Route.find()
+    .populate(['pointA', 'pointB'])
+    .exec((err, routes) => {
+      if (err) {
+        return handleDbError(err, res);
+      }
+      return res.status(Sc.OK).json(routes);
+    });
 };
