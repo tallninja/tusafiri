@@ -33,38 +33,68 @@ exports.addLocation = async (req, res) => {
     if (err) {
       return handleDbError(err, res);
     }
-    return res.status(Sc.OK).json({ message: `${location.name} added.` });
+    console.log('Info:', `${location.name} was created.`);
+    return res.status(Sc.OK).json(location);
   });
 };
 
 exports.editLocation = async (req, res) => {
   const { id } = req.params;
-  let data = null;
+  let updatedFields = null;
   try {
-    data = await EditLocationSchema.validateAsync(req.body);
+    updatedFields = await EditLocationSchema.validateAsync(req.body);
   } catch (err) {
     return res.status(Sc.BAD_REQUEST).json(err);
   }
-  Location.findByIdAndUpdate(id, data).exec((err, location) => {
+  Location.findById(id).exec((err, location) => {
     if (err) {
       return handleDbError(err, res);
     }
-    return res.status(Sc.OK).json({ message: `${location.name} edited.` });
+    if (!location) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Location not found.' });
+    }
+    location.updateOne({ $set: updatedFields }, (err) => {
+      if (err) {
+        return handleDbError(err, res);
+      }
+      console.log('Info:', `${updatedLocation.name} was edited.`);
+      Location.findById(id).exec((err, updatedLocation) => {
+        if (err) {
+          return handleDbError(err, res);
+        }
+        return res.status(Sc.OK).json(updatedLocation);
+      });
+    });
   });
 };
 
 exports.deleteLocation = (req, res) => {
   const { id } = req.params;
-  if (!location_id) {
+  if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
-      .json({ message: 'Please provide location_id in the URL parameters.' });
+      .json({ message: 'Please provide location id.' });
   }
-  Location.findByIdAndDelete(location_id).exec((err, location) => {
+  Location.findById(id).exec((err, location) => {
     if (err) {
       return handleDbError(err, res);
     }
-    return res.status(Sc.OK).json({ message: `${location} deleted.` });
+    if (!location) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Location not found.' });
+    }
+    location.delete((err) => {
+      if (err) {
+        return handleDbError(err, res);
+      }
+      console.log('Info:', `${location.name} was deleted.`);
+      return res
+        .status(Sc.OK)
+        .json({ message: `${location.name} was deleted.` });
+    });
   });
 };
 
@@ -72,12 +102,17 @@ exports.getLocation = (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(Sc.BAD_REQUEST).json({
-      message: 'Please provide the location id in the URL parameters.',
+      message: 'Please provide the location id.',
     });
   }
   Location.findById(id).exec((err, location) => {
     if (err) {
       return handleDbError(err, res);
+    }
+    if (!location) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Location not found.' });
     }
     return res.status(Sc.OK).json(location);
   });
