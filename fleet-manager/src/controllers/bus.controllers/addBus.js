@@ -31,7 +31,14 @@ module.exports = (req, res) => {
             }
 
             console.log('Info:', `${bus.regNo} was added.`);
-            return res.status(Sc.OK).json(bus);
+            Bus.findById(bus._id)
+              .populate({ path: 'routes', populate: ['pointA', 'pointB'] })
+              .exec((err, newBus) => {
+                if (err) {
+                  return handleDbError(err, res);
+                }
+                return res.status(Sc.OK).json(newBus);
+              });
           });
         });
       } else {
@@ -39,9 +46,15 @@ module.exports = (req, res) => {
           if (err) {
             return handleDbError(err);
           }
-
           console.log('Info:', `${bus.regNo} was added.`);
-          return res.status(Sc.OK).json(bus);
+          Bus.findById(bus._id)
+            .populate({ path: 'routes', populate: ['pointA', 'pointB'] })
+            .exex((err, newBus) => {
+              if (err) {
+                return handleDbError(err, res);
+              }
+              return res.status(Sc.OK).json(newBus);
+            });
         });
       }
     })

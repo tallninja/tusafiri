@@ -66,8 +66,16 @@ module.exports = (req, res) => {
               if (err) {
                 return handleDbError(err, res);
               }
+
               console.log('Info:', `${route.name} was created.`);
-              return res.status(Sc.OK).json(route);
+              Route.findById(route._id)
+                .populate(['pointA', 'pointB'])
+                .exec((err, newRoute) => {
+                  if (err) {
+                    return handleDbError(err, res);
+                  }
+                  return res.status(Sc.OK).json(newRoute);
+                });
             });
           });
         });

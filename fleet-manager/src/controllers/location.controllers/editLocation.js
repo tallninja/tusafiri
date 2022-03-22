@@ -33,7 +33,7 @@ module.exports = (req, res) => {
           if (err) {
             return handleDbError(err, res);
           }
-          console.log('Info:', `${updatedLocation.name} was edited.`);
+          console.log('Info:', `${location.name} was edited.`);
           Location.findById(id).exec((err, updatedLocation) => {
             if (err) {
               return handleDbError(err, res);

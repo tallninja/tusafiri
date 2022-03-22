@@ -78,7 +78,7 @@ module.exports = (req, res) => {
               .json({ message: 'Route not found' });
           }
 
-          route.update({ $set: updatedFields }, (err) => {
+          route.updateOne({ $set: updatedFields }, (err) => {
             if (err) {
               return handleDbError(err, res);
             }

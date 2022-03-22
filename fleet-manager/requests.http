@@ -6,20 +6,20 @@ POST http://localhost:5100/api/locations/new
 Content-Type: application/json
 
 {
-    "name": "Kakamega",
-    "code": "KMG",
-    "lat": 3.2247590,
-    "lng": 6.3330776
+    "name": "Bungoma",
+    "code": "BNG",
+    "lat": 2.2247590,
+    "lng": 9.3330776
 }
 
 ### FETCH Locations
 GET http://localhost:5100/api/locations/
 
 ### FETCH Location
-GET http://localhost:5100/api/locations/623751033312c2f1e6a35ce0
+GET http://localhost:5100/api/locations/6239730ff87dc6d1af4fc24d
 
 ### EDIT Location
-PATCH http://localhost:5100/api/locations/edit/623751033312c2f1e6a35ce0
+PATCH http://localhost:5100/api/locations/edit/6239730ff87dc6d1af4fc24d
 Content-Type: application/json
 
 {
@@ -28,36 +28,35 @@ Content-Type: application/json
 }
 
 ### DELETE Location
-DELETE http://localhost:5100/api/locations/delete/623751033312c2f1e6a35ce0
+DELETE http://localhost:5100/api/locations/delete/6239730ff87dc6d1af4fc24d
 
 ### CREATE route
 POST http://localhost:5100/api/routes/new
 Content-Type: application/json
 
 {
-    "name": "A4",
-    "pointA": "MSA",
-    "pointB": "KMG"
+    "name": "A7",
+    "pointA": "ELD",
+    "pointB": "MSA"
 }
 
 ### FETCH routes
 GET http://localhost:5100/api/routes/
 
 ### FETCH route
-GET http://localhost:5100/api/routes/62376daf14f74e0e7313f31c
+GET http://localhost:5100/api/routes/623973c170002adbd553f5be
 
 ### EDIT route
-PATCH http://localhost:5100/api/routes/edit/62376daf14f74e0e7313f31c
+PATCH http://localhost:5100/api/routes/edit/623973c170002adbd553f5be
 Content-Type: application/json
 
 {
-    "name": "A6",
-    "pointA": "NRB",
+    "pointA": "MSA",
     "pointB": "ELD"
 }
 
 ### Delete route
-DELETE http://localhost:5100/api/routes/delete/62376daf14f74e0e7313f31c
+DELETE http://localhost:5100/api/routes/delete/623973c170002adbd553f5be
 
 
 ### CREATE Bus
@@ -65,43 +64,42 @@ POST http://localhost:5100/api/buses/new
 Content-Type: application/json
 
 {
-    "regNo": "KCX 220P",
-    "make": "Scania",
-    "yom": 2019,
+    "regNo": "KCS 121A",
+    "make": "Mazda",
+    "yom": 2016,
     "capacity": 50,
-    "routes": ["A1"]
+    "routes": ["A1", "A2"]
 }
 
 ### FETCH all buses
 GET http://localhost:5100/api/buses/
 
 ### FETCH bus
-GET http://localhost:5100/api/buses/623787d9cc9806f8625c803e
+GET http://localhost:5100/api/buses/6239745a70002adbd553f5d1
 
 ### EDIT bus
-PATCH http://localhost:5100/api/buses/edit/623787d9cc9806f8625c803e
+PATCH http://localhost:5100/api/buses/edit/6239745a70002adbd553f5d1
 Content-Type: application/json
 
 {
-    "yom": 2018,
-    "capacity": 45
+    "yom": 2017
 }
 
 ### ADD_ROUTE
-PATCH http://localhost:5100/api/buses/add-route?bus_id=623787d9cc9806f8625c803e
+PATCH http://localhost:5100/api/buses/add-route?bus_id=6239745a70002adbd553f5d1
 Content-Type: application/json
 
 {
-    "route_name": "A2"
+    "route_name": "A3"
 }
 
 ### REMOVE_ROUTE
-PATCH http://localhost:5100/api/buses/remove-route?bus_id=623787d9cc9806f8625c803e
+PATCH http://localhost:5100/api/buses/remove-route?bus_id=6239745a70002adbd553f5d1
 Content-Type: application/json
 
 {
-    "route_name": "A2"
+    "route_name": "A3"
 }
 
-### DELETE route
-DELETE http://localhost:5100/api/buses/delete/623787d9cc9806f8625c803e
+### DELETE bus
+DELETE http://localhost:5100/api/buses/delete/6239777274d1eedb9ac3525b

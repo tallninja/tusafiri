@@ -27,7 +27,7 @@ module.exports = (req, res) => {
         if (!bus) {
           return res.status(Sc.BAD_REQUEST).json({ message: 'Bus not found.' });
         }
-        bus.update({ $set: updatedFields }, (err) => {
+        bus.updateOne({ $set: updatedFields }, (err) => {
           if (err) {
             return handleDbError(err, res);
           }
