@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const app = express();
 
 const routes = require('./routes');
+const { connectToDb, initDb } = require('./models');
 
 app.use(cors());
 app.use(express.json());
@@ -12,6 +13,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   process.env.NODE_ENV === 'production' ? morgan('common') : morgan('dev')
 );
+
+connectToDb();
+initDb();
 
 app.use('/', routes);
 

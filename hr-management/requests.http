@@ -1,2 +1,48 @@
 ### Root route
 GET http://localhost:5200/
+
+### CREATE employee
+POST http://localhost:5200/api/employees/new
+Content-Type: application/json
+
+{
+    "firstName": "Ernest",
+    "lastName": "Wambua",
+    "idNo": 37281546,
+    "email": "ernestwambua2@gmail.com",
+    "phoneNumber": "+254719286396",
+    "employeeId": "DRV0001/2012",
+    "password": "password",
+    "role": "driver"
+}
+
+### FETCH employees
+GET http://localhost:5200/api/employees/
+
+### FETCH employee
+GET http://localhost:5200/api/employees/6239a7a4a01f163aa98b247a
+
+### EDIT employee
+PATCH http://localhost:5200/api/employees/edit/6239a7a4a01f163aa98b247a
+Content-Type: application/json
+
+{
+    "email": "ernestwambua@gmail.com"
+}
+
+### Change password
+PATCH http://localhost:5200/api/employees/change-password?employee_id=6239a7a4a01f163aa98b247a
+Content-Type: application/json
+
+{
+    "oldPassword": "password",
+    "newPassword": "password2"
+}
+
+### Change role
+PATCH http://localhost:5200/api/employees/change-role?employee_id=6239a7a4a01f163aa98b247a
+Content-Type: application/json
+
+{
+    "roleName": "admin"
+}
