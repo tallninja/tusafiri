@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Route, Location } = require('../../models');

@@ -6,7 +6,7 @@ const {
   deleteRoute,
   getRoute,
   getRoutes,
-} = require('../controllers/routes.controllers');
+} = require('../controllers/route.controllers');
 
 router.get('/', getRoutes);
 router.get('/:id', getRoute);
