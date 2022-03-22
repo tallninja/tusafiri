@@ -15,32 +15,37 @@ const CreateBusSchema = Joi.object({
   routes: Joi.array().optional(),
 });
 
-module.exports = async (req, res) => {
-  const busDetails = await CreateBusSchema.validateAsync(req.body);
-  if (busDetails.routes) {
-    Route.find({ name: { $in: busDetails.routes } }).exec((err, routes) => {
-      if (err) {
-        return handleDbError(err, res);
+module.exports = (req, res) => {
+  CreateBusSchema.validateAsync(req.body)
+    .then((busDetails) => {
+      if (busDetails.routes) {
+        Route.find({ name: { $in: busDetails.routes } }).exec((err, routes) => {
+          if (err) {
+            return handleDbError(err, res);
+          }
+
+          busDetails.routes = routes.map((route) => route._id);
+          new Bus(busDetails).save((err, bus) => {
+            if (err) {
+              return handleDbError(err, res);
+            }
+
+            console.log('Info:', `${bus.regNo} was added.`);
+            return res.status(Sc.OK).json(bus);
+          });
+        });
+      } else {
+        new Bus(busDetails).save((err, bus) => {
+          if (err) {
+            return handleDbError(err);
+          }
+
+          console.log('Info:', `${bus.regNo} was added.`);
+          return res.status(Sc.OK).json(bus);
+        });
       }
-
-      busDetails.routes = routes.map((route) => route._id);
-      new Bus(busDetails).save((err, bus) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
-
-        console.log('Info:', `${bus.regNo} was added.`);
-        return res.status(Sc.OK).json(bus);
-      });
+    })
+    .catch((err) => {
+      return res.status(Sc.BAD_REQUEST).json(err);
     });
-  } else {
-    new Bus(busDetails).save((err, bus) => {
-      if (err) {
-        return handleDbError(err);
-      }
-
-      console.log('Info:', `${bus.regNo} was added.`);
-      return res.status(Sc.OK).json(bus);
-    });
-  }
 };
