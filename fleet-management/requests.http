@@ -67,7 +67,7 @@ Content-Type: application/json
     "regNo": "KCA 111A",
     "make": "Scania",
     "yom": 2016,
-    "capacity": 50,
+    "capacity": 50
 }
 
 ### FETCH all buses

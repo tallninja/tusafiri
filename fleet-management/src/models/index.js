@@ -17,5 +17,7 @@ module.exports = {
   Location: require('./Location'),
   Route: require('./Route'),
   Journey: require('./Journey'),
+  Employee: mongoose.model('drivers', new mongoose.Schema({}), 'drivers'),
+  Role: mongoose.model('roles', new mongoose.Schema({}), 'roles'),
   Seat: require('./Seat'),
 };
