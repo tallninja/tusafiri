@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Journey, Seat } = require('../../models');
+const { Journey, Bus, Route, Seat } = require('../../models');
 
 const handleDbError = (err, res) => {
   console.log('Error:', err);
@@ -12,7 +12,7 @@ const CreateJourneySchema = Joi.object({
   bus: Joi.string(),
   route: Joi.string(),
   fare: Joi.number().min(50).max(10000),
-  departureTime: Joi.date(),
+  departureTime: Joi.date().optional(),
 });
 
 module.exports = (req, res) => {
@@ -46,36 +46,49 @@ module.exports = (req, res) => {
 
           journeyDetails.bus = bus._id;
 
-          Seat.find({ bus: bus._id }).exec((err, seats) => {
+          // check if there is a similar journey
+          Journey.findOne(journeyDetails).exec((err, journey) => {
             if (err) {
               return handleDbError(err, res);
             }
 
-            journeyDetails.seats = seats.map((seat) => seat._id);
-            journeyDetails.createdAt = new Date();
+            if (journey) {
+              return res
+                .status(Sc.BAD_REQUEST)
+                .json({ message: 'Journey already exists.' });
+            }
 
-            new Journey(journeyDetails).save((err, journey) => {
+            Seat.find({ bus: bus._id }).exec((err, seats) => {
               if (err) {
                 return handleDbError(err, res);
               }
 
-              console.log('Info:', `Journey ${journey._id} was created.`);
+              journeyDetails.seats = seats.map((seat) => seat._id);
+              journeyDetails.createdAt = new Date();
 
-              Journey.findById(journey._id)
-                .populate(['bus', 'route', 'seats'])
-                .exec((err, newJourney) => {
-                  if (err) {
-                    return handleDbError(err, res);
-                  }
+              new Journey(journeyDetails).save((err, journey) => {
+                if (err) {
+                  return handleDbError(err, res);
+                }
 
-                  return res.status(Sc.OK).json(newJourney);
-                });
+                console.log('Info:', `Journey ${journey._id} was created.`);
+
+                Journey.findById(journey._id)
+                  .populate(['bus', 'route', 'seats'])
+                  .exec((err, newJourney) => {
+                    if (err) {
+                      return handleDbError(err, res);
+                    }
+
+                    return res.status(Sc.OK).json(newJourney);
+                  });
+              });
             });
           });
         });
       });
     })
-    .json((err) => {
+    .catch((err) => {
       return res.status(Sc.BAD_REQUEST).json(err);
     });
 };

@@ -48,14 +48,12 @@ module.exports = (req, res) => {
             });
           }
 
-          Bus.findById(bus._id)
-            .populate({ path: 'routes', populate: ['pointA', 'pointB'] })
-            .exec((err, newBus) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
-              return res.status(Sc.OK).json(newBus);
-            });
+          Bus.findById(bus._id).exec((err, newBus) => {
+            if (err) {
+              return handleDbError(err, res);
+            }
+            return res.status(Sc.OK).json(newBus);
+          });
         });
       });
     })

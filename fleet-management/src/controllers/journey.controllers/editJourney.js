@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Journey, Route, Seat } = require('../../models');
+const { Journey, Bus, Route, Seat } = require('../../models');
 
 const handleDbError = (err, res) => {
   console.log('Error:', err);
@@ -21,7 +21,7 @@ module.exports = (req, res) => {
   EditJourneySchema.validateAsync(req.body)
     .then((updatedFields) => {
       // check given route is valid
-      Route.findOne({ name: updatedFields.name }).exec((err, route) => {
+      Route.findOne({ name: updatedFields.route }).exec((err, route) => {
         if (err) {
           return handleDbError(err, res);
         }

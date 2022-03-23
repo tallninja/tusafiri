@@ -13,11 +13,11 @@ const SetDriversSchema = Joi.object({
 });
 
 module.exports = (req, res) => {
-  const { journey_id } = req.params;
+  const { journey_id } = req.query;
 
   SetDriversSchema.validateAsync(req.body)
     .then(({ drivers }) => {
-      Journey.findById(id).exec((err, journey) => {
+      Journey.findById(journey_id).exec((err, journey) => {
         if (err) {
           return handleDbError(err, res);
         }
@@ -33,6 +33,12 @@ module.exports = (req, res) => {
             return handleDbError(err, res);
           }
 
+          if (!role) {
+            return res
+              .status(Sc.INTERNAL_SERVER_ERROR)
+              .json({ message: 'Role driver does not exist.' });
+          }
+
           Employee.find({
             role: role._id,
             employeeId: { $in: drivers },
@@ -41,22 +47,43 @@ module.exports = (req, res) => {
               return handleDbError(err, res);
             }
 
-            journey.updateOne(
-              { $set: { drivers: drivers, updatedAt: new Date() } },
-              (err) => {
+            if (drivers.length !== 2) {
+              return res
+                .status(Sc.BAD_REQUEST)
+                .json({ message: 'Please provide exactly 2 drivers.' });
+            }
+
+            Journey.findOne({ drivers: { $in: drivers } }).exec(
+              (err, existingJourney) => {
                 if (err) {
                   return handleDbError(err, res);
                 }
 
-                Journey.findById(journey._id)
-                  .populate(['bus', 'route', 'seats', 'drivers'])
-                  .exec((err, newJourney) => {
+                if (existingJourney) {
+                  return res.status(Sc.BAD_REQUEST).json({
+                    message:
+                      'One or both drivers not available for assignment.',
+                  });
+                }
+
+                journey.updateOne(
+                  { $set: { drivers: drivers, updatedAt: new Date() } },
+                  (err) => {
                     if (err) {
                       return handleDbError(err, res);
                     }
 
-                    return res.status(Sc.OK).json(newJourney);
-                  });
+                    Journey.findById(journey._id, { password: 0 })
+                      .populate(['bus', 'route', 'seats'])
+                      .exec((err, newJourney) => {
+                        if (err) {
+                          return handleDbError(err, res);
+                        }
+
+                        return res.status(Sc.OK).json(newJourney);
+                      });
+                  }
+                );
               }
             );
           });

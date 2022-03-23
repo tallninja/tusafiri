@@ -84,21 +84,42 @@ Content-Type: application/json
     "yom": 2017
 }
 
-### ADD_ROUTE
-PATCH http://localhost:5100/api/buses/add-route?bus_id=6239745a70002adbd553f5d1
-Content-Type: application/json
-
-{
-    "route_name": "A3"
-}
-
-### REMOVE_ROUTE
-PATCH http://localhost:5100/api/buses/remove-route?bus_id=6239745a70002adbd553f5d1
-Content-Type: application/json
-
-{
-    "route_name": "A3"
-}
-
 ### DELETE bus
 DELETE http://localhost:5100/api/buses/delete/623ae7da4298c29454921021
+
+### CREATE journey
+POST http://localhost:5100/api/journeys/new
+Content-Type: application/json
+
+{
+    "bus": "KCA 111A",
+    "route": "A1",
+    "fare": 2000
+}
+
+### FETCH journeys
+GET http://localhost:5100/api/journeys/
+
+### FETCH journey
+GET http://localhost:5100/api/journeys/623b308401fe16c005cba9ce
+
+### EDIT journey
+PATCH http://localhost:5100/api/journeys/edit/623b308401fe16c005cba9ce
+Content-Type: application/json
+
+{
+    "bus": "KBM 960X",
+    "route": "A3",
+    "fare": 5000
+}
+
+### ADD drivers
+PATCH http://localhost:5100/api/journeys/add-drivers?journey_id=623b308401fe16c005cba9ce
+Content-Type: application/json
+
+{
+    "drivers": ["DRV0001/2018", "DRV0002/2018"]
+}
+
+### DELETE journey
+DELETE http://localhost:5100/api/journeys/delete/623b308401fe16c005cba9ce
