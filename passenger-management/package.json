@@ -1,5 +1,5 @@
 {
-  "name": "hr-management",
+  "name": "passenger-management",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,12 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "http-status-codes": "^2.2.0",
     "joi": "^17.6.0",
-    "mongoose": "^6.2.7",
+    "mongoose": "^6.2.8",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

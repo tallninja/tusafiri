@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const app = express();
 
 const routes = require('./routes');
-const { connectToDb, initDb } = require('./models');
+const { connectToDb } = require('./models');
 
 app.use(cors());
 app.use(express.json());
@@ -15,11 +15,10 @@ app.use(
 );
 
 connectToDb();
-initDb();
 
 app.use('/', routes);
 
-const PORT = process.env.PORT || 5200;
+const PORT = process.env.PORT || 5300;
 app.listen(PORT, (err) => {
   if (err) {
     console.log('Error:', err);
