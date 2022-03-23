@@ -92,7 +92,7 @@ POST http://localhost:5100/api/journeys/new
 Content-Type: application/json
 
 {
-    "bus": "KCA 111A",
+    "bus": "KCS 121A",
     "route": "A1",
     "fare": 2000
 }
@@ -114,11 +114,11 @@ Content-Type: application/json
 }
 
 ### ADD drivers
-PATCH http://localhost:5100/api/journeys/add-drivers?journey_id=623b308401fe16c005cba9ce
+PATCH http://localhost:5100/api/journeys/add-drivers?journey_id=623b3a7dfb7f452d372c649e
 Content-Type: application/json
 
 {
-    "drivers": ["DRV0001/2018", "DRV0002/2018"]
+    "drivers": ["DRV0003/2015", "DRV0007/2017"]
 }
 
 ### DELETE journey

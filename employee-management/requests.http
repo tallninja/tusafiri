@@ -6,12 +6,12 @@ POST http://localhost:5200/api/employees/new
 Content-Type: application/json
 
 {
-    "firstName": "Ernest",
-    "lastName": "Wambua",
-    "idNo": 37281546,
-    "email": "ernestwambua2@gmail.com",
+    "firstName": "Benjamin",
+    "lastName": "Mumasi",
+    "idNo": 37281555,
+    "email": "mumasibenjamin@gmail.com",
     "phoneNumber": "+254719286396",
-    "employeeId": "DRV0001/2012",
+    "employeeId": "DRV0007/2017",
     "password": "password",
     "role": "driver"
 }
@@ -49,3 +49,16 @@ Content-Type: application/json
 
 ### DELETE Employee
 DELETE http://localhost:5200/api/employees/delete/6239b0a5bf038478788e10f4
+
+
+### FETCH drivers
+GET http://localhost:5200/api/employees/dept/drivers
+
+### FETCH fleet managers
+GET http://localhost:5200/api/employees/dept/fleet-managers
+
+### FETCH snm managers
+GET http://localhost:5200/api/employees/dept/snm-managers
+
+### FETCH help desk
+GET http://localhost:5200/api/employees/dept/help-desk

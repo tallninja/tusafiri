@@ -11,3 +11,11 @@ exports.getEmployees = require('./getEmployees');
 exports.changePassword = require('./changePassword');
 
 exports.changeRole = require('./changeRole');
+
+exports.getDrivers = require('./getDrivers');
+
+exports.getFleetManagers = require('./getFleetManagers');
+
+exports.getSnmManagers = require('./getSnmManagers');
+
+exports.getShd = require('./getShd');
