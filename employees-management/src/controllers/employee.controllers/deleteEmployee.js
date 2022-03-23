@@ -10,7 +10,7 @@ const handleDbError = (err, res) => {
 module.exports = (req, res) => {
   const { id } = req.params;
 
-  Employee.findById(id)
+  Employee.findById(id, { password: 0 })
     .populate(['role'])
     .exec((err, employee) => {
       if (err) {

@@ -8,7 +8,7 @@ const handleDbError = (err, res) => {
 };
 
 module.exports = (req, res) => {
-  Employee.find()
+  Employee.find({}, { password: 0 })
     .populate(['role'])
     .exec((err, employees) => {
       if (err) {

@@ -39,7 +39,7 @@ module.exports = (req, res) => {
           }
 
           console.log('Info:', `Employee ${employee.employeeId} was edited.`);
-          Employee.findById(employee._id)
+          Employee.findById(employee._id, { password: 0 })
             .populate(['role'])
             .exec((err, updatedEmployee) => {
               if (err) {
