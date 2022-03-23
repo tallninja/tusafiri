@@ -64,11 +64,10 @@ POST http://localhost:5100/api/buses/new
 Content-Type: application/json
 
 {
-    "regNo": "KCS 121A",
-    "make": "Mazda",
+    "regNo": "KCA 111A",
+    "make": "Scania",
     "yom": 2016,
     "capacity": 50,
-    "routes": ["A1", "A2"]
 }
 
 ### FETCH all buses
@@ -102,4 +101,4 @@ Content-Type: application/json
 }
 
 ### DELETE bus
-DELETE http://localhost:5100/api/buses/delete/6239777274d1eedb9ac3525b
+DELETE http://localhost:5100/api/buses/delete/623ae7da4298c29454921021

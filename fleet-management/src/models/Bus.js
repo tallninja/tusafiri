@@ -5,7 +5,6 @@ const BusSchema = new mongoose.Schema({
   make: { type: String },
   yom: { type: Number },
   capacity: { type: Number, required: true, min: 1, max: 50 },
-  routes: [{ type: mongoose.Types.ObjectId, ref: 'routes' }],
 });
 
 module.exports = mongoose.model('buses', BusSchema);

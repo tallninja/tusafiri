@@ -32,14 +32,12 @@ module.exports = (req, res) => {
             return handleDbError(err, res);
           }
           console.log('Info:', `${bus.regNo} was updated.`);
-          Bus.findById(bus.id)
-            .populate({ path: 'routes', populate: ['pointA', 'pointB'] })
-            .exec((err, updatedBus) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
-              return res.status(Sc.OK).json(updatedBus);
-            });
+          Bus.findById(bus.id).exec((err, updatedBus) => {
+            if (err) {
+              return handleDbError(err, res);
+            }
+            return res.status(Sc.OK).json(updatedBus);
+          });
         });
       });
     })

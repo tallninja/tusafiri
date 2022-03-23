@@ -8,12 +8,10 @@ const handleDbError = (err, res) => {
 };
 
 module.exports = (req, res) => {
-  Bus.find()
-    .populate(['routes'])
-    .exec((err, buses) => {
-      if (err) {
-        return handleDbError(err, res);
-      }
-      return res.status(Sc.OK).json(buses);
-    });
+  Bus.find().exec((err, buses) => {
+    if (err) {
+      return handleDbError(err, res);
+    }
+    return res.status(Sc.OK).json(buses);
+  });
 };

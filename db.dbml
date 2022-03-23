@@ -62,14 +62,12 @@ Table buses {
   routes int [ref: > Rt.id]
 }
 
-Table journey {
+Table journeys {
   id int [pk, increment]
   bus_id int [ref: > buses.id]
   route_id int [ref: > Rt.id]
-  from int [ref: > Loc.id]
-  to int [ref: > Loc.id]
-  departure_time datetime
-  arrival_time datetime
+  fare int
+  departure datetime
 }
 
 Table tickets {

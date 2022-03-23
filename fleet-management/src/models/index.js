@@ -17,4 +17,5 @@ module.exports = {
   Location: require('./Location'),
   Route: require('./Route'),
   Journey: require('./Journey'),
+  Seat: require('./Seat'),
 };
