@@ -18,6 +18,6 @@ module.exports = {
   Invoice: require('./Invoice'),
   Ticket: require('./Ticket'),
   Payment: require('./Payment'),
-  Journey: mongoose.model('journeys', new mongoose.Schema({}), 'journeys'),
-  Seat: mongoose.model('seats', new mongoose.Schema({}), 'seats'),
+  Journey: require('./Journey'),
+  Seat: require('./Seat'),
 };

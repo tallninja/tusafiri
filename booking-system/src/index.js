@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 
 const routes = require('./routes');
+const { connectToDb } = require('./models');
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(
 );
 
 app.use('/', routes);
+
+connectToDb();
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (err) => {

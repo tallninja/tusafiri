@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const { payments } = require('../../config');
-const { Journey, Booking } = require('.');
+const Journey = require('./Journey');
+const Booking = require('./Booking');
 
 const InvoiceSchema = new mongoose.Schema({
   booking: {
@@ -57,7 +58,7 @@ InvoiceSchema.statics.generateInvoice = async function (booking) {
   }
 };
 
-Invoice.statics.updateInvoice = function (invoice) {
+InvoiceSchema.statics.updateInvoice = async function (invoice) {
   try {
     const booking = await Booking.findById(invoice.booking).exec();
     const journey = await Journey.findById(booking.journey).exec();
