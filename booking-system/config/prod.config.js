@@ -4,6 +4,6 @@ module.exports = {
   },
   payments: {
     salesTax: 0.16,
-    invoiceDue: 60 * 60 * 1, // Customer has 1 hour to make the payment
+    invoiceDue: 60 * 60 * 0.5, // Customer has 30 minutes to make the payment
   },
 };

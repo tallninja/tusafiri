@@ -7,7 +7,6 @@ const Journey = require('./Journey');
 const BookingSchema = new mongoose.Schema({
   journey: { type: mongoose.Types.ObjectId, ref: 'journeys', required: true },
   seats: [{ type: mongoose.Types.ObjectId, ref: 'seats' }],
-  paid: { type: Boolean, default: false },
   createdAt: { type: Date },
   updatedAt: { type: Date },
 });

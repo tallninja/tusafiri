@@ -11,14 +11,14 @@ Content-Type: application/json
 
 {
     "journey": "623c7d1ce2b563a09608cd97",
-    "seats": ["623c7d0de2b563a09608cd73", "623c7d0de2b563a09608cd75"]
+    "seats": ["623c7d0de2b563a09608cd7b", "623c7d0de2b563a09608cd7d"]
 }
 
 ### FETCH bookings
 GET {{bookingsApi}}/
 
 ### FETCH booking
-GET {{bookingsApi}}/623cc012eb430d1359ee11d3
+GET {{bookingsApi}}/623cc24f027c1a07828163d9
 
 ### EDIT booking
 PATCH {{bookingsApi}}/edit/623c47776d05c90ddbb9405b
@@ -29,4 +29,4 @@ Content-Type: application/json
 }
 
 ### DELETE booking
-DELETE {{bookingsApi}}/delete/623cc183ab3f4a5df4ffc474
+DELETE {{bookingsApi}}/delete/623cd3e0f5e6deda00ed8b5c

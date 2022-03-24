@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
+const cron = require('node-cron');
 
 const { db } = require('../../config');
+
+const Booking = require('./Booking');
+const Invoice = require('./Invoice');
 
 const connectToDb = () => {
   mongoose.connect(db.MONGO_URI, (err) => {
@@ -8,6 +12,28 @@ const connectToDb = () => {
       console.log('Error:', err);
     } else {
       console.log('Info:', 'Conneted to database.');
+
+      cron.schedule('*/2 * * * *', async () => {
+        // runs after every 2 minutes
+        console.log('Info:', 'Cleaning the bookings collection...');
+        try {
+          let bookings = await Booking.find().exec();
+
+          bookings.map(async (booking) => {
+            let invoice = await Invoice.findOne({
+              booking: booking._id,
+            }).exec();
+
+            if (!invoice) {
+              // check if booking is missing an invoice and is not paid for
+              await booking.deleteOne();
+              console.log('Info:', `Booking ${booking._id} was deleted.`);
+            }
+          });
+        } catch (err) {
+          console.log('Error:', err);
+        }
+      });
     }
   });
 };
