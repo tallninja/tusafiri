@@ -58,14 +58,9 @@ InvoiceSchema.statics.generateInvoice = async function (booking) {
   }
 };
 
-InvoiceSchema.statics.updateInvoice = async function (invoice) {
+InvoiceSchema.statics.updateInvoice = async function (invoice, booking) {
   try {
-    const booking = await Booking.findById(invoice.booking).exec();
     const journey = await Journey.findById(booking.journey).exec();
-
-    if (!booking) {
-      throw new Error('Booking not found.');
-    }
 
     if (!journey) {
       throw new Error('Journey not found');
@@ -89,8 +84,9 @@ InvoiceSchema.statics.updateInvoice = async function (invoice) {
 
 InvoiceSchema.pre('deleteOne', async function (next) {
   try {
-    const booking = await Booking.findById(this.booking);
-    booking.deleteOne();
+    let invoice = await this.model.findOne(this.getQuery()).exec();
+    let booking = await Booking.findById(invoice.booking).exec();
+    await booking.deleteOne();
     next();
   } catch (err) {
     console.log(err);

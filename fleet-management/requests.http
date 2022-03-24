@@ -70,10 +70,10 @@ POST {{busesApi}}/new
 Content-Type: application/json
 
 {
-    "regNo": "KCX 401K",
-    "make": "Isuzu",
-    "yom": 2020,
-    "capacity": 50
+    "regNo": "KCB 123C",
+    "make": "Ford",
+    "yom": 2018,
+    "capacity": 15
 }
 
 ### FETCH all buses
@@ -98,9 +98,9 @@ POST {{journeysApi}}/new
 Content-Type: application/json
 
 {
-    "bus": "KAB 115C",
-    "route": "B4",
-    "fare": 1500,
+    "bus": "KCB 123C",
+    "route": "B2",
+    "fare": 650,
     "departureTime": 1648650600000
 }
 
@@ -108,15 +108,16 @@ Content-Type: application/json
 GET {{journeysApi}}/
 
 ### FETCH journey
-GET {{journeysApi}}/623c6fa8f30f432a9b58a677
+GET {{journeysApi}}/623c7c2743f02b5e994abee4
 
 ### EDIT journey
-PATCH {{journeysApi}}/edit/623c6fa8f30f432a9b58a677
+PATCH {{journeysApi}}/edit/623c7c2743f02b5e994abee4
 Content-Type: application/json
 
 {
     "route": "B1",
-    "fare": 900
+    "fare": 900,
+    "bookedSeats": ["623c7c0743f02b5e994abec5", "623c7c0743f02b5e994abec7", "623c7c0843f02b5e994abedb"]
 }
 
 ### ADD drivers
@@ -129,3 +130,6 @@ Content-Type: application/json
 
 ### DELETE journey
 DELETE {{journeysApi}}/delete/623c6fa8f30f432a9b58a677
+
+### FETCH available journeys
+GET {{journeysApi}}/available/all?route_name=B2

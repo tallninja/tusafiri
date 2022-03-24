@@ -20,12 +20,30 @@ BookingSchema.pre('save', function (next) {
 
 BookingSchema.pre('updateOne', async function (next) {
   try {
-    let invoice = await Invoice.findOne({ booking: this._id }).exec();
-    Invoice.updateInvoice(invoice);
+    let booking = await this.model.findOne(this.getQuery()).exec();
+    let invoice = await Invoice.findOne({ booking: booking._id }).exec();
+    Invoice.updateInvoice(invoice, booking);
     next();
   } catch (err) {
     throw err;
   }
 });
+
+// BookingSchema.pre('delete', async function (next) {
+//   try {
+//     console.log(this);
+//     let booking = await this.model.findOne(this.getQuery()).exec();
+//     let invoice = await Invoice.findOne({ booking: booking._id }).exec();
+
+//     if (!invoice) {
+//       next();
+//     }
+
+//     await invoice.deleteOne();
+//     next();
+//   } catch (err) {
+//     throw err;
+//   }
+// });
 
 module.exports = mongoose.model('bookings', BookingSchema);

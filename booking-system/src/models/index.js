@@ -19,5 +19,6 @@ module.exports = {
   Ticket: require('./Ticket'),
   Payment: require('./Payment'),
   Journey: require('./Journey'),
+  Bus: require('./Bus'),
   Seat: require('./Seat'),
 };

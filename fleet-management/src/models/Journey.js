@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 
+const Bus = require('./Bus');
+
 const JourneySchema = new mongoose.Schema({
   bus: { type: mongoose.Types.ObjectId, ref: 'buses', required: true },
   route: { type: mongoose.Types.ObjectId, ref: 'routes', required: true },
   fare: { type: Number, required: true },
+  bookedSeats: [{ type: mongoose.Types.ObjectId, ref: 'seats' }],
+  availableSeats: { type: Number },
   drivers: [{ type: mongoose.Types.ObjectId, ref: 'employees' }], // for safety purposes every journey should have at least 2 drivers.
   departureTime: { type: Date, required: true },
   arrivalTime: { type: Date },
@@ -20,6 +24,30 @@ JourneySchema.pre('validate', (next) => {
     next();
   } else {
     next();
+  }
+});
+
+JourneySchema.pre('save', async function (next) {
+  try {
+    let bus = await Bus.findById(this.bus).exec();
+    this.availableSeats = bus.capacity - this.bookedSeats.length - 2;
+    next();
+  } catch (err) {
+    throw err;
+  }
+});
+
+JourneySchema.post('updateOne', async function () {
+  try {
+    let journey = await this.model
+      .findOne(this.getQuery())
+      .populate(['bus'])
+      .exec();
+    journey.availableSeats =
+      journey.bus.capacity - journey.bookedSeats.length - 2;
+    await journey.save();
+  } catch (err) {
+    throw err;
   }
 });
 

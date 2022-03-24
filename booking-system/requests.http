@@ -1,2 +1,32 @@
+@baseUrl = http://localhost:5000
+@bookingsApi = {{baseUrl}}/api/bookings
+
+
 ### ROOT route
-GET http://localhost:5000/
+GET {{baseUrl}}
+
+### CREATE booking
+POST {{bookingsApi}}/new
+Content-Type: application/json
+
+{
+    "journey": "623b308401fe16c005cba9ce",
+    "seats": ["623b27f4f43a2efdd58fc31f", "623b27f4f43a2efdd58fc31e"]
+}
+
+### FETCH bookings
+GET {{bookingsApi}}/
+
+### FETCH booking
+GET {{bookingsApi}}/623c47776d05c90ddbb9405b
+
+### EDIT booking
+PATCH {{bookingsApi}}/edit/623c47776d05c90ddbb9405b
+Content-Type: application/json
+
+{
+    "seats": ["623b27f4f43a2efdd58fc349", "623b27f4f43a2efdd58fc348", "623b27f4f43a2efdd58fc345", "623b27f4f43a2efdd58fc341"]
+}
+
+### DELETE booking
+DELETE {{bookingsApi}}/delete/623c47776d05c90ddbb9405b
