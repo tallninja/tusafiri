@@ -1,0 +1,31 @@
+const mongoose = require('mongoose');
+
+const Invoice = require('./Invoice');
+
+const BookingSchema = new mongoose.Schema({
+  journey: { type: mongoose.Types.ObjectId, ref: 'journeys', required: true },
+  seats: [{ type: mongoose.Types.ObjectId, ref: 'seats' }],
+  createdAt: { type: Date },
+  updatedAt: { type: Date },
+});
+
+BookingSchema.pre('save', function (next) {
+  try {
+    Invoice.generateInvoice(this);
+    next();
+  } catch (err) {
+    throw err;
+  }
+});
+
+BookingSchema.pre('updateOne', async function (next) {
+  try {
+    let invoice = await Invoice.findOne({ booking: this._id }).exec();
+    Invoice.updateInvoice(invoice);
+    next();
+  } catch (err) {
+    throw err;
+  }
+});
+
+module.exports = mongoose.model('bookings', BookingSchema);

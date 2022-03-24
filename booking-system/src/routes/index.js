@@ -5,4 +5,6 @@ router.get('/', (req, res) => {
   res.status(Sc.OK).json({ message: 'Api Gateway' });
 });
 
+router.use('/api', require('./api.routes'));
+
 module.exports = router;
