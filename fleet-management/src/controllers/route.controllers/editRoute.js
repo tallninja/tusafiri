@@ -10,8 +10,8 @@ const handleDbError = (err, res) => {
 
 const EditRouteSchema = Joi.object({
   name: Joi.string().optional(),
-  pointA: Joi.string().length(3).optional(),
-  pointB: Joi.string().length(3).optional(),
+  from: Joi.string().length(3).optional(),
+  to: Joi.string().length(3).optional(),
 });
 
 module.exports = (req, res) => {
@@ -26,8 +26,8 @@ module.exports = (req, res) => {
     .then((validatedData) => {
       let updatedFields = validatedData;
 
-      if (updatedFields.pointA) {
-        let locationCode = updatedFields.pointA;
+      if (updatedFields.from) {
+        let locationCode = updatedFields.from;
         Location.findOne({ code: locationCode }).exec((err, location) => {
           if (err) {
             return handleDbError(location);
@@ -37,12 +37,12 @@ module.exports = (req, res) => {
               .status(Sc.BAD_REQUEST)
               .json({ message: `${locationCode} not found.` });
           }
-          updatedFields.pointA = location._id;
+          updatedFields.from = location._id;
         });
       }
 
-      if (updatedFields.pointB) {
-        let locationCode = updatedFields.pointB;
+      if (updatedFields.to) {
+        let locationCode = updatedFields.to;
         Location.findOne({ code: locationCode }).exec((err, location) => {
           if (err) {
             return handleDbError(location);
@@ -52,7 +52,7 @@ module.exports = (req, res) => {
               .status(Sc.BAD_REQUEST)
               .json({ message: `${locationCode} not found.` });
           }
-          updatedFields.pointB = location._id;
+          updatedFields.to = location._id;
         });
       }
 
@@ -86,7 +86,7 @@ module.exports = (req, res) => {
             console.log('Info:', `${route.name} was edited.`);
 
             Route.findById(route._id)
-              .populate(['pointA', 'pointB'])
+              .populate(['from', 'to'])
               .exec((err, updatedRoute) => {
                 if (err) {
                   return handleDbError(err, res);

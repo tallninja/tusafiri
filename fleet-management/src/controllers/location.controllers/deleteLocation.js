@@ -28,9 +28,7 @@ module.exports = (req, res) => {
         return handleDbError(err, res);
       }
       console.log('Info:', `${location.name} was deleted.`);
-      return res
-        .status(Sc.OK)
-        .json({ message: `${location.name} was deleted.` });
+      return res.status(Sc.OK).json(location);
     });
   });
 };

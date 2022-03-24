@@ -10,8 +10,8 @@ const handleDbError = (err, res) => {
 
 const CreateRouteSchema = Joi.object({
   name: Joi.string(),
-  pointA: Joi.string().length(3),
-  pointB: Joi.string().length(3),
+  from: Joi.string().length(3),
+  to: Joi.string().length(3),
 });
 
 module.exports = (req, res) => {
@@ -19,7 +19,7 @@ module.exports = (req, res) => {
     .then((validatedData) => {
       let routeDetails = validatedData;
 
-      let { name, pointA, pointB } = routeDetails;
+      let { name, from, to } = routeDetails;
 
       Route.findOne({ name: name }).exec((err, route) => {
         if (err) {
@@ -31,7 +31,7 @@ module.exports = (req, res) => {
             .json({ message: `${route.name} already exists.` });
         }
         Location.findOne({
-          code: pointA,
+          code: from,
         }).exec((err, location) => {
           if (err) {
             return handleDbError(err, res);
@@ -42,10 +42,10 @@ module.exports = (req, res) => {
               .json({ message: `${location} location does not exist.` });
           }
 
-          pointA = location._id;
+          from = location._id;
 
           Location.findOne({
-            code: pointB,
+            code: to,
           }).exec((err, location) => {
             if (err) {
               return handleDbError(err, res);
@@ -56,12 +56,12 @@ module.exports = (req, res) => {
                 .json({ message: `${location} location does not exist.` });
             }
 
-            pointB = location._id;
+            to = location._id;
 
             new Route({
               name: name,
-              pointA: pointA,
-              pointB: pointB,
+              from: from,
+              to: to,
             }).save((err, route) => {
               if (err) {
                 return handleDbError(err, res);
@@ -69,7 +69,7 @@ module.exports = (req, res) => {
 
               console.log('Info:', `${route.name} was created.`);
               Route.findById(route._id)
-                .populate(['pointA', 'pointB'])
+                .populate(['from', 'to'])
                 .exec((err, newRoute) => {
                   if (err) {
                     return handleDbError(err, res);

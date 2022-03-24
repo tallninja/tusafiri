@@ -15,7 +15,7 @@ module.exports = (req, res) => {
       .json({ message: 'Please provide the route id.' });
   }
   Route.findById(id)
-    .populate(['pointA', 'pointB'])
+    .populate(['from', 'to'])
     .exec((err, route) => {
       if (err) {
         return handleDbError(err, res);

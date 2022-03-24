@@ -1,8 +1,14 @@
+@baseUrl = http://localhost:5100
+@locationsApi = {{baseUrl}}/api/locations
+@routesApi = {{baseUrl}}/api/routes
+@busesApi = {{baseUrl}}/api/buses
+@journeysApi = {{baseUrl}}/api/journeys
+
 ### Root route
-GET http://localhost:5100/
+GET {{baseUrl}}/
 
 ### CREATE Location
-POST http://localhost:5100/api/locations/new
+POST {{locationsApi}}/new
 Content-Type: application/json
 
 {
@@ -13,13 +19,13 @@ Content-Type: application/json
 }
 
 ### FETCH Locations
-GET http://localhost:5100/api/locations/
+GET {{locationsApi}}/
 
 ### FETCH Location
-GET http://localhost:5100/api/locations/6239730ff87dc6d1af4fc24d
+GET {{locationsApi}}/623c66d79ba3d91bd0a4ed5c
 
 ### EDIT Location
-PATCH http://localhost:5100/api/locations/edit/6239730ff87dc6d1af4fc24d
+PATCH {{locationsApi}}/edit/623c66d79ba3d91bd0a4ed5c
 Content-Type: application/json
 
 {
@@ -28,56 +34,56 @@ Content-Type: application/json
 }
 
 ### DELETE Location
-DELETE http://localhost:5100/api/locations/delete/6239730ff87dc6d1af4fc24d
+DELETE {{locationsApi}}/delete/623c66d79ba3d91bd0a4ed5c
 
 ### CREATE route
-POST http://localhost:5100/api/routes/new
+POST {{routesApi}}/new
 Content-Type: application/json
 
 {
-    "name": "A7",
-    "pointA": "ELD",
-    "pointB": "MSA"
+    "name": "B7",
+    "from": "KSM",
+    "to": "NRB"
 }
 
 ### FETCH routes
-GET http://localhost:5100/api/routes/
+GET {{routesApi}}/
 
 ### FETCH route
-GET http://localhost:5100/api/routes/623973c170002adbd553f5be
+GET {{routesApi}}/623c68493e7f8b05de2e579a
 
 ### EDIT route
-PATCH http://localhost:5100/api/routes/edit/623973c170002adbd553f5be
+PATCH {{routesApi}}/edit/623c68493e7f8b05de2e579a
 Content-Type: application/json
 
 {
-    "pointA": "MSA",
-    "pointB": "ELD"
+    "from": "MSA",
+    "to": "ELD"
 }
 
 ### Delete route
-DELETE http://localhost:5100/api/routes/delete/623973c170002adbd553f5be
+DELETE {{routesApi}}/delete/623c68493e7f8b05de2e579a
 
 
 ### CREATE Bus
-POST http://localhost:5100/api/buses/new
+POST {{busesApi}}/new
 Content-Type: application/json
 
 {
-    "regNo": "KCA 111A",
-    "make": "Scania",
-    "yom": 2016,
+    "regNo": "KCX 401K",
+    "make": "Isuzu",
+    "yom": 2020,
     "capacity": 50
 }
 
 ### FETCH all buses
-GET http://localhost:5100/api/buses/
+GET {{busesApi}}/
 
 ### FETCH bus
-GET http://localhost:5100/api/buses/6239745a70002adbd553f5d1
+GET {{busesApi}}/623c5b283c4ae6beac7dcf56
 
 ### EDIT bus
-PATCH http://localhost:5100/api/buses/edit/6239745a70002adbd553f5d1
+PATCH {{busesApi}}/edit/623c5b283c4ae6beac7dcf56
 Content-Type: application/json
 
 {
@@ -85,36 +91,36 @@ Content-Type: application/json
 }
 
 ### DELETE bus
-DELETE http://localhost:5100/api/buses/delete/623ae7da4298c29454921021
+DELETE {{busesApi}}/delete/623c5b283c4ae6beac7dcf56
 
-### CREATE journey
-POST http://localhost:5100/api/journeys/new
+### CREATE journey let date = new Date("2022-03-30T17:30+03:00").getTime()
+POST {{journeysApi}}/new
 Content-Type: application/json
 
 {
-    "bus": "KCS 121A",
-    "route": "A1",
-    "fare": 2000
+    "bus": "KAB 115C",
+    "route": "B4",
+    "fare": 1500,
+    "departureTime": 1648650600000
 }
 
 ### FETCH journeys
-GET http://localhost:5100/api/journeys/
+GET {{journeysApi}}/
 
 ### FETCH journey
-GET http://localhost:5100/api/journeys/623b308401fe16c005cba9ce
+GET {{journeysApi}}/623c6fa8f30f432a9b58a677
 
 ### EDIT journey
-PATCH http://localhost:5100/api/journeys/edit/623b308401fe16c005cba9ce
+PATCH {{journeysApi}}/edit/623c6fa8f30f432a9b58a677
 Content-Type: application/json
 
 {
-    "bus": "KBM 960X",
-    "route": "A3",
-    "fare": 5000
+    "route": "B1",
+    "fare": 900
 }
 
 ### ADD drivers
-PATCH http://localhost:5100/api/journeys/add-drivers?journey_id=623b3a7dfb7f452d372c649e
+PATCH {{journeysApi}}/add-drivers?journey_id=623c6fa8f30f432a9b58a677
 Content-Type: application/json
 
 {
@@ -122,4 +128,4 @@ Content-Type: application/json
 }
 
 ### DELETE journey
-DELETE http://localhost:5100/api/journeys/delete/623b308401fe16c005cba9ce
+DELETE {{journeysApi}}/delete/623c6fa8f30f432a9b58a677

@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Journey, Bus, Route, Seat } = require('../../models');
+const { Journey, Bus, Route } = require('../../models');
 
 const handleDbError = (err, res) => {
   console.log('Error:', err);
@@ -60,47 +60,21 @@ module.exports = (req, res) => {
                 .json({ message: 'Journey not found.' });
             }
 
-            if (JSON.stringify(journey.bus) !== JSON.stringify(bus._id)) {
-              Seat.find({ bus: bus._id }).exec((err, seats) => {
+            journey.updateOne({ $set: updatedFields }, (err) => {
+              if (err) {
+                return handleDbError(err, res);
+              }
+
+              console.log('Info:', `${journey._id} was updated.`);
+
+              Journey.findById(journey._id).exec((err, updatedJourney) => {
                 if (err) {
                   return handleDbError(err, res);
                 }
 
-                updatedFields.seats = seats.map((seat) => seat._id);
-
-                journey.updateOne({ $set: updatedFields }, (err) => {
-                  if (err) {
-                    return handleDbError(err, res);
-                  }
-
-                  console.log('Info:', `${journey._id} was updated.`);
-
-                  Journey.findById(journey._id).exec((err, updatedJourney) => {
-                    if (err) {
-                      return handleDbError(err, res);
-                    }
-
-                    return res.status(Sc.OK).json(updatedJourney);
-                  });
-                });
+                return res.status(Sc.OK).json(updatedJourney);
               });
-            } else {
-              journey.updateOne({ $set: updatedFields }, (err) => {
-                if (err) {
-                  return handleDbError(err, res);
-                }
-
-                console.log('Info:', `${journey._id} was updated.`);
-
-                Journey.findById(journey._id).exec((err, updatedJourney) => {
-                  if (err) {
-                    return handleDbError(err, res);
-                  }
-
-                  return res.status(Sc.OK).json(updatedJourney);
-                });
-              });
-            }
+            });
           });
         });
       });

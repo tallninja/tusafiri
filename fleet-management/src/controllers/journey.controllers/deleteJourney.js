@@ -12,7 +12,7 @@ module.exports = (req, res) => {
   const { id } = req.params;
 
   Journey.findById(id)
-    .populate(['bus', 'route', 'seats'])
+    .populate(['bus', 'route'])
     .exec((err, journey) => {
       if (err) {
         return handleDbError(err, res);

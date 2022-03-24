@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Journey, Bus, Route, Seat } = require('../../models');
+const { Journey, Bus, Route } = require('../../models');
 
 const handleDbError = (err, res) => {
   console.log('Error:', err);
@@ -12,7 +12,7 @@ const CreateJourneySchema = Joi.object({
   bus: Joi.string(),
   route: Joi.string(),
   fare: Joi.number().min(50).max(10000),
-  departureTime: Joi.date().optional(),
+  departureTime: Joi.date(),
 });
 
 module.exports = (req, res) => {
@@ -58,31 +58,24 @@ module.exports = (req, res) => {
                 .json({ message: 'Journey already exists.' });
             }
 
-            Seat.find({ bus: bus._id }).exec((err, seats) => {
+            journeyDetails.createdAt = new Date();
+
+            new Journey(journeyDetails).save((err, journey) => {
               if (err) {
                 return handleDbError(err, res);
               }
 
-              journeyDetails.seats = seats.map((seat) => seat._id);
-              journeyDetails.createdAt = new Date();
+              console.log('Info:', `Journey ${journey._id} was created.`);
 
-              new Journey(journeyDetails).save((err, journey) => {
-                if (err) {
-                  return handleDbError(err, res);
-                }
+              Journey.findById(journey._id)
+                .populate(['bus', 'route'])
+                .exec((err, newJourney) => {
+                  if (err) {
+                    return handleDbError(err, res);
+                  }
 
-                console.log('Info:', `Journey ${journey._id} was created.`);
-
-                Journey.findById(journey._id)
-                  .populate(['bus', 'route', 'seats'])
-                  .exec((err, newJourney) => {
-                    if (err) {
-                      return handleDbError(err, res);
-                    }
-
-                    return res.status(Sc.OK).json(newJourney);
-                  });
-              });
+                  return res.status(Sc.OK).json(newJourney);
+                });
             });
           });
         });

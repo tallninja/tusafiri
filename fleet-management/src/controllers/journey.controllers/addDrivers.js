@@ -74,7 +74,7 @@ module.exports = (req, res) => {
                     }
 
                     Journey.findById(journey._id, { password: 0 })
-                      .populate(['bus', 'route', 'seats'])
+                      .populate(['bus', 'route'])
                       .exec((err, newJourney) => {
                         if (err) {
                           return handleDbError(err, res);

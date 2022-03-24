@@ -9,7 +9,7 @@ const handleDbError = (err, res) => {
 
 module.exports = (req, res) => {
   Route.find()
-    .populate(['pointA', 'pointB'])
+    .populate(['from', 'to'])
     .exec((err, routes) => {
       if (err) {
         return handleDbError(err, res);

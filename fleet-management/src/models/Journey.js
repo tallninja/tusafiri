@@ -4,9 +4,8 @@ const JourneySchema = new mongoose.Schema({
   bus: { type: mongoose.Types.ObjectId, ref: 'buses', required: true },
   route: { type: mongoose.Types.ObjectId, ref: 'routes', required: true },
   fare: { type: Number, required: true },
-  seats: [{ type: mongoose.Types.ObjectId, ref: 'seats' }],
   drivers: [{ type: mongoose.Types.ObjectId, ref: 'employees' }], // for safety purposes every journey should have at least 2 drivers.
-  departureTime: { type: Date },
+  departureTime: { type: Date, required: true },
   arrivalTime: { type: Date },
   completed: { type: Boolean, default: false },
   createdAt: { type: Date },

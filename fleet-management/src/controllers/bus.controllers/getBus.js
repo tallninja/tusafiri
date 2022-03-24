@@ -14,13 +14,15 @@ module.exports = (req, res) => {
       .status(Sc.BAD_REQUEST)
       .json({ message: 'Please provide the bus id' });
   }
-  Bus.findById(id).exec((err, bus) => {
-    if (err) {
-      handleDbError(err, res);
-    }
-    if (!bus) {
-      return res.status(Sc.BAD_REQUEST).json({ message: 'Bus not found.' });
-    }
-    return res.status(Sc.OK).json(bus);
-  });
+  Bus.findById(id)
+    .populate(['seats'])
+    .exec((err, bus) => {
+      if (err) {
+        handleDbError(err, res);
+      }
+      if (!bus) {
+        return res.status(Sc.BAD_REQUEST).json({ message: 'Bus not found.' });
+      }
+      return res.status(Sc.OK).json(bus);
+    });
 };

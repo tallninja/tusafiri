@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
-const { Bus, Seat } = require('../../models');
+const { Bus } = require('../../models');
 
 const handleDbError = (err, res) => {
   console.log('Error:', err);
@@ -10,7 +10,10 @@ const handleDbError = (err, res) => {
 const CreateBusSchema = Joi.object({
   regNo: Joi.string(),
   make: Joi.string(),
-  yom: Joi.number().min(2010).max(new Date().getFullYear()),
+  yom: Joi.number()
+    .min(2005)
+    .max(new Date().getFullYear())
+    .max(new Date().getFullYear()),
   capacity: Joi.number().min(1).max(60),
 });
 
@@ -35,18 +38,6 @@ module.exports = (req, res) => {
           }
 
           console.log('Info:', `${bus.regNo} was added.`);
-
-          // Also create the bus seats
-          for (let i = 1; i <= bus.capacity; i++) {
-            new Seat({
-              number: i,
-              bus: bus._id,
-            }).save((err) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
-            });
-          }
 
           Bus.findById(bus._id).exec((err, newBus) => {
             if (err) {
