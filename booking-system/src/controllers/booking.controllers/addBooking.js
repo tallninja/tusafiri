@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
@@ -13,56 +14,43 @@ const CreateBookingSchema = Joi.object({
   seats: Joi.array(),
 });
 
-module.exports = (req, res) => {
-  CreateBookingSchema.validateAsync(req.body)
-    .then((bookingDetails) => {
-      Journey.findById(bookingDetails.journey).exec((err, journey) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+module.exports = async (req, res) => {
+  try {
+    let bookingDetails = await CreateBookingSchema.validateAsync(req.body);
+    let journey = await Journey.findById(bookingDetails.journey).exec();
 
-        if (!journey) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: 'Journey not found.' });
-        }
+    if (!journey) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Journey not found.' });
+    }
 
-        bookingDetails.journey = journey._id;
+    bookingDetails.journey = journey._id;
+    let seats = await Seat.find({ _id: { $in: bookingDetails.seats } }).exec();
 
-        Seat.find({ _id: { $in: bookingDetails.seats } }).exec((err, seats) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    if (seats.length !== bookingDetails.seats.length) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Seats are invalid.' });
+    }
 
-          if (seats.length !== bookingDetails.seats.length) {
-            return res
-              .status(Sc.BAD_REQUEST)
-              .json({ message: 'Seats are invalid.' });
-          }
+    bookingDetails.seats = _.uniqBy(
+      seats.map((seat) => seat._id),
+      JSON.stringify
+    );
 
-          bookingDetails.seats = seats.map((seat) => seat._id);
-          bookingDetails.createdAt = new Date();
+    let existingBooking = await Booking.findOne(bookingDetails).exec();
 
-          new Booking(bookingDetails).save((err, booking) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
+    if (existingBooking) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Booking exists.' });
+    }
 
-            console.log('Info:', `Booking ${booking._id} was created.`);
-            Booking.findById(booking._id)
-              .populate(['journey', 'seats'])
-              .exec((err, newBooking) => {
-                if (err) {
-                  return handleDbError(err, res);
-                }
+    bookingDetails.createdAt = new Date();
 
-                return res.status(Sc.OK).json(newBooking);
-              });
-          });
-        });
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+    let booking = await new Booking(bookingDetails).save();
+    console.log('Info:', `Booking ${booking._id} was created.`);
+
+    let newBooking = await Booking.findById(booking._id)
+      .populate(['journey', 'seats'])
+      .exec();
+    return res.status(Sc.OK).json(newBooking);
+  } catch (err) {
+    return handleDbError(err, res);
+  }
 };

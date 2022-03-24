@@ -8,35 +8,30 @@ const handleDbError = (err, res) => {
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   const { id } = req.params;
 
-  Booking.findById(id)
-    .populate(['journey', 'seats'])
-    .exec((err, booking) => {
-      if (err) {
-        return handleDbError(err, res);
-      }
+  try {
+    let booking = await Booking.findById(id)
+      .populate(['journey', 'seats'])
+      .exec();
 
-      if (!booking) {
-        return res
-          .status(Sc.BAD_REQUEST)
-          .json({ message: 'Booking not found.' });
-      }
+    if (!booking) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Booking not found.' });
+    }
 
-      Invoice.findOneAndDelete({ booking: booking._id }).exec((err) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+    await booking.deleteOne();
 
-        booking.deleteOne((err) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    console.log('Info:', `Booking ${booking._id} was deleted.`);
 
-          console.log('Info:', `Booking ${booking._id} was deleted.`);
-          return res.status(Sc.OK).json(booking);
-        });
-      });
-    });
+    let deletedInvoice = await Invoice.findOneAndDelete({
+      booking: booking._id,
+    }).exec();
+
+    console.log('Info:', `Invoice ${deletedInvoice._id} was deleted.`);
+
+    return res.status(Sc.OK).json(booking);
+  } catch (err) {
+    return handleDbError(err, res);
+  }
 };
