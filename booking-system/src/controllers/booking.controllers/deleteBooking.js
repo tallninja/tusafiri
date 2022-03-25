@@ -3,13 +3,13 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Booking, Invoice } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
 
 module.exports = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.query;
 
   try {
     let booking = await Booking.findById(id)
@@ -32,6 +32,6 @@ module.exports = async (req, res) => {
 
     return res.status(Sc.OK).json(booking);
   } catch (err) {
-    return handleDbError(err, res);
+    return handleError(err, res);
   }
 };

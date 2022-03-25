@@ -4,7 +4,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Booking, Seat, Journey } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
@@ -51,6 +51,6 @@ module.exports = async (req, res) => {
       .exec();
     return res.status(Sc.OK).json(newBooking);
   } catch (err) {
-    return handleDbError(err, res);
+    return handleError(err, res);
   }
 };

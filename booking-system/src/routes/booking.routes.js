@@ -11,7 +11,7 @@ const {
 router.get('/', getBookings);
 router.get('/:id', getBooking);
 router.post('/new', addBooking);
-router.patch('/edit/:id', editBooking);
-router.delete('/delete/:id', deleteBooking);
+router.patch('/edit/', editBooking);
+router.delete('/delete/', deleteBooking);
 
 module.exports = router;

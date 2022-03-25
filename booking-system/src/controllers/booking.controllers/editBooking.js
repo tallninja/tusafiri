@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Booking } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
@@ -12,44 +12,34 @@ const EditBookingSchema = Joi.object({
   seats: Joi.array(),
 });
 
-module.exports = (req, res) => {
-  const { id } = req.params;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  EditBookingSchema.validateAsync(req.body)
-    .then((updatedFields) => {
-      Booking.findById(id).exec((err, booking) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+  if (!id) {
+    return res
+      .status(Sc.BAD_REQUEST)
+      .json({ message: 'Please enter the booking id.' });
+  }
 
-        if (!booking) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: 'Booking not found.' });
-        }
+  try {
+    let updatedFields = await EditBookingSchema.validateAsync(req.body);
+    let currentBooking = await Booking.findById(id).exec();
 
-        updatedFields.updatedAt = new Date();
+    if (!currentBooking) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Booking not found.' });
+    }
 
-        booking.updateOne({ $set: updatedFields }, (err) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    updatedFields.updatedAt = new Date();
 
-          console.log('Info:', `Booking ${booking._id} was updated.`);
+    await currentBooking.updateOne({ $set: updatedFields });
+    console.log('Info:', `Booking ${currentBooking._id} was updated.`);
 
-          Booking.findById(booking._id)
-            .populate(['journey', 'seats'])
-            .exec((err, updatedBooking) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
+    let updatedBooking = await Booking.findById(currentBooking._id)
+      .populate(['journey', 'seats'])
+      .exec();
 
-              return res.status(Sc.OK).json(updatedBooking);
-            });
-        });
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+    return res.status(Sc.OK).json(updatedBooking);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };
