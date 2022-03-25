@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Route, Location } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -14,76 +14,40 @@ const CreateRouteSchema = Joi.object({
   to: Joi.string().length(3),
 });
 
-module.exports = (req, res) => {
-  CreateRouteSchema.validateAsync(req.body)
-    .then((validatedData) => {
-      let routeDetails = validatedData;
+module.exports = async (req, res) => {
+  try {
+    let routeDetails = await CreateRouteSchema.validateAsync(req.body);
+    let existingRoute = await Route.findOne({ name: routeDetails.name }).exec();
 
-      let { name, from, to } = routeDetails;
+    if (existingRoute) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `${routeDetails.name} exists.` });
+    }
 
-      Route.findOne({ name: name }).exec((err, route) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
-        if (route) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: `${route.name} already exists.` });
-        }
-        Location.findOne({
-          code: from,
-        }).exec((err, location) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
-          if (!location) {
-            return res
-              .status(Sc.BAD_REQUEST)
-              .json({ message: `${location} location does not exist.` });
-          }
+    let from = await Location.findOne({ code: routeDetails.from }).exec();
+    let to = await Location.findOne({ code: routeDetails.to }).exec();
 
-          from = location._id;
+    if (!from || !to) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `Enter valid locations.` });
+    }
 
-          Location.findOne({
-            code: to,
-          }).exec((err, location) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
-            if (!location) {
-              return res
-                .status(Sc.BAD_REQUEST)
-                .json({ message: `${location} location does not exist.` });
-            }
+    routeDetails.from = from._id;
+    routeDetails.to = to._id;
+    routeDetails.createdAt = new Date();
 
-            to = location._id;
+    let route = await new Route(routeDetails).save();
 
-            new Route({
-              name: name,
-              from: from,
-              to: to,
-            }).save((err, route) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
+    console.log('Info:', `${route.name} was created.`);
 
-              console.log('Info:', `${route.name} was created.`);
-              Route.findById(route._id)
-                .populate(['from', 'to'])
-                .exec((err, newRoute) => {
-                  if (err) {
-                    return handleDbError(err, res);
-                  }
-                  return res.status(Sc.OK).json(newRoute);
-                });
-            });
-          });
-        });
-      });
-    })
-    .catch((err) => {
-      if (err) {
-        return res.status(Sc.BAD_REQUEST).json(err);
-      }
-    });
+    let newRoute = await Route.findById(route._id)
+      .populate(['from', 'to'])
+      .exec();
+
+    return res.status(Sc.OK).json(newRoute);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

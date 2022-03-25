@@ -11,11 +11,11 @@ const {
 } = require('../controllers/journey.controllers');
 
 router.get('/', getJourneys);
+router.get('/available', getAvailableJourneys);
 router.get('/:id', getJourney);
 router.post('/new', addJourney);
-router.patch('/edit/:id', editJourney);
-router.delete('/delete/:id', deleteJourney);
+router.patch('/edit/', editJourney);
+router.delete('/delete/', deleteJourney);
 router.patch('/add-drivers', addDrivers);
-router.get('/available/all', getAvailableJourneys);
 
 module.exports = router;

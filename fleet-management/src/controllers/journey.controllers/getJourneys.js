@@ -3,19 +3,17 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Journey } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
 
-module.exports = (req, res) => {
-  Journey.find()
-    .populate(['route'])
-    .exec((err, journeys) => {
-      if (err) {
-        return handleDbError(err, res);
-      }
+module.exports = async (req, res) => {
+  try {
+    let journeys = await Journey.find().populate(['route']).exec();
 
-      return res.status(Sc.OK).json(journeys);
-    });
+    return res.status(Sc.OK).json(journeys);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

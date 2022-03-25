@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Location } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -15,18 +15,36 @@ const CreateLocationSchema = Joi.object({
   lng: Joi.number(),
 });
 
-module.exports = (req, res) => {
-  CreateLocationSchema.validateAsync(req.body)
-    .then((locationDetails) => {
-      new Location(locationDetails).save((err, location) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
-        console.log('Info:', `${location.name} was created.`);
-        return res.status(Sc.OK).json(location);
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+module.exports = async (req, res) => {
+  try {
+    let locationDetails = await CreateLocationSchema.validateAsync(req.body);
+    locationDetails.createdAt = new Date();
+
+    let existingLocation = await Location.findOne({
+      name: locationDetails.name,
+    }).exec();
+
+    if (existingLocation) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `${locationDetails.name} already exists.` });
+    }
+
+    existingLocation = await Location.findOne({
+      code: locationDetails.code,
+    }).exec();
+
+    if (existingLocation) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `${locationDetails.code} already exists.` });
+    }
+
+    let newLocation = await new Location(locationDetails).save();
+    console.log('Info:', `${newLocation.name} was created.`);
+
+    return res.status(Sc.OK).json(newLocation);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

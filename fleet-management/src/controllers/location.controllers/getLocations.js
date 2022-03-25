@@ -2,16 +2,17 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Location } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
 
-module.exports = (req, res) => {
-  Location.find().exec((err, locations) => {
-    if (err) {
-      return handleDbError(err, res);
-    }
+module.exports = async (req, res) => {
+  try {
+    let locations = await Location.find().exec();
+
     return res.status(Sc.OK).json(locations);
-  });
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

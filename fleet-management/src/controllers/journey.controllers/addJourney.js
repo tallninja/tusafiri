@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Journey, Bus, Route } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
@@ -15,73 +15,57 @@ const CreateJourneySchema = Joi.object({
   departureTime: Joi.date(),
 });
 
-module.exports = (req, res) => {
-  CreateJourneySchema.validateAsync(req.body)
-    .then((journeyDetails) => {
-      // check given route is valid
-      Route.findOne({ name: journeyDetails.route }).exec((err, route) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+module.exports = async (req, res) => {
+  try {
+    let journeyDetails = await CreateJourneySchema.validateAsync(req.body);
 
-        if (!route) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: `${journeyDetails.route} route not found.` });
-        }
+    let route = await Route.findOne({ name: journeyDetails.route }).exec();
 
-        journeyDetails.route = route._id;
+    if (!route) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `${journeyDetails.route} route not found.` });
+    }
 
-        // check given bus is valid
-        Bus.findOne({ regNo: journeyDetails.bus }).exec((err, bus) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    journeyDetails.route = route._id;
+    let bus = await Bus.findOne({ regNo: journeyDetails.bus }).exec();
+    let existingJourneys = await Journey.find({ completed: false });
 
-          if (!bus) {
-            return res
-              .status(Sc.BAD_REQUEST)
-              .json({ message: `${journeyDetails.bus} not found.` });
-          }
+    if (!bus) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `${journeyDetails.bus} not found.` });
+    }
 
-          journeyDetails.bus = bus._id;
+    let unavailableBuses = existingJourneys.map((journey) =>
+      JSON.stringify(journey.bus)
+    );
+    if (unavailableBuses.includes(JSON.stringify(bus._id))) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Bus already assigned another journey.' });
+    }
 
-          // check if there is a similar journey
-          Journey.findOne(journeyDetails).exec((err, journey) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
+    journeyDetails.bus = bus._id;
+    let existingjourney = await Journey.findOne(journeyDetails).exec();
 
-            if (journey) {
-              return res
-                .status(Sc.BAD_REQUEST)
-                .json({ message: 'Journey already exists.' });
-            }
+    if (existingjourney) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Journey already exists.' });
+    }
 
-            journeyDetails.createdAt = new Date();
+    journeyDetails.createdAt = new Date();
+    let newJourney = await new Journey(journeyDetails).save();
 
-            new Journey(journeyDetails).save((err, journey) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
+    console.log('Info:', `Journey ${newJourney._id} was created.`);
 
-              console.log('Info:', `Journey ${journey._id} was created.`);
+    let createdJourney = await Journey.findById(newJourney._id)
+      .populate(['bus', 'route'])
+      .exec();
 
-              Journey.findById(journey._id)
-                .populate(['bus', 'route'])
-                .exec((err, newJourney) => {
-                  if (err) {
-                    return handleDbError(err, res);
-                  }
-
-                  return res.status(Sc.OK).json(newJourney);
-                });
-            });
-          });
-        });
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+    return res.status(Sc.OK).json(createdJourney);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

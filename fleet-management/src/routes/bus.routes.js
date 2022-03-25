@@ -11,7 +11,7 @@ const {
 router.get('/', getBuses);
 router.get('/:id', getBus);
 router.post('/new', addBus);
-router.patch('/edit/:id', editBus);
-router.delete('/delete/:id', deleteBus);
+router.patch('/edit/', editBus);
+router.delete('/delete/', deleteBus);
 
 module.exports = router;

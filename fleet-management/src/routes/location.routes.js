@@ -11,7 +11,7 @@ const {
 router.get('/', getLocations);
 router.get('/:id', getLocation);
 router.post('/new', addLocation);
-router.patch('/edit/:id', editLocation);
-router.delete('/delete/:id', deleteLocation);
+router.patch('/edit/', editLocation);
+router.delete('/delete/', deleteLocation);
 
 module.exports = router;

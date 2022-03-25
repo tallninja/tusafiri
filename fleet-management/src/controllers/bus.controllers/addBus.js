@@ -1,8 +1,8 @@
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
-const { Bus } = require('../../models');
+const { Bus, Seat } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -17,38 +17,34 @@ const CreateBusSchema = Joi.object({
   capacity: Joi.number().min(1).max(60),
 });
 
-module.exports = (req, res) => {
-  CreateBusSchema.validateAsync(req.body)
-    .then((busDetails) => {
-      // check if bus with regNo exists
-      Bus.findOne({ regNo: busDetails.regNo }).exec((err, bus) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+module.exports = async (req, res) => {
+  try {
+    let busDetails = await CreateBusSchema.validateAsync(req.body);
+    let existingBus = await Bus.findOne({ regNo: busDetails.regNo }).exec();
 
-        if (bus) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: `${bus.regNo} exists.` });
-        }
+    if (existingBus) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `${existingBus.regNo} exists.` });
+    }
 
-        new Bus(busDetails).save((err, bus) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    busDetails.createdAt = new Date();
 
-          console.log('Info:', `${bus.regNo} was added.`);
+    let newBus = await new Bus(busDetails).save();
 
-          Bus.findById(bus._id).exec((err, newBus) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
-            return res.status(Sc.OK).json(newBus);
-          });
-        });
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+    for (let i = 1; i <= newBus.capacity; i++) {
+      let seat = await new Seat({ number: i, bus: newBus._id }).save();
+      newBus.seats.push(seat._id);
+    }
+
+    await newBus.save();
+
+    console.log('Info:', `${newBus.regNo} was added.`);
+
+    let createdBus = await Bus.findById(newBus._id).exec();
+
+    return res.status(Sc.OK).json(createdBus);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

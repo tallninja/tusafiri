@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Journey, Employee, Role } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
@@ -12,85 +12,56 @@ const SetDriversSchema = Joi.object({
   drivers: Joi.array().length(2),
 });
 
-module.exports = (req, res) => {
-  const { journey_id } = req.query;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  SetDriversSchema.validateAsync(req.body)
-    .then(({ drivers }) => {
-      Journey.findById(journey_id).exec((err, journey) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+  try {
+    let updatedFields = await SetDriversSchema.validateAsync(req.body);
+    let journey = await Journey.findById(id).exec();
 
-        if (!journey) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: 'Journey not found.' });
-        }
+    if (!journey) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Journey not found.' });
+    }
 
-        Role.find({ name: 'driver' }).exec((err, role) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    let driverRole = await Role.find({ name: 'driver' }).exec();
 
-          if (!role) {
-            return res
-              .status(Sc.INTERNAL_SERVER_ERROR)
-              .json({ message: 'Role driver does not exist.' });
-          }
+    if (!driverRole) {
+      return res
+        .status(Sc.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Role does not exist.' });
+    }
 
-          Employee.find({
-            role: role._id,
-            employeeId: { $in: drivers },
-          }).exec((err, drivers) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
+    let drivers = await Employee.find({
+      role: driverRole._id,
+      employeeId: { $in: updatedFields.drivers },
+    }).exec();
 
-            if (drivers.length !== 2) {
-              return res
-                .status(Sc.BAD_REQUEST)
-                .json({ message: 'Please provide exactly 2 drivers.' });
-            }
+    if (drivers.length !== 2) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Please provide exactly 2 drivers.' });
+    }
 
-            Journey.findOne({ drivers: { $in: drivers } }).exec(
-              (err, existingJourney) => {
-                if (err) {
-                  return handleDbError(err, res);
-                }
+    let existingJourney = await Journey.findOne({
+      drivers: { $in: drivers },
+    }).exec();
 
-                if (existingJourney) {
-                  return res.status(Sc.BAD_REQUEST).json({
-                    message:
-                      'One or both drivers not available for assignment.',
-                  });
-                }
-
-                journey.updateOne(
-                  { $set: { drivers: drivers, updatedAt: new Date() } },
-                  (err) => {
-                    if (err) {
-                      return handleDbError(err, res);
-                    }
-
-                    Journey.findById(journey._id, { password: 0 })
-                      .populate(['bus', 'route'])
-                      .exec((err, newJourney) => {
-                        if (err) {
-                          return handleDbError(err, res);
-                        }
-
-                        return res.status(Sc.OK).json(newJourney);
-                      });
-                  }
-                );
-              }
-            );
-          });
-        });
+    if (existingJourney) {
+      return res.status(Sc.BAD_REQUEST).json({
+        message: 'One or both drivers not available for assignment.',
       });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
+    }
+
+    await journey.updateOne({
+      $set: { drivers: drivers, updatedAt: new Date() },
     });
+
+    let updatedJourney = await Journey.findById(journey._id)
+      .populate(['bus', 'route'])
+      .exec();
+
+    return res.status(Sc.OK).json(updatedJourney);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

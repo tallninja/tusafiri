@@ -3,33 +3,31 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Journey } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
 
-module.exports = (req, res) => {
-  const { id } = req.params;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  Journey.findById(id)
-    .populate(['bus', 'route'])
-    .exec((err, journey) => {
-      if (err) {
-        return handleDbError(err, res);
-      }
+  if (!id) {
+    return res
+      .status(Sc.BAD_REQUEST)
+      .json({ message: 'Please provide the journey id.' });
+  }
 
-      if (!journey) {
-        return res
-          .status(Sc.BAD_REQUEST)
-          .json({ message: 'Journey not found.' });
-      }
+  try {
+    let journey = await Journey.findById(id).populate(['bus', 'route']).exec();
 
-      journey.delete((err) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+    if (!journey) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Journey not found.' });
+    }
 
-        return res.status(Sc.OK).json(journey);
-      });
-    });
+    await journey.deleteOne();
+
+    return res.status(Sc.OK).json(journey);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

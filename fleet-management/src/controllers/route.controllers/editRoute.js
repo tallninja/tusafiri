@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Route, Location } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -14,91 +14,73 @@ const EditRouteSchema = Joi.object({
   to: Joi.string().length(3).optional(),
 });
 
-module.exports = (req, res) => {
-  const { id } = req.params;
+module.exports = async (req, res) => {
+  const { id } = req.query;
+
   if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
       .json({ message: 'Please provide the route id.' });
   }
 
-  EditRouteSchema.validateAsync(req.body)
-    .then((validatedData) => {
-      let updatedFields = validatedData;
+  try {
+    let updatedFields = await EditRouteSchema.validateAsync(req.body);
 
-      if (updatedFields.from) {
-        let locationCode = updatedFields.from;
-        Location.findOne({ code: locationCode }).exec((err, location) => {
-          if (err) {
-            return handleDbError(location);
-          }
-          if (!location) {
-            return res
-              .status(Sc.BAD_REQUEST)
-              .json({ message: `${locationCode} not found.` });
-          }
-          updatedFields.from = location._id;
-        });
+    if (updatedFields.from) {
+      let location = await Location.findOne({
+        code: updatedFields.from,
+      }).exec();
+
+      if (!location) {
+        return res
+          .status(Sc.BAD_REQUEST)
+          .json({ message: `${updatedFields.from} not found.` });
       }
 
-      if (updatedFields.to) {
-        let locationCode = updatedFields.to;
-        Location.findOne({ code: locationCode }).exec((err, location) => {
-          if (err) {
-            return handleDbError(location);
-          }
-          if (!location) {
-            return res
-              .status(Sc.BAD_REQUEST)
-              .json({ message: `${locationCode} not found.` });
-          }
-          updatedFields.to = location._id;
-        });
+      updatedFields.from = location._id;
+    }
+
+    if (updatedFields.to) {
+      let location = await Location.findOne({ code: updatedFields.to }).exec();
+
+      if (!location) {
+        return res
+          .status(Sc.BAD_REQUEST)
+          .json({ message: `${updatedFields.from} not found.` });
       }
 
-      Route.findOne({ name: updatedFields.name }).exec((err, route) => {
-        if (err) {
-          return handleDbError(err);
-        }
+      updatedFields.to = location._id;
+    }
 
-        if (route) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: `${route.name} exists.` });
-        }
+    if (updatedFields.name) {
+      let existingRoute = await Route.findOne({
+        name: updatedFields.name,
+      }).exec();
 
-        Route.findById(id).exec((err, route) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+      if (existingRoute) {
+        return res
+          .status(Sc.BAD_REQUEST)
+          .json({ message: `${existingRoute.name} exists.` });
+      }
+    }
 
-          if (!route) {
-            return res
-              .status(Sc.BAD_REQUEST)
-              .json({ message: 'Route not found' });
-          }
+    let currentRoute = await Route.findById(id).exec();
 
-          route.updateOne({ $set: updatedFields }, (err) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
+    if (!currentRoute) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Route not found' });
+    }
 
-            console.log('Info:', `${route.name} was edited.`);
+    updatedFields.updatedAt = new Date();
 
-            Route.findById(route._id)
-              .populate(['from', 'to'])
-              .exec((err, updatedRoute) => {
-                if (err) {
-                  return handleDbError(err, res);
-                }
+    await currentRoute.updateOne({ $set: updatedFields });
+    console.log('Info:', `${currentRoute.name} was updated.`);
 
-                return res.status(Sc.OK).json(updatedRoute);
-              });
-          });
-        });
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+    let updatedRoute = await Route.findById(currentRoute._id)
+      .populate(['from', 'to'])
+      .exec();
+
+    return res.status(Sc.OK).json(updatedRoute);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

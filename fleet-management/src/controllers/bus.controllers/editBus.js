@@ -1,9 +1,9 @@
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Bus } = require('../../models');
+const { Bus, Seat } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -15,33 +15,45 @@ const EditBusSchema = Joi.object({
   capacity: Joi.number().min(1).max(60).optional(),
 });
 
-module.exports = (req, res) => {
-  const { id } = req.params;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  EditBusSchema.validateAsync(req.body)
-    .then((updatedFields) => {
-      Bus.findById(id).exec((err, bus) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
-        if (!bus) {
-          return res.status(Sc.BAD_REQUEST).json({ message: 'Bus not found.' });
-        }
-        bus.updateOne({ $set: updatedFields }, (err) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
-          console.log('Info:', `${bus.regNo} was updated.`);
-          Bus.findById(bus.id).exec((err, updatedBus) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
-            return res.status(Sc.OK).json(updatedBus);
-          });
-        });
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+  if (!id) {
+    return res
+      .status(Sc.BAD_REQUEST)
+      .json({ message: 'Please provide the bus id.' });
+  }
+
+  try {
+    let updatedFields = await EditBusSchema.validateAsync(req.body);
+    let currentBus = await Bus.findById(id).exec();
+
+    if (!currentBus) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Bus not found.' });
+    }
+
+    // also adjust the number of seats
+    if (updatedFields.capacity) {
+      await Seat.deleteMany({ bus: currentBus._id });
+
+      updatedFields.seats = [];
+      for (let i = 1; i <= updatedFields.capacity; i++) {
+        let seat = await new Seat({ number: i, bus: currentBus._id }).save();
+        updatedFields.seats.push(seat);
+      }
+    }
+
+    updatedFields.updatedAt = new Date();
+
+    await currentBus.updateOne({ $set: updatedFields });
+    console.log('Info:', `${currentBus.regNo} was updated.`);
+
+    let updatedBus = await Bus.findById(currentBus.id)
+      .populate(['seats'])
+      .exec();
+
+    return res.status(Sc.OK).json(updatedBus);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

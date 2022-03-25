@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Journey, Bus, Route } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
@@ -16,80 +16,59 @@ const EditJourneySchema = Joi.object({
   departureTime: Joi.date().optional(),
 });
 
-module.exports = (req, res) => {
-  const { id } = req.params;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  EditJourneySchema.validateAsync(req.body)
-    .then((updatedFields) => {
-      updatedFields.updatedAt = new Date();
+  if (!id) {
+    return res
+      .status(Sc.BAD_REQUEST)
+      .json({ message: 'Please provide the journey id.' });
+  }
 
-      Journey.findById(id).exec(async (err, journey) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+  try {
+    let updatedFields = await EditJourneySchema.validateAsync(req.body);
 
-        if (!journey) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: 'Journey not found.' });
-        }
+    if (updatedFields.route) {
+      let route = await Route.findOne({
+        name: updatedFields.route,
+      }).exec();
 
-        // check given route is valid
-        if (updatedFields.route) {
-          try {
-            let route = await Route.findOne({
-              name: updatedFields.route,
-            }).exec();
+      if (!route) {
+        return res.status(Sc.BAD_REQUEST).json({ message: `Route not found.` });
+      }
 
-            if (!route) {
-              return res
-                .status(Sc.BAD_REQUEST)
-                .json({ message: `Route not found.` });
-            }
+      updatedFields.route = route._id;
+    }
 
-            updatedFields.route = route._id;
-          } catch (err) {
-            return handleDbError(err, res);
-          }
-        }
+    if (updatedFields.bus) {
+      let bus = await Bus.findOne({ regNo: updatedFields.bus }).exec();
 
-        if (updatedFields.bus) {
-          // check given bus is valid
-          try {
-            let bus = await Bus.findOne({ regNo: updatedFields.bus }).exec();
+      if (!bus) {
+        return res
+          .status(Sc.BAD_REQUEST)
+          .json({ message: `${updatedFields.bus} not found.` });
+      }
 
-            if (!bus) {
-              return res
-                .status(Sc.BAD_REQUEST)
-                .json({ message: `${updatedFields.bus} not found.` });
-            }
+      updatedFields.bus = bus._id;
+    }
 
-            updatedFields.bus = bus._id;
-          } catch (err) {
-            return handleDbError(err, res);
-          }
-        }
+    let currentJourney = await Journey.findById(id).exec();
 
-        journey.updateOne({ $set: updatedFields }, (err) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    if (!currentJourney) {
+      return res.status(Sc.BAD_REQUEST).json({ message: 'Journey not found.' });
+    }
 
-          console.log('Info:', `${journey._id} was updated.`);
+    updatedFields.updatedAt = new Date();
 
-          Journey.findById(journey._id)
-            .populate(['bus', 'route', 'drivers', 'bookedSeats'])
-            .exec((err, updatedJourney) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
+    await currentJourney.updateOne({ $set: updatedFields });
+    console.log('Info:', `${currentJourney._id} was updated.`);
 
-              return res.status(Sc.OK).json(updatedJourney);
-            });
-        });
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+    let updatedJourney = await Journey.findById(currentJourney._id)
+      .populate(['bus', 'route', 'drivers', 'bookedSeats'])
+      .exec();
+
+    return res.status(Sc.OK).json(updatedJourney);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

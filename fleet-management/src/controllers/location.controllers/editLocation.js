@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Location } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -15,35 +15,34 @@ const EditLocationSchema = Joi.object({
   lng: Joi.number().optional(),
 });
 
-module.exports = (req, res) => {
-  const { id } = req.params;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  EditLocationSchema.validateAsync(req.body)
-    .then((updatedFields) => {
-      Location.findById(id).exec((err, location) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
-        if (!location) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: 'Location not found.' });
-        }
-        location.updateOne({ $set: updatedFields }, (err) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
-          console.log('Info:', `${location.name} was edited.`);
-          Location.findById(id).exec((err, updatedLocation) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
-            return res.status(Sc.OK).json(updatedLocation);
-          });
-        });
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+  if (!id) {
+    return res
+      .status(Sc.BAD_REQUEST)
+      .json({ message: 'Please provide the location id.' });
+  }
+
+  try {
+    let updatedFields = await EditLocationSchema.validateAsync(req.body);
+    let currentLocation = await Location.findById(id).exec();
+
+    if (!currentLocation) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Location not found.' });
+    }
+
+    updatedFields.updatedAt = new Date();
+
+    await currentLocation.updateOne({ $set: updatedFields });
+    console.log('Info:', `${currentLocation.name} was updated.`);
+
+    let updatedLocation = await Location.findById(currentLocation._id).exec();
+
+    return res.status(Sc.OK).json(updatedLocation);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

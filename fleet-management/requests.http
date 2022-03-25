@@ -108,16 +108,14 @@ Content-Type: application/json
 GET {{journeysApi}}/
 
 ### FETCH journey
-GET {{journeysApi}}/623c7c2743f02b5e994abee4
+GET {{journeysApi}}/623c7d1ce2b563a09608cd97
 
 ### EDIT journey
-PATCH {{journeysApi}}/edit/623c7c2743f02b5e994abee4
+PATCH {{journeysApi}}/edit/623c7d1ce2b563a09608cd97
 Content-Type: application/json
 
 {
-    "route": "B1",
-    "fare": 900,
-    "bookedSeats": ["623c7c0743f02b5e994abec5", "623c7c0743f02b5e994abec7", "623c7c0843f02b5e994abedb"]
+    "bookedSeats": []
 }
 
 ### ADD drivers
