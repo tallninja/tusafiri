@@ -25,6 +25,7 @@ module.exports = async (req, res) => {
     }
 
     await journey.deleteOne();
+    console.log('Info:', `Journey ${journey._id} was deleted.`);
 
     return res.status(Sc.OK).json(journey);
   } catch (err) {
