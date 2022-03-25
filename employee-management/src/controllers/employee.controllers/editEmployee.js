@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Employee } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -16,42 +16,33 @@ const EditEmployeeSchema = Joi.object({
   phoneNumber: Joi.string(),
 });
 
-module.exports = (req, res) => {
-  const { id } = req.params;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  EditEmployeeSchema.validateAsync(req.body)
-    .then((updatedFields) => {
-      Employee.findById(id).exec((err, employee) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+  try {
+    let updatedFields = await EditEmployeeSchema.validateAsync(req.body);
+    let currentEmployee = await Employee.findById(id).exec();
 
-        if (!employee) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: 'Employee not found.' });
-        }
+    if (!currentEmployee) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Employee not found.' });
+    }
 
-        updatedFields.updatedAt = new Date();
-        employee.updateOne({ $set: updatedFields }, (err) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    updatedFields.updatedAt = new Date();
 
-          console.log('Info:', `Employee ${employee.employeeId} was edited.`);
-          Employee.findById(employee._id, { password: 0 })
-            .populate(['role'])
-            .exec((err, updatedEmployee) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
+    await currentEmployee.updateOne({ $set: updatedFields });
 
-              return res.status(Sc.OK).json(updatedEmployee);
-            });
-        });
-      });
+    console.log('Info:', `Employee ${currentEmployee.employeeId} was updated.`);
+
+    let updatedEmployee = await Employee.findById(currentEmployee._id, {
+      password: 0,
     })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+      .populate(['role'])
+      .exec();
+
+    return res.status(Sc.OK).json(updatedEmployee);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

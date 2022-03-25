@@ -2,25 +2,24 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Employee, Role, ROLES } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
 
-module.exports = (req, res) => {
-  Role.findOne({ name: ROLES.helpDesk }).exec((err, role) => {
-    if (err) {
-      return handleDbError(err, res);
-    }
+module.exports = async (req, res) => {
+  try {
+    let helpDeskRole = await Role.findOne({ name: ROLES.helpDesk }).exec();
 
-    Employee.find({ role: role._id }, { password: 0 })
+    let helpDeskManagers = await Employee.find(
+      { role: helpDeskRole._id },
+      { password: 0 }
+    )
       .populate(['role'])
-      .exec((err, helpDeskManagers) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+      .exec();
 
-        return res.status(Sc.OK).json(helpDeskManagers);
-      });
-  });
+    return res.status(Sc.OK).json(helpDeskManagers);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

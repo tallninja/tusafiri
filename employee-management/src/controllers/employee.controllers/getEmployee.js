@@ -2,27 +2,27 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Employee } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   const { id } = req.params;
 
-  Employee.findById(id, { password: 0 })
-    .populate(['role'])
-    .exec((err, employee) => {
-      if (err) {
-        return handleDbError(err, res);
-      }
+  try {
+    let employee = await Employee.findById(id, { password: 0 })
+      .populate(['role'])
+      .exec();
 
-      if (!employee) {
-        return res
-          .status(Sc.BAD_REQUEST)
-          .json({ message: 'Employee not found.' });
-      }
+    if (!employee) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Employee not found.' });
+    }
 
-      return res.status(Sc.OK).json(employee);
-    });
+    return res.status(Sc.OK).json(employee);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

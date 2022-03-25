@@ -3,7 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Employee, Role } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -12,72 +12,57 @@ const ChangeRoleSchema = Joi.object({
   roleName: Joi.string(),
 });
 
-module.exports = (req, res) => {
-  const { employee_id } = req.query;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  if (!employee_id) {
+  if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
       .json({ mmesage: 'Please provide employee id.' });
   }
 
-  ChangeRoleSchema.validateAsync(req.body)
-    .then(({ roleName }) => {
-      Role.findOne({ name: roleName }).exec((err, role) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+  try {
+    let { roleName } = await ChangeRoleSchema.validateAsync(req.body);
 
-        if (!role) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: `Role ${roleName} nof found.` });
-        }
+    let role = await Role.findOne({ name: roleName }).exec();
 
-        Employee.findById(employee_id).exec((err, employee) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    if (!role) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `Role ${roleName} nof found.` });
+    }
 
-          if (!employee) {
-            return res
-              .status(Sc.BAD_REQUEST)
-              .json({ message: 'Employee not found.' });
-          }
+    let currentEmployee = await Employee.findById(id).exec();
 
-          if (JSON.stringify(employee.role) === JSON.stringify(role._id)) {
-            return res.status(Sc.BAD_REQUEST).json({
-              message: `Employee ${employee.employeeId} is currently ${role.name}.`,
-            });
-          }
+    if (!currentEmployee) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Employee not found.' });
+    }
 
-          console.log(employee.role, role._id);
-
-          employee.updateOne(
-            { $set: { role: role._id, updatedAt: new Date() } },
-            (err) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
-
-              console.log(
-                'Info:',
-                `Employee ${employee.employeeId} role changed to ${role.name}.`
-              );
-              Employee.findById(employee._id, { password: 0 })
-                .populate(['role'])
-                .exec((err, updatedEmployee) => {
-                  if (err) {
-                    return handleDbError(err, res);
-                  }
-                  return res.status(Sc.OK).json(updatedEmployee);
-                });
-            }
-          );
-        });
+    if (JSON.stringify(currentEmployee.role) === JSON.stringify(role._id)) {
+      return res.status(Sc.BAD_REQUEST).json({
+        message: `Employee ${currentEmployee.employeeId} is currently ${role.name}.`,
       });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
+    }
+
+    await currentEmployee.updateOne({
+      $set: { role: role._id, updatedAt: new Date() },
     });
+
+    console.log(
+      'Info:',
+      `Employee ${currentEmployee.employeeId} role changed to ${role.name}.`
+    );
+
+    let updatedEmployee = await Employee.findById(currentEmployee._id, {
+      password: 0,
+    })
+      .populate(['role'])
+      .exec();
+
+    return res.status(Sc.OK).json(updatedEmployee);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

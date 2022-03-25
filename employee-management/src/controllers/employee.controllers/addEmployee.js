@@ -4,7 +4,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Employee, Role } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -20,61 +20,43 @@ const CreateEmployeeSchema = Joi.object({
   role: Joi.string(),
 });
 
-module.exports = (req, res) => {
-  CreateEmployeeSchema.validateAsync(req.body)
-    .then((employeeDetails) => {
-      employeeDetails.createdAt = new Date();
+module.exports = async (req, res) => {
+  try {
+    let employeeDetails = await CreateEmployeeSchema.validateAsync(req.body);
+    let existingEmployee = await Employee.findOne({
+      employeeId: employeeDetails.employeeId,
+    }).exec();
 
-      Employee.findOne({ employeeId: employeeDetails.employeeId }).exec(
-        (err, employee) => {
-          if (err) {
-            return handleDbError(err, res);
-          }
+    if (existingEmployee) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: `${employeeDetails.employeeId} exists.` });
+    }
 
-          if (employee) {
-            return res
-              .status(Sc.BAD_REQUEST)
-              .json({ message: `${employeeDetails.employeeId} exists.` });
-          }
+    let role = await Role.findOne({ name: employeeDetails.role }).exec();
 
-          Role.findOne({ name: employeeDetails.role }).exec((err, role) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
+    if (!role) {
+      return res.status(Sc.BAD_REQUEST).json({
+        message: `${employeeDetails.role} role does not exist.`,
+      });
+    }
 
-            if (!role) {
-              return res.status(Sc.BAD_REQUEST).json({
-                message: `${employeeDetails.role} role does not exist.`,
-              });
-            }
+    employeeDetails.role = role._id;
+    employeeDetails.password = bcrypt.hashSync(employeeDetails.password);
+    employeeDetails.createdAt = new Date();
 
-            employeeDetails.role = role._id;
-            employeeDetails.password = bcrypt.hashSync(
-              employeeDetails.password
-            );
-            new Employee(employeeDetails).save((err, employee) => {
-              if (err) {
-                return handleDbError(err, res);
-              }
+    let createdEmployee = await new Employee(employeeDetails).save();
 
-              console.log(
-                'Info:',
-                `Employee ${employee.employeeId} was created.`
-              );
-              Employee.findById(employee._id, { password: 0 })
-                .populate(['role'])
-                .exec((err, newEmployee) => {
-                  if (err) {
-                    return handleDbError(err, res);
-                  }
-                  return res.status(Sc.OK).json(newEmployee);
-                });
-            });
-          });
-        }
-      );
+    console.log('Info:', `Employee ${createdEmployee.employeeId} was created.`);
+
+    let newEmployee = await Employee.findById(createdEmployee._id, {
+      password: 0,
     })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
-    });
+      .populate(['role'])
+      .exec();
+
+    return res.status(Sc.OK).json(newEmployee);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

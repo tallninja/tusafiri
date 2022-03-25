@@ -4,7 +4,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Employee } = require('../../models');
 
-const handleDbError = (err, res) => {
+const handleError = (err, res) => {
   console.log('Error:', err);
   return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
 };
@@ -14,65 +14,54 @@ const ChangePaswordSchema = Joi.object({
   newPassword: Joi.string(),
 });
 
-module.exports = (req, res) => {
-  const { employee_id } = req.query;
+module.exports = async (req, res) => {
+  const { id } = req.query;
 
-  if (!employee_id) {
+  if (!id) {
     return res
       .status(Sc.BAD_REQUEST)
       .json({ mmesage: 'Please provide employee id.' });
   }
 
-  ChangePaswordSchema.validateAsync(req.body)
-    .then(({ oldPassword, newPassword }) => {
-      Employee.findById(employee_id).exec((err, employee) => {
-        if (err) {
-          return handleDbError(err, res);
-        }
+  try {
+    let { oldPassword, newPassword } = await ChangePaswordSchema.validateAsync(
+      req.body
+    );
 
-        if (!employee) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: 'Employee not found.' });
-        }
+    let currentEmployee = await Employee.findById(id).exec();
 
-        let oldPasswordIsValid = bcrypt.compareSync(
-          oldPassword,
-          employee.password
-        );
+    if (!currentEmployee) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Employee not found.' });
+    }
 
-        if (!oldPasswordIsValid) {
-          return res
-            .status(Sc.BAD_REQUEST)
-            .json({ message: 'Old password is invalid.' });
-        }
+    let oldPasswordIsValid = bcrypt.compareSync(
+      oldPassword,
+      currentEmployee.password
+    );
 
-        employee.updateOne(
-          {
-            $set: {
-              password: bcrypt.hashSync(newPassword),
-              updatedAt: new Date(),
-            },
-          },
-          (err) => {
-            if (err) {
-              return handleDbError(err, res);
-            }
+    if (!oldPasswordIsValid) {
+      return res
+        .status(Sc.BAD_REQUEST)
+        .json({ message: 'Old password is invalid.' });
+    }
 
-            Employee.findById(employee._id, { password: 0 })
-              .populate(['role'])
-              .exec((err, updatedEmployee) => {
-                if (err) {
-                  return handleDbError(err, res);
-                }
-
-                return res.status(Sc.OK).json(updatedEmployee);
-              });
-          }
-        );
-      });
-    })
-    .catch((err) => {
-      return res.status(Sc.BAD_REQUEST).json(err);
+    await currentEmployee.updateOne({
+      $set: {
+        password: bcrypt.hashSync(newPassword),
+        updatedAt: new Date(),
+      },
     });
+
+    let updatedEmployee = await Employee.findById(currentEmployee._id, {
+      password: 0,
+    })
+      .populate(['role'])
+      .exec();
+
+    return res.status(Sc.OK).json(updatedEmployee);
+  } catch (err) {
+    return handleError(err, res);
+  }
 };

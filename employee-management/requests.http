@@ -1,37 +1,41 @@
+@base_url=http://localhost:5200
+@employees_api={{base_url}}/api/employees
+
+
 ### Root route
-GET http://localhost:5200/
+GET {{base_url}}/
 
 ### CREATE employee
-POST http://localhost:5200/api/employees/new
+POST {{employees_api}}/new
 Content-Type: application/json
 
 {
-    "firstName": "Benjamin",
-    "lastName": "Mumasi",
-    "idNo": 37281555,
-    "email": "mumasibenjamin@gmail.com",
-    "phoneNumber": "+254719286396",
-    "employeeId": "DRV0007/2017",
+    "firstName": "Betty",
+    "lastName": "Mueni",
+    "idNo": 17281555,
+    "email": "betty@gmail.com",
+    "phoneNumber": "+254750286330",
+    "employeeId": "HDM0002/2017",
     "password": "password",
-    "role": "driver"
+    "role": "help-desk"
 }
 
 ### FETCH employees
-GET http://localhost:5200/api/employees/
+GET {{employees_api}}/
 
 ### FETCH employee
-GET http://localhost:5200/api/employees/6239b0a5bf038478788e10f4
+GET {{employees_api}}/623d4db7a6730e28b15eb019
 
 ### EDIT employee
-PATCH http://localhost:5200/api/employees/edit/6239b0a5bf038478788e10f4
+PATCH {{employees_api}}/edit?id=623d4db7a6730e28b15eb019
 Content-Type: application/json
 
 {
-    "email": "wambua@gmail.com"
+    "email": "bettymueni12@gmail.com"
 }
 
 ### Change password
-PATCH http://localhost:5200/api/employees/change-password?employee_id=6239b0a5bf038478788e10f4
+PATCH {{employees_api}}/change-password?id=623d4db7a6730e28b15eb019
 Content-Type: application/json
 
 {
@@ -40,7 +44,7 @@ Content-Type: application/json
 }
 
 ### Change role
-PATCH http://localhost:5200/api/employees/change-role?employee_id=6239b0a5bf038478788e10f4
+PATCH {{employees_api}}/change-role?id=623d4db7a6730e28b15eb019
 Content-Type: application/json
 
 {
@@ -48,17 +52,17 @@ Content-Type: application/json
 }
 
 ### DELETE Employee
-DELETE http://localhost:5200/api/employees/delete/6239b0a5bf038478788e10f4
+DELETE {{employees_api}}/delete?id=623d4db7a6730e28b15eb019
 
 
 ### FETCH drivers
-GET http://localhost:5200/api/employees/dept/drivers
+GET {{employees_api}}/drivers
 
 ### FETCH fleet managers
-GET http://localhost:5200/api/employees/dept/fleet-managers
+GET {{employees_api}}/fleet-managers
 
 ### FETCH snm managers
-GET http://localhost:5200/api/employees/dept/snm-managers
+GET {{employees_api}}/snm-managers
 
 ### FETCH help desk
-GET http://localhost:5200/api/employees/dept/help-desk
+GET {{employees_api}}/help-desk
