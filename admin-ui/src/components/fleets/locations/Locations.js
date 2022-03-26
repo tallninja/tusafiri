@@ -23,10 +23,14 @@ export const Locations = () => {
 
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure you want to delete this record ?')) {
-			let deletedLocation = await deleteLocation(id);
-			setLocations(
-				locations.filter((location) => location._id !== deletedLocation._id)
-			);
+			let res = await deleteLocation(id);
+			if (res.status === 200) {
+				setLocations(
+					locations.filter((location) => location._id !== res.data._id)
+				);
+			} else {
+				console.log(res.data);
+			}
 		}
 	};
 

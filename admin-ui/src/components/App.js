@@ -8,6 +8,7 @@ import { Dashboard } from './Dashboard';
 import { FleetRoutes, CreateRoute, EditRoute } from './fleets/fleetRoutes';
 import { Locations, CreateLocation, EditLocation } from './fleets/locations';
 import { Buses, CreateBus, EditBus } from './fleets/buses';
+import { Journeys, CreateJourney, EditJourney } from './fleets/journeys';
 
 const queryClient = new QueryClient();
 
@@ -18,18 +19,25 @@ export const App = () => {
 				<AppWrapper>
 					<Routes>
 						<Route path='/' element={<Dashboard />} />
+
 						<Route path='/fleets/locations' element={<Locations />} />
 						<Route path='/fleets/locations/new' element={<CreateLocation />} />
 						<Route
 							path='/fleets/locations/edit/:id'
 							element={<EditLocation />}
 						/>
+
 						<Route path='/fleets/routes' element={<FleetRoutes />} />
 						<Route path='/fleets/routes/new' element={<CreateRoute />} />
 						<Route path='/fleets/routes/edit/:id' element={<EditRoute />} />
+
 						<Route path='/fleets/buses' element={<Buses />} />
 						<Route path='/fleets/buses/new' element={<CreateBus />} />
 						<Route path='/fleets/buses/edit/:id' element={<EditBus />} />
+
+						<Route path='/fleets/journeys' element={<Journeys />} />
+						<Route path='/fleets/journeys/new' element={<CreateJourney />} />
+						<Route path='/fleets/journeys/edit/:id' element={<EditJourney />} />
 					</Routes>
 				</AppWrapper>
 			</BrowserRouter>
