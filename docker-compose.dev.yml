@@ -35,7 +35,6 @@ services:
       context: ./admin-ui
       dockerfile: ./Dockerfile.dev
     volumes:
-      - /app/node_modules
       - ./admin-ui:/app
     ports:
-      - 3003:3000
+      - 3000:3000

@@ -49,9 +49,9 @@ export const AppWrapper = (props) => {
 										Dashboard
 									</a>
 								</li>
-								<li class='nav-item'>
+								<li className='nav-item'>
 									<a
-										class='nav-link'
+										className='nav-link'
 										data-bs-toggle='collapse'
 										href='#employeesCollapse'
 										role='button'
@@ -60,32 +60,32 @@ export const AppWrapper = (props) => {
 									>
 										Employee Management
 									</a>
-									<ul class='collapse' id='employeesCollapse'>
+									<ul className='collapse' id='employeesCollapse'>
 										<li>
-											<a class='nav-link' href='#'>
+											<a className='nav-link' href='#'>
 												Drivers
 											</a>
 										</li>
 										<li>
-											<a class='nav-link' href='#'>
+											<a className='nav-link' href='#'>
 												Fleet Managers
 											</a>
 										</li>
 										<li>
-											<a class='nav-link' href='#'>
+											<a className='nav-link' href='#'>
 												Service and maintenance
 											</a>
 										</li>
 										<li>
-											<a class='nav-link' href='#'>
+											<a className='nav-link' href='#'>
 												Support and help desk
 											</a>
 										</li>
 									</ul>
 								</li>
-								<li class='nav-item'>
+								<li className='nav-item'>
 									<a
-										class='nav-link'
+										className='nav-link'
 										data-bs-toggle='collapse'
 										href='#fleetCollapse'
 										role='button'
@@ -94,26 +94,30 @@ export const AppWrapper = (props) => {
 									>
 										Fleet Management
 									</a>
-									<ul class='collapse' id='fleetCollapse'>
+									<ul className='collapse' id='fleetCollapse'>
 										<li>
-											<a class='nav-link' href='#'>
+											<Link to={'/fleets/Buses'} className='nav-link'>
 												Buses
-											</a>
+											</Link>
 										</li>
 										<li>
-											<a class='nav-link' href='#'>
+											<Link
+												to={'/fleets/journeys'}
+												className='nav-link'
+												href='#'
+											>
 												Journeys
-											</a>
+											</Link>
 										</li>
 										<li>
-											<a class='nav-link' href='#'>
+											<Link to={'/fleets/routes'} className='nav-link'>
 												Routes
-											</a>
+											</Link>
 										</li>
 										<li>
-											<a class='nav-link' href='#'>
+											<Link to={'/fleets/locations'} className='nav-link'>
 												Locations
-											</a>
+											</Link>
 										</li>
 									</ul>
 								</li>

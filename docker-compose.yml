@@ -18,4 +18,4 @@ services:
   admin-ui:
     image: ernestwambua/tusafiri-admin-ui:latest
     ports:
-      - 3003:3000
+      - 3000:3000
