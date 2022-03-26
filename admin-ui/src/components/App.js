@@ -5,11 +5,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import './App.css';
 import { AppWrapper } from './AppWrapper';
 import { Dashboard } from './Dashboard';
-import { JourneyRoute, Bus, Journey } from './fleets';
+import { FleetRoutes, CreateRoute, EditRoute } from './fleets/fleetRoutes';
 import { Locations, CreateLocation, EditLocation } from './fleets/locations';
-// import { Login } from './Login';
-
-import { Products } from './Products';
 
 const queryClient = new QueryClient();
 
@@ -26,10 +23,9 @@ export const App = (props) => {
 							path='/fleets/locations/edit/:id'
 							element={<EditLocation />}
 						/>
-						<Route path='/fleets/routes' element={<JourneyRoute />} />
-						<Route path='/fleets/buses' element={<Bus />} />
-						<Route path='/fleets/journeys' element={<Journey />} />
-						<Route path='/products' element={<Products />} />
+						<Route path='/fleets/routes' element={<FleetRoutes />} />
+						<Route path='/fleets/routes/new' element={<CreateRoute />} />
+						<Route path='/fleets/routes/edit/:id' element={<EditRoute />} />
 					</Routes>
 				</AppWrapper>
 			</BrowserRouter>

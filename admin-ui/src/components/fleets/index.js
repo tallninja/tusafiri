@@ -1,5 +1,3 @@
-export { Bus } from './Bus';
+export * from './locations';
 
-export { JourneyRoute } from './Route';
-
-export { Journey } from './Journey';
+export * from './fleetRoutes';
