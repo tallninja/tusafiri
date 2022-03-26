@@ -7,10 +7,11 @@ import { AppWrapper } from './AppWrapper';
 import { Dashboard } from './Dashboard';
 import { FleetRoutes, CreateRoute, EditRoute } from './fleets/fleetRoutes';
 import { Locations, CreateLocation, EditLocation } from './fleets/locations';
+import { Buses, CreateBus, EditBus } from './fleets/buses';
 
 const queryClient = new QueryClient();
 
-export const App = (props) => {
+export const App = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<BrowserRouter>
@@ -26,6 +27,9 @@ export const App = (props) => {
 						<Route path='/fleets/routes' element={<FleetRoutes />} />
 						<Route path='/fleets/routes/new' element={<CreateRoute />} />
 						<Route path='/fleets/routes/edit/:id' element={<EditRoute />} />
+						<Route path='/fleets/buses' element={<Buses />} />
+						<Route path='/fleets/buses/new' element={<CreateBus />} />
+						<Route path='/fleets/buses/edit/:id' element={<EditBus />} />
 					</Routes>
 				</AppWrapper>
 			</BrowserRouter>

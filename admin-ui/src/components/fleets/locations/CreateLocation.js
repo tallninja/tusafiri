@@ -9,9 +9,11 @@ export const CreateLocation = () => {
 
 	const handleSubmit = async (locationData) => {
 		if (window.confirm('Are you sure you want to add this record ?')) {
-			let location = await createLocation(locationData);
-			if (location._id) {
+			let res = await createLocation(locationData);
+			if (res.status === 200) {
 				navigate(-1);
+			} else {
+				console.log(res.data);
 			}
 		}
 	};

@@ -2,19 +2,19 @@ import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { getLocation, editLocation } from '../../../api';
-import { LocationForm } from './LocationForm';
+import { getBus, editBus } from '../../../api';
+import { BusForm } from './BusForm';
 
-export const EditLocation = () => {
-	const [locationData, setLocationData] = useState({});
+export const EditBus = () => {
+	const [busData, setBusData] = useState({});
 	let navigate = useNavigate();
 	const { id } = useParams();
 
 	useEffect(() => {
 		(async () => {
-			let res = await getLocation(id);
+			let res = await getBus(id);
 			if (res.status === 200) {
-				setLocationData(res.data);
+				setBusData(res.data);
 			} else {
 				console.log(res.data);
 			}
@@ -25,9 +25,9 @@ export const EditLocation = () => {
 		if (window.confirm('Are you sure you want to update this record ?')) {
 			let updateData = _.pick(
 				data,
-				Object.keys(data).filter((k) => data[k] !== locationData[k])
+				Object.keys(data).filter((k) => data[k] !== busData[k])
 			); // get only the updated fields
-			let res = await editLocation(locationData._id, updateData);
+			let res = await editBus(busData._id, updateData);
 			if (res.status === 200) {
 				navigate(-1);
 			} else {
@@ -37,10 +37,6 @@ export const EditLocation = () => {
 	};
 
 	return (
-		<LocationForm
-			onSubmit={handleSubmit}
-			initialValues={locationData}
-			action='Update'
-		/>
+		<BusForm onSubmit={handleSubmit} initialValues={busData} action='Update' />
 	);
 };

@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const LocationForm = ({ onSubmit, initialValues, action }) => {
 	const [locationData, setLocationData] = useState({
@@ -7,6 +9,8 @@ export const LocationForm = ({ onSubmit, initialValues, action }) => {
 		lat: null,
 		lng: null,
 	});
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (initialValues) {
@@ -94,8 +98,15 @@ export const LocationForm = ({ onSubmit, initialValues, action }) => {
 					}
 				/>
 			</div>
-			<div className='d-grid'>
-				<button type='submit' className='btn btn-dark mt-4'>
+			<div className='d-flex justify-content-between my-3 '>
+				<a
+					className='btn btn-info btn-lg frac-width'
+					role={'button'}
+					onClick={() => navigate(-1)}
+				>
+					Cancel
+				</a>
+				<button className='btn btn-dark btn-lg frac-width' type='submit'>
 					{action}
 				</button>
 			</div>
