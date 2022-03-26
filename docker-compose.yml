@@ -1,0 +1,21 @@
+version: '3'
+services:
+  employee-man:
+    image: ernestwambua/tusafiri-employee-management:latest
+    ports:
+      - 5005:5005
+
+  fleet-man:
+    image: ernestwambua/tusafir-fleet-management:latest
+    ports:
+      - 5004:5004
+
+  booking:
+    image: ernestwambua/tusafiri-booking-system:latest
+    ports:
+      - 5003:5003
+
+  admin-ui:
+    image: ernestwambua/tusafiri-admin-ui:latest
+    ports:
+      - 3003:3000

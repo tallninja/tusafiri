@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:5100
+@baseUrl = http://localhost:5004
 @locationsApi = {{baseUrl}}/api/locations
 @routesApi = {{baseUrl}}/api/routes
 @busesApi = {{baseUrl}}/api/buses

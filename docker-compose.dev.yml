@@ -1,0 +1,41 @@
+version: '3'
+services:
+  employee-man:
+    build:
+      context: ./employee-management
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - ./app/node_modules
+      - ./employee-management:/app
+    ports:
+      - 5005:5005
+
+  fleet-man:
+    build:
+      context: ./fleet-management
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./fleet-management:/app
+    ports:
+      - 5004:5004
+
+  booking:
+    build:
+      context: ./booking-system
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./booking-system:/app
+    ports:
+      - 5003:5003
+
+  admin-ui:
+    build:
+      context: ./admin-ui
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./admin-ui:/app
+    ports:
+      - 3003:3000

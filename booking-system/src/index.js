@@ -13,18 +13,18 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
-  process.env.NODE_ENV === 'production' ? morgan('common') : morgan('dev')
+	process.env.NODE_ENV === 'production' ? morgan('common') : morgan('dev')
 );
 
 app.use('/', routes);
 
 connectToDb();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 app.listen(PORT, (err) => {
-  if (err) {
-    console.log('Error:', err);
-  } else {
-    console.log(`Server listening on PORT: ${PORT}`);
-  }
+	if (err) {
+		console.log('Error:', err);
+	} else {
+		console.log(`Server listening on PORT: ${PORT}`);
+	}
 });
