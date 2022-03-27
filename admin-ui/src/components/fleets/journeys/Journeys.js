@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getJourneys, deleteJourney } from '../../../api';
+import Modal from './Modal';
 
 export const Journeys = () => {
 	const [journeys, setJourneys] = useState([]);
 	const navigate = useNavigate();
+	const modalRef = useRef();
 
 	useEffect(() => {
 		(async () => {
@@ -16,6 +18,10 @@ export const Journeys = () => {
 			}
 		})();
 	}, []);
+
+	const handleModal = () => {
+		modalRef.current.openModal();
+	};
 
 	const handleEdit = (id) => {
 		navigate(`/fleets/journeys/edit/${id}`);
@@ -123,8 +129,7 @@ export const Journeys = () => {
 											<button
 												type='button'
 												className='btn btn-outline-dark btn-sm mx-1'
-												data-bs-toggle='modal'
-												data-bs-target='#addDriverModal'
+												onClick={handleModal}
 											>
 												<i className='fa-solid fa-bus'></i>{' '}
 											</button>
@@ -158,6 +163,7 @@ export const Journeys = () => {
 					</tbody>
 				</table>
 			</div>
+			<Modal ref={modalRef} />
 		</>
 	);
 };

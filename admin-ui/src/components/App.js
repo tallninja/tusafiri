@@ -1,9 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import './App.css';
-import { AppWrapper } from './AppWrapper';
+import AppWrapper from './AppWrapper';
 import { Dashboard } from './Dashboard';
 import { FleetRoutes, CreateRoute, EditRoute } from './fleets/fleetRoutes';
 import { Locations, CreateLocation, EditLocation } from './fleets/locations';
@@ -13,42 +13,48 @@ import { Employees, CreateEmployee, EditEmployee } from './employees';
 
 const queryClient = new QueryClient();
 
-export const App = () => {
+const App = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<BrowserRouter>
-				<AppWrapper>
-					<Routes>
-						<Route path='/' element={<Dashboard />} />
+			<Routes>
+				<Route path='/' element={<AppWrapper />}>
+					<Route index element={<Dashboard />} />
 
-						<Route path='/fleets/locations' element={<Locations />} />
-						<Route path='/fleets/locations/new' element={<CreateLocation />} />
-						<Route
-							path='/fleets/locations/edit/:id'
-							element={<EditLocation />}
-						/>
+					<Route path='fleets'>
+						<Route path='locations'>
+							<Route index element={<Locations />} />
+							<Route path='new' element={<CreateLocation />} />
+							<Route path='edit/:id' element={<EditLocation />} />
+						</Route>
 
-						<Route path='/fleets/routes' element={<FleetRoutes />} />
-						<Route path='/fleets/routes/new' element={<CreateRoute />} />
-						<Route path='/fleets/routes/edit/:id' element={<EditRoute />} />
+						<Route path='routes'>
+							<Route index element={<FleetRoutes />} />
+							<Route path='new' element={<CreateRoute />} />
+							<Route path='edit/:id' element={<EditRoute />} />
+						</Route>
 
-						<Route path='/fleets/buses' element={<Buses />} />
-						<Route path='/fleets/buses/new' element={<CreateBus />} />
-						<Route path='/fleets/buses/edit/:id' element={<EditBus />} />
+						<Route path='buses'>
+							<Route index element={<Buses />} />
+							<Route path='new' element={<CreateBus />} />
+							<Route path='edit/:id' element={<EditBus />} />
+						</Route>
 
-						<Route path='/fleets/journeys' element={<Journeys />} />
-						<Route path='/fleets/journeys/new' element={<CreateJourney />} />
-						<Route path='/fleets/journeys/edit/:id' element={<EditJourney />} />
+						<Route path='journeys'>
+							<Route index element={<Journeys />} />
+							<Route path='new' element={<CreateJourney />} />
+							<Route path='edit/:id' element={<EditJourney />} />
+						</Route>
+					</Route>
 
-						<Route path='/employees/:role' element={<Employees />} />
-						<Route path='/employees/:role/new' element={<CreateEmployee />} />
-						<Route
-							path='/employees/:role/edit/:id'
-							element={<EditEmployee />}
-						/>
-					</Routes>
-				</AppWrapper>
-			</BrowserRouter>
+					<Route path='employees'>
+						<Route path=':role' element={<Employees />} />
+						<Route path=':role/new' element={<CreateEmployee />} />
+						<Route path=':role/edit/:id' element={<EditEmployee />} />
+					</Route>
+				</Route>
+			</Routes>
 		</QueryClientProvider>
 	);
 };
+
+export default App;

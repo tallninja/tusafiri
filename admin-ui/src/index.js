@@ -5,7 +5,17 @@ import $ from 'jquery';
 import Popper from 'popper.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import { App } from './components/App';
+import App from './components/App';
 
-ReactDOM.render(<App />, document.querySelector('#root'));
+ReactDOM.render(
+	<React.StrictMode>
+		<Router>
+			<Routes>
+				<Route path='/*' element={<App />} />
+			</Routes>
+		</Router>
+	</React.StrictMode>,
+	document.querySelector('#root')
+);
