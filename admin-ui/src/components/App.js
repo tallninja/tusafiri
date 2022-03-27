@@ -9,6 +9,7 @@ import { FleetRoutes, CreateRoute, EditRoute } from './fleets/fleetRoutes';
 import { Locations, CreateLocation, EditLocation } from './fleets/locations';
 import { Buses, CreateBus, EditBus } from './fleets/buses';
 import { Journeys, CreateJourney, EditJourney } from './fleets/journeys';
+import { Employees, CreateEmployee, EditEmployee } from './employees';
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,13 @@ export const App = () => {
 						<Route path='/fleets/journeys' element={<Journeys />} />
 						<Route path='/fleets/journeys/new' element={<CreateJourney />} />
 						<Route path='/fleets/journeys/edit/:id' element={<EditJourney />} />
+
+						<Route path='/employees/:role' element={<Employees />} />
+						<Route path='/employees/:role/new' element={<CreateEmployee />} />
+						<Route
+							path='/employees/:role/edit/:id'
+							element={<EditEmployee />}
+						/>
 					</Routes>
 				</AppWrapper>
 			</BrowserRouter>

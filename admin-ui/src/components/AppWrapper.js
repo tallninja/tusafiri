@@ -62,24 +62,27 @@ export const AppWrapper = (props) => {
 									</a>
 									<ul className='collapse' id='employeesCollapse'>
 										<li>
-											<a className='nav-link' href='#'>
+											<Link to={'/employees/drivers'} className='nav-link'>
 												Drivers
-											</a>
+											</Link>
 										</li>
 										<li>
-											<a className='nav-link' href='#'>
+											<Link
+												to={'/employees/fleet-managers'}
+												className='nav-link'
+											>
 												Fleet Managers
-											</a>
+											</Link>
 										</li>
 										<li>
-											<a className='nav-link' href='#'>
+											<Link to={'/employees/snm-managers'} className='nav-link'>
 												Service and maintenance
-											</a>
+											</Link>
 										</li>
 										<li>
-											<a className='nav-link' href='#'>
+											<Link to={'/employees/help-desk'} className='nav-link'>
 												Support and help desk
-											</a>
+											</Link>
 										</li>
 									</ul>
 								</li>
