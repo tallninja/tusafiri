@@ -80,7 +80,7 @@ Content-Type: application/json
 GET {{busesApi}}/
 
 ### FETCH bus
-GET {{busesApi}}/623d916643fca7e8de609d05
+GET {{busesApi}}/623f40ddecaefea9476a6853
 
 ### EDIT bus
 PATCH {{busesApi}}/edit?id=623d916643fca7e8de609d05

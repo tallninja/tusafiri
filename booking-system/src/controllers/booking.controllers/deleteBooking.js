@@ -4,34 +4,37 @@ const { StatusCodes: Sc } = require('http-status-codes');
 const { Booking, Invoice } = require('../../models');
 
 const handleError = (err, res) => {
-  console.log('Error:', err);
-  return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
+	console.log('Error:', err);
+	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
 
 module.exports = async (req, res) => {
-  const { id } = req.query;
+	const { id } = req.query;
 
-  try {
-    let booking = await Booking.findById(id)
-      .populate(['journey', 'seats'])
-      .exec();
+	try {
+		let booking = await Booking.findById(id)
+			.populate(['journey', 'seats'])
+			.exec();
 
-    if (!booking) {
-      return res.status(Sc.BAD_REQUEST).json({ message: 'Booking not found.' });
-    }
+		if (!booking) {
+			return res.status(Sc.BAD_REQUEST).json({ message: 'Booking not found.' });
+		}
 
-    await booking.deleteOne();
+		await booking.deleteOne();
 
-    console.log('Info:', `Booking ${booking._id} was deleted.`);
+		console.log('Info:', `Booking ${booking._id} was deleted.`);
 
-    let deletedInvoice = await Invoice.findOneAndDelete({
-      booking: booking._id,
-    }).exec();
+		let invoice = await Invoice.findOne({
+			booking: booking._id,
+		}).exec();
 
-    console.log('Info:', `Invoice ${deletedInvoice._id} was deleted.`);
+		if (invoice) {
+			await invoice.deleteOne();
+			console.log('Info:', `Invoice ${invoice._id} was deleted.`);
+		}
 
-    return res.status(Sc.OK).json(booking);
-  } catch (err) {
-    return handleError(err, res);
-  }
+		return res.status(Sc.OK).json(booking);
+	} catch (err) {
+		return handleError(err, res);
+	}
 };

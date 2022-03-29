@@ -13,7 +13,11 @@ module.exports = async (req, res) => {
 
 	try {
 		let journey = await Journey.findById(id)
-			.populate(['bus', { path: 'route', populate: ['from', 'to'] }, 'drivers'])
+			.populate([
+				{ path: 'bus', populate: ['seats'] },
+				{ path: 'route', populate: ['from', 'to'] },
+				'drivers',
+			])
 			.exec();
 
 		if (!journey) {

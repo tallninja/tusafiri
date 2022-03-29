@@ -10,6 +10,7 @@ import { Locations, CreateLocation, EditLocation } from './fleets/locations';
 import { Buses, CreateBus, EditBus } from './fleets/buses';
 import { Journeys, CreateJourney, EditJourney } from './fleets/journeys';
 import { Employees, CreateEmployee, EditEmployee } from './employees';
+import { Bookings, CreateBooking, Invoices } from './bookings';
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,15 @@ const App = () => {
 						<Route path=':role' element={<Employees />} />
 						<Route path=':role/new' element={<CreateEmployee />} />
 						<Route path=':role/edit/:id' element={<EditEmployee />} />
+					</Route>
+
+					<Route path='bookings'>
+						<Route index element={<Bookings />} />
+						<Route path='new' element={<CreateBooking />} />
+					</Route>
+
+					<Route path='invoices'>
+						<Route index element={<Invoices />} />
 					</Route>
 				</Route>
 			</Routes>

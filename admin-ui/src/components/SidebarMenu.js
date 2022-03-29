@@ -84,19 +84,13 @@ const Navbar = () => {
 						</ul>
 					</li>
 					<li className='nav-item'>
-						<Link to='/' className='nav-link'>
-							<span data-feather='file'></span>
-							Tickets
-						</Link>
-					</li>
-					<li className='nav-item'>
-						<Link to={'/products'} className='nav-link'>
+						<Link to={'/bookings'} className='nav-link'>
 							<span data-feather='shopping-cart'></span>
 							Bookings
 						</Link>
 					</li>
 					<li className='nav-item'>
-						<Link to='/' className='nav-link' href='#'>
+						<Link to='/invoices' className='nav-link' href='#'>
 							<span data-feather='users'></span>
 							Invoices
 						</Link>
@@ -105,6 +99,12 @@ const Navbar = () => {
 						<Link to='/' className='nav-link' href='#'>
 							<span data-feather='bar-chart-2'></span>
 							Payments
+						</Link>
+					</li>
+					<li className='nav-item'>
+						<Link to='/' className='nav-link'>
+							<span data-feather='file'></span>
+							Tickets
 						</Link>
 					</li>
 					<li className='nav-item'>
