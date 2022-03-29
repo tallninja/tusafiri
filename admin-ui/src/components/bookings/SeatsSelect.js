@@ -10,11 +10,13 @@ const SeatsSelect = ({ htmlId, handleSelect, journey }) => {
 			multiple
 			size={12}
 		>
-			{journey.bus?.seats.map((seat) => (
-				<option key={seat._id} value={seat._id}>
-					{seat.number}
-				</option>
-			))}
+			{journey.bus?.seats
+				.filter((seat) => !journey.bookedSeats.includes(seat._id))
+				.map((seat) => (
+					<option key={seat._id} value={seat._id}>
+						{seat.number}
+					</option>
+				))}
 		</select>
 	);
 };
