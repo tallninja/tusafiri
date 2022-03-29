@@ -32,10 +32,6 @@ export const Journeys = () => {
 		}
 	};
 
-	const handleAddDrivers = (id) => {
-		navigate(`/fleets/journeys/add-drivers/${id}`);
-	};
-
 	return (
 		<>
 			<div className='d-flex justify-content-between pt-3 pb-2 mb-3 border-bottom'>
