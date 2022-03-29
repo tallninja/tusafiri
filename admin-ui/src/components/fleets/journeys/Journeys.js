@@ -69,17 +69,52 @@ export const Journeys = () => {
 								<tr key={journey._id}>
 									<td>{idx + 1}</td>
 									<td>{journey.bus ? journey.bus.regNo : '-'}</td>
-									<td>{journey.route ? journey.route.name : '-'}</td>
+									<td>
+										<table className='table table-sm table-borderless my-0'>
+											<thead>
+												<tr>
+													<th colSpan='col' className='p-0 m-0'>
+														<p className='p-0 m-0'>
+															<small>From:</small>
+														</p>
+													</th>
+													<th colSpan='col' className='p-0 m-0'>
+														<p className='p-0 m-0'>
+															<small>To:</small>
+														</p>
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td className='p-0 m-0'>
+														<p className='p-0 m-0'>
+															<small>{journey.route?.from.code || '-'}</small>
+														</p>
+													</td>
+													<td className='p-0 m-0'>
+														<p className='p-0 m-0'>
+															<small>{journey.route?.to.code || '-'}</small>
+														</p>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
 									<td>{journey.fare}</td>
 									<td>{journey.availableSeats}</td>
 									<td>
-										<table className='table mb-0'>
+										<table className='table table-sm mb-0'>
 											<tbody>
 												{journey.drivers?.map((driver) => (
-													<tr>
-														<small>
-															{driver.firstName} {driver.lastName}
-														</small>
+													<tr key={driver._id}>
+														<td>
+															<p className='p-0 m-0'>
+																<small>
+																	{driver.firstName} {driver.lastName}
+																</small>
+															</p>
+														</td>
 													</tr>
 												))}
 											</tbody>
@@ -106,15 +141,6 @@ export const Journeys = () => {
 											: '-'}
 									</td>
 									<td>
-										{/* <button
-											type='button'
-											className='btn btn-outline-dark btn-sm mx-1'
-											data-bs-toggle='tooltip'
-											data-bs-placement='top'
-											title='view'
-										>
-											<i className='fa-solid fa-eye'></i>
-										</button> */}
 										<button
 											type='button'
 											className='btn btn-warning btn-sm mx-1'

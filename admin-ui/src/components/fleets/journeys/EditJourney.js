@@ -18,16 +18,17 @@ export const EditJourney = () => {
 					...res.data,
 					bus: res.data.bus.regNo,
 					route: res.data.route.name,
-					departureTime: new Date(res.data.departureTime)
+					departureTime: new Date(res.data.departureTime || new Date())
 						.toISOString()
 						.split(':')
 						.slice(0, 2)
 						.join(':'),
-					arrivalTime: new Date(res.data.arrivalTime)
+					arrivalTime: new Date(res.data.arrivalTime || new Date())
 						.toISOString()
 						.split(':')
 						.slice(0, 2)
 						.join(':'),
+					drivers: [],
 				});
 			} else {
 				console.log(res.data);
@@ -41,6 +42,7 @@ export const EditJourney = () => {
 				data,
 				Object.keys(data).filter((k) => data[k] !== journeyData[k])
 			); // get only the updated fields
+
 			let res = await editJourney(journeyData._id, updateData);
 			if (res.status === 200) {
 				navigate(-1);

@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Journey, Bus, Route } = require('../../models');
+const { Journey, Bus, Route, Employee } = require('../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -15,7 +15,7 @@ const EditJourneySchema = Joi.object({
 	bookedSeats: Joi.array().optional(),
 	departureTime: Joi.date().optional(),
 	arrivalTime: Joi.date().optional(),
-	driver: Joi.array().optional(),
+	drivers: Joi.array().optional(),
 });
 
 module.exports = async (req, res) => {
@@ -52,6 +52,20 @@ module.exports = async (req, res) => {
 			}
 
 			updatedFields.bus = bus._id;
+		}
+
+		if (updatedFields.drivers) {
+			let drivers = await Employee.find({
+				employeeId: { $in: updatedFields.drivers },
+			}).exec();
+
+			if (drivers.length !== 2) {
+				return res
+					.status(Sc.BAD_REQUEST)
+					.json({ message: 'Please provide exactly 2 drivers.' });
+			}
+
+			updatedFields.drivers = drivers.map((driver) => driver._id);
 		}
 
 		let currentJourney = await Journey.findById(id).exec();

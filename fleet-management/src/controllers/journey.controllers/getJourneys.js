@@ -11,7 +11,7 @@ const handleError = (err, res) => {
 module.exports = async (req, res) => {
 	try {
 		let journeys = await Journey.find()
-			.populate(['bus', 'route', 'drivers'])
+			.populate(['bus', { path: 'route', populate: ['from', 'to'] }, 'drivers'])
 			.exec();
 
 		return res
