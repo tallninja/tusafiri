@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getJourneys, deleteJourney } from '../../../api';
-import Modal from './Modal';
 
 export const Journeys = () => {
 	const [journeys, setJourneys] = useState([]);
 	const navigate = useNavigate();
-	const modalRef = useRef();
 
 	useEffect(() => {
 		(async () => {
@@ -18,10 +16,6 @@ export const Journeys = () => {
 			}
 		})();
 	}, []);
-
-	const handleModal = () => {
-		modalRef.current.openModal();
-	};
 
 	const handleEdit = (id) => {
 		navigate(`/fleets/journeys/edit/${id}`);
@@ -36,6 +30,10 @@ export const Journeys = () => {
 				console.log(res.data);
 			}
 		}
+	};
+
+	const handleAddDrivers = (id) => {
+		navigate(`/fleets/journeys/add-drivers/${id}`);
 	};
 
 	return (
@@ -79,21 +77,17 @@ export const Journeys = () => {
 									<td>{journey.fare}</td>
 									<td>{journey.availableSeats}</td>
 									<td>
-										{journey.drivers.length > 0 ? (
-											<table>
-												<h4 align='center'>Drivers</h4>
-												<tr>
-													<td>{journey.drivers[0].employeeId}</td>
-													<td>{journey.drivers[1].employeeId}</td>
-												</tr>
-												<tr>
-													<td>nested table</td>
-													<td>nested table</td>
-												</tr>
-											</table>
-										) : (
-											'-'
-										)}
+										<table className='table mb-0'>
+											<tbody>
+												{journey.drivers?.map((driver) => (
+													<tr>
+														<small>
+															{driver.firstName} {driver.lastName}
+														</small>
+													</tr>
+												))}
+											</tbody>
+										</table>
 									</td>
 									<td>
 										{journey.departureTime
@@ -125,17 +119,6 @@ export const Journeys = () => {
 										>
 											<i className='fa-solid fa-eye'></i>
 										</button> */}
-										{journey.drivers.length !== 2 ? (
-											<button
-												type='button'
-												className='btn btn-outline-dark btn-sm mx-1'
-												onClick={handleModal}
-											>
-												<i className='fa-solid fa-bus'></i>{' '}
-											</button>
-										) : (
-											<></>
-										)}
 										<button
 											type='button'
 											className='btn btn-warning btn-sm mx-1'
@@ -163,7 +146,6 @@ export const Journeys = () => {
 					</tbody>
 				</table>
 			</div>
-			<Modal ref={modalRef} />
 		</>
 	);
 };

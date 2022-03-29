@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import DriverSelect from './DriverSelect';
+
 export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 	const [journeyData, setJourneyData] = useState({
 		bus: '',
@@ -9,6 +11,7 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 		fare: null,
 		departureTime: null,
 		arrivalTime: null,
+		drivers: [],
 	});
 
 	const navigate = useNavigate();
@@ -60,6 +63,7 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 				/>
 				<div className='form-text'>Code representing the route.</div>
 			</div>
+
 			<div className='col-md-12'>
 				<label htmlFor='fareInput' className='form-label'>
 					Fare
@@ -78,6 +82,7 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 				/>
 				<div className='form-text'>Fare per person in Ksh.</div>
 			</div>
+
 			<h4>Dates</h4>
 			<hr />
 			<div className='col-md-6'>
@@ -110,8 +115,43 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 						setJourneyData({ ...journeyData, arrivalTime: e.target.value })
 					}
 				/>
-				<div className='form-text'>Date and time of arrival.</div>
+				<div className='form-text'>ETA - Estimated Time of Arrival.</div>
 			</div>
+
+			<h4>Drivers</h4>
+			<hr />
+			<div className='col-md-6'>
+				<label htmlFor='driver1Select' className='form-label'>
+					1<sup>st</sup> Driver
+				</label>
+				<DriverSelect
+					id='driver1Select'
+					handleSelect={(value) =>
+						setJourneyData({
+							...journeyData,
+							drivers: [...journeyData.drivers, value],
+						})
+					}
+					defaultValue={journeyData.drivers?.[0] || ''}
+				/>
+			</div>
+
+			<div className='col-md-6'>
+				<label htmlFor='driver2Select' className='form-label'>
+					2<sup>nd</sup> driver
+				</label>
+				<DriverSelect
+					id='driver2Select'
+					handleSelect={(value) =>
+						setJourneyData({
+							...journeyData,
+							drivers: [...journeyData.drivers, value],
+						})
+					}
+					defaultValue={journeyData.drivers?.[1] || ''}
+				/>
+			</div>
+
 			<div className='d-flex justify-content-between my-3 '>
 				<a
 					className='btn btn-info btn-lg frac-width'

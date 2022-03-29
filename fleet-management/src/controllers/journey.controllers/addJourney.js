@@ -1,7 +1,8 @@
+const mongoose = require('mongoose');
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Journey, Bus, Route } = require('../../models');
+const { Journey, Bus, Route, Role, Employee } = require('../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -14,6 +15,7 @@ const CreateJourneySchema = Joi.object({
 	fare: Joi.number().min(50).max(10000),
 	departureTime: Joi.date(),
 	arrivalTime: Joi.date().optional(),
+	drivers: Joi.array(),
 });
 
 module.exports = async (req, res) => {
@@ -30,21 +32,11 @@ module.exports = async (req, res) => {
 
 		journeyDetails.route = route._id;
 		let bus = await Bus.findOne({ regNo: journeyDetails.bus }).exec();
-		let existingJourneys = await Journey.find({ completed: false });
 
 		if (!bus) {
 			return res
 				.status(Sc.BAD_REQUEST)
 				.json({ message: `${journeyDetails.bus} not found.` });
-		}
-
-		let unavailableBuses = existingJourneys.map((journey) =>
-			JSON.stringify(journey.bus)
-		);
-		if (unavailableBuses.includes(JSON.stringify(bus._id))) {
-			return res
-				.status(Sc.BAD_REQUEST)
-				.json({ message: 'Bus already assigned another journey.' });
 		}
 
 		journeyDetails.bus = bus._id;
@@ -55,6 +47,18 @@ module.exports = async (req, res) => {
 				.status(Sc.BAD_REQUEST)
 				.json({ message: 'Journey already exists.' });
 		}
+
+		let drivers = await Employee.find({
+			employeeId: { $in: journeyDetails.drivers },
+		}).exec();
+
+		if (drivers.length !== 2) {
+			return res
+				.status(Sc.BAD_REQUEST)
+				.json({ message: 'Please provide exactly 2 drivers.' });
+		}
+
+		journeyDetails.drivers = drivers.map((driver) => driver._id);
 
 		journeyDetails.createdAt = new Date();
 		let newJourney = await new Journey(journeyDetails).save();

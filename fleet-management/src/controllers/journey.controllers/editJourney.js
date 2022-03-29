@@ -15,6 +15,7 @@ const EditJourneySchema = Joi.object({
 	bookedSeats: Joi.array().optional(),
 	departureTime: Joi.date().optional(),
 	arrivalTime: Joi.date().optional(),
+	driver: Joi.array().optional(),
 });
 
 module.exports = async (req, res) => {
