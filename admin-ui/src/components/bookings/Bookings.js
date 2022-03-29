@@ -17,10 +17,6 @@ export const Bookings = () => {
 		})();
 	}, []);
 
-	const handleEdit = (id) => {
-		navigate(`/bookings/edit/${id}`);
-	};
-
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure you want to delete this record ?')) {
 			let res = await deleteBooking(id);
