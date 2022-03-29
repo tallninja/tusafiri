@@ -16,11 +16,7 @@ BookingSchema.pre('save', async function (next) {
 	try {
 		Invoice.generateInvoice(this);
 		let journey = await Journey.findById(this.journey).exec();
-		journey.bookedSeats = _.unionBy(
-			journey.bookedSeats,
-			this.seats,
-			JSON.stringify
-		);
+		this.seats.map((seat) => journey.bookedSeats.push(seat));
 		journey.save();
 		next();
 	} catch (err) {
@@ -54,11 +50,11 @@ BookingSchema.pre(
 	async function (next) {
 		try {
 			let journey = await Journey.findById(this.journey).exec();
-			let bookedSeats = this.seats.map((seat) => JSON.stringify(seat._id));
-			journey.bookedSeats = _.remove(
-				journey.bookedSeats,
-				(seat) => !bookedSeats.includes(JSON.stringify(seat))
-			);
+			let bookedSeats = journey.bookedSeats.map((seat) => JSON.stringify(seat));
+			let bookingSeats = this.seats.map((seat) => JSON.stringify(seat._id));
+			journey.bookedSeats = bookedSeats
+				.filter((seat) => !bookingSeats.includes(seat))
+				?.map((seat) => JSON.parse(seat));
 			await journey.save();
 			next();
 		} catch (err) {

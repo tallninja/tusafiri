@@ -66,7 +66,7 @@ export const Bookings = () => {
 								<tr key={booking._id}>
 									<td>{idx + 1}</td>
 									<td>{booking._id}</td>
-									<td>{booking.journey?.id || '-'}</td>
+									<td>{booking.journey || '-'}</td>
 									<td>{booking.seats.map((seat) => seat.number + ', ')}</td>
 									<td>
 										{booking.paid ? (

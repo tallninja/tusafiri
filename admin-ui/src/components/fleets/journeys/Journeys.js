@@ -51,10 +51,11 @@ export const Journeys = () => {
 					<thead>
 						<tr>
 							<th scope='col'>#</th>
+							<th scope='col'>Id</th>
 							<th scope='col'>Bus</th>
 							<th scope='col'>Route</th>
 							<th scope='col'>Fare</th>
-							<th scope='col'>Available Seats</th>
+							<th scope='col'>Seats</th>
 							<th scope='col'>Drivers</th>
 							<th scope='col'>Departure Time</th>
 							<th scope='col'>Arrival Time</th>
@@ -68,6 +69,7 @@ export const Journeys = () => {
 							return (
 								<tr key={journey._id}>
 									<td>{idx + 1}</td>
+									<td>{journey._id}</td>
 									<td>{journey.bus ? journey.bus.regNo : '-'}</td>
 									<td>
 										<table className='table table-sm table-borderless my-0'>
@@ -122,12 +124,20 @@ export const Journeys = () => {
 									</td>
 									<td>
 										{journey.departureTime
-											? new Date(journey.departureTime).toDateString()
+											? new Date(journey.departureTime)
+													.toString()
+													.split(':')
+													.slice(0, -1)
+													.join(':')
 											: '-'}
 									</td>
 									<td>
 										{journey.arrivalTime
-											? new Date(journey.arrivalTime).toDateString()
+											? new Date(journey.departureTime)
+													.toString()
+													.split(':')
+													.slice(0, -1)
+													.join(':')
 											: '-'}
 									</td>
 									<td>
