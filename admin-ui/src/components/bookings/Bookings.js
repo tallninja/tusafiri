@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 import { getBookings, deleteBooking } from '../../api';
 
 export const Bookings = () => {
 	const [bookings, setBookings] = useState([]);
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		(async () => {
