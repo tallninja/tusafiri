@@ -52,10 +52,10 @@ BookingSchema.pre(
 			let journey = await Journey.findById(this.journey).exec();
 			let bookedSeats = journey.bookedSeats.map((seat) => JSON.stringify(seat));
 			let bookingSeats = this.seats.map((seat) => JSON.stringify(seat._id));
-			journey.bookedSeats = bookedSeats
+			let newBookedSeats = bookedSeats
 				.filter((seat) => !bookingSeats.includes(seat))
 				?.map((seat) => JSON.parse(seat));
-			await journey.save();
+			await journey.updateOne({ $set: { bookedSeats: newBookedSeats } });
 			next();
 		} catch (err) {
 			throw err;

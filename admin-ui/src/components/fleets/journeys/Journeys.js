@@ -46,7 +46,7 @@ export const Journeys = () => {
 					</Link>
 				</div>
 			</div>
-			<div className='table-responsive-xl'>
+			<div className='table-responsive-sm'>
 				<table className='table table-striped table-sm'>
 					<thead>
 						<tr>
