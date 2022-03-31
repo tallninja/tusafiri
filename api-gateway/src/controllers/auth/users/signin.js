@@ -1,0 +1,60 @@
+const Joi = require('joi');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { StatusCodes: Sc } = require('http-status-codes');
+
+const { User, SYSTEM_ROLES, RefreshToken } = require('../../../models');
+const { auth } = require('../../../../config');
+
+const handleError = (err, res) => {
+	console.log('Error:', err);
+	res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
+};
+
+const SigninSchema = Joi.object({
+	email: Joi.string().email({ allowFullyQualified: ['.com'] }),
+	password: Joi.string(),
+});
+
+module.exports = async (req, res) => {
+	try {
+		const signinCredentials = await SigninSchema.validateAsync(req.body);
+		const user = await User.findOne({
+			email: signinCredentials.email,
+		}).exec();
+
+		if (!user) {
+			return res
+				.status(Sc.BAD_REQUEST)
+				.json({ message: 'User does not exist.' });
+		}
+
+		const passwordIsValid = bcrypt.compareSync(
+			signinCredentials.password,
+			user.password
+		);
+
+		if (!passwordIsValid) {
+			return res
+				.status(Sc.BAD_REQUEST)
+				.json({ message: 'Password is invalid.' });
+		}
+
+		const token = jwt.sign({ id: user._id }, auth.jwtSecret, {
+			expiresIn: auth.jwtTokenExpire,
+		});
+
+		const refreshToken = await RefreshToken.createToken(user._id);
+
+		const responseData = {
+			id: user._id,
+			email: user.email,
+			accessToken: token,
+			refreshToken: refreshToken,
+		};
+
+		return res.status(Sc.OK).json(responseData);
+	} catch (err) {
+		handleError(err, res);
+	}
+};
