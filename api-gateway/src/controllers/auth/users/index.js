@@ -1,4 +1,5 @@
 module.exports = {
-	signupUser: require('./signup'),
-	signinUser: require('./signin'),
+	signup: require('./signup'),
+	signin: require('./signin'),
+	refreshToken: require('./refreshToken'),
 };

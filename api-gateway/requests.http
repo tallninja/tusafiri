@@ -1,4 +1,34 @@
 @base_url=http://localhost:5000
+@auth_routes={{base_url}}/api/auth
 
 ### Root route
 GET {{base_url}}/
+
+### Signup user
+POST {{auth_routes}}/users/signup
+Content-Type: application/json
+
+{
+    "firstName": "Ernest",
+    "lastName": "Wambua",
+    "email": "ernestwambua2@gmail.com",
+    "phoneNo": "+254719286396",
+    "password": "password123"
+}
+
+### Signin user
+POST {{auth_routes}}/users/signin
+Content-Type: application/json
+
+{
+    "email": "ernestwambua2@gmail.com",
+    "password": "password123"
+}
+
+### Refresh token
+POST {{auth_routes}}/users/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken": "296c290a-a325-4f4a-b53b-b6dd62521b21"
+}

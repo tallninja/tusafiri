@@ -2,7 +2,7 @@ const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { User } = require('../models');
+const { User } = require('../../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
 
 		console.log(`User ${newUser.email} was created.`);
 
-		return res.status(Sc.OK).json(newUser);
+		return res.status(Sc.OK).json({ message: 'Account created successfully.' });
 	} catch (err) {
 		handleError(err, res);
 	}

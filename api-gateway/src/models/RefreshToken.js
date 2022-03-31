@@ -18,13 +18,13 @@ RefreshTokenSchema.statics.createToken = async function (userId) {
 		}
 
 		let _expiresIn = new Date();
-		_expiresIn.setSeconds(_expiresAt.getSeconds() + auth.jwtRefreshExpire);
+		_expiresIn.setSeconds(_expiresIn.getSeconds() + auth.jwtRefreshExpire);
 
 		let _token = uuid4();
 
 		let _object = new this({
 			token: _token,
-			user: user,
+			user: userId,
 			expiresIn: _expiresIn,
 		});
 
@@ -36,7 +36,7 @@ RefreshTokenSchema.statics.createToken = async function (userId) {
 	}
 };
 
-RefreshTokenSchema.statics.verifyToken = (token) => {
+RefreshTokenSchema.statics.verifyTokenExpiration = (token) => {
 	return token.expiresIn.getTime() > new Date().getTime();
 };
 
