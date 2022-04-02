@@ -5,7 +5,7 @@ services:
       context: ./employee-management
       dockerfile: ./Dockerfile.dev
     volumes:
-      - ./app/node_modules
+      - /app/node_modules
       - ./employee-management:/app
     ports:
       - 5005:5005
@@ -35,8 +35,10 @@ services:
       context: ./admin-ui
       dockerfile: ./Dockerfile.dev
     volumes:
+      # - /app/node_modules
       - ./admin-ui:/app
     ports:
+      # - 3003:3003
       - 3000:3000
 
   api-gateway:
@@ -44,7 +46,7 @@ services:
       context: ./api-gateway
       dockerfile: ./Dockerfile.dev
     volumes:
-      - /app/node_modules
+      # - /app/node_modules
       - ./api-gateway:/app
     ports:
       - 5000:5000

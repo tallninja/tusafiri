@@ -30,7 +30,7 @@ RefreshTokenSchema.statics.createToken = async function (userId) {
 
 		const refreshToken = await _object.save();
 
-		return refreshToken;
+		return refreshToken.token;
 	} catch (err) {
 		throw err;
 	}

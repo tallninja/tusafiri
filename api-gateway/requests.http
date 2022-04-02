@@ -30,5 +30,9 @@ POST {{auth_routes}}/users/refresh-token
 Content-Type: application/json
 
 {
-    "refreshToken": "296c290a-a325-4f4a-b53b-b6dd62521b21"
+    "refreshToken": "8ae30842-9e74-411e-97b1-12d943b88b36"
 }
+
+### Testing the gateway
+GET {{base_url}}/fleets/buses
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNDVlMzhlNDE2YzIxMWVjZDIyYjgyMyIsImlhdCI6MTY0ODkwNDU4MiwiZXhwIjoxNjQ4OTA0NjQyfQ.m7k4JiNC7hYe3kYkVMHY7veRSilnFyB3cJ0cx8C_Lig

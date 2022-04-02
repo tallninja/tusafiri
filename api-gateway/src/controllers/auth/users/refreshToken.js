@@ -31,7 +31,9 @@ module.exports = async (req, res) => {
 			!RefreshToken.verifyTokenExpiration(existingRefreshToken);
 
 		if (tokenIsExpired) {
-			await RefreshToken.findOneAndDelete({ token: existingRefreshToken });
+			await RefreshToken.findOneAndDelete({
+				token: existingRefreshToken.token,
+			});
 			return res
 				.status(Sc.UNAUTHORIZED)
 				.json({ message: 'Refresh token is expired, please sign in again' });
