@@ -5,8 +5,12 @@ const Invoice = require('./Invoice');
 const Journey = require('./Journey');
 
 const BookingSchema = new mongoose.Schema({
-	journey: { type: mongoose.Types.ObjectId, ref: 'journeys', required: true },
-	seats: [{ type: mongoose.Types.ObjectId, ref: 'seats' }],
+	journey: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'journeys',
+		required: true,
+	},
+	seats: [{ type: mongoose.Schema.Types.ObjectId, ref: 'seats' }],
 	createdAt: { type: Date },
 	updatedAt: { type: Date },
 	paid: { type: Boolean, default: false },

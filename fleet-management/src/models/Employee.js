@@ -9,7 +9,7 @@ const EmployeeSchema = new mongoose.Schema(
 		phoneNumber: { type: String, required: true },
 		employeeId: { type: String, required: true, unique: true, index: true },
 		password: { type: String, required: true },
-		role: { type: mongoose.Types.ObjectId, ref: 'roles' },
+		role: { type: mongoose.Schema.Types.ObjectId, ref: 'roles' },
 		createdAt: { type: Date },
 		updatedAt: { type: Date },
 	},

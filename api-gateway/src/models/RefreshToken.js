@@ -5,7 +5,7 @@ const { auth } = require('../../config');
 
 const RefreshTokenSchema = new mongoose.Schema({
 	token: { type: String, required: true },
-	user: { type: mongoose.Types.ObjectId, ref: 'users' },
+	user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 	expiresIn: { type: Date, required: true },
 });
 

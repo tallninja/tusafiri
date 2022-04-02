@@ -5,7 +5,7 @@ const Journey = require('./Journey');
 
 const InvoiceSchema = new mongoose.Schema({
 	booking: {
-		type: mongoose.Types.ObjectId,
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'bookings',
 		required: true,
 		unique: true,
