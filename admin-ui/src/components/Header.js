@@ -1,7 +1,12 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import useAuth from '../hooks/useAuth';
+
 const Header = ({ title }) => {
+	const { setAuth } = useAuth();
+
 	return (
 		<header className='navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow'>
 			<Link to='/' className='navbar-brand col-md-3 col-lg-2 me-0 px-3'>
@@ -26,9 +31,9 @@ const Header = ({ title }) => {
 			/>
 			<div className='navbar-nav'>
 				<div className='nav-item text-nowrap'>
-					<Link to='signout' className='nav-link px-3'>
+					<a className='nav-link px-3' onClick={() => setAuth({})}>
 						Sign out
-					</Link>
+					</a>
 				</div>
 			</div>
 		</header>

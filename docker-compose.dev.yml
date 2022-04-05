@@ -30,6 +30,14 @@ services:
     ports:
       - 5003:5003
 
+  feedback:
+    build:
+      context: ./feedback-system
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./feedback-system:/app
+
   admin-ui:
     build:
       context: ./admin-ui

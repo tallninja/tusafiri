@@ -15,6 +15,11 @@ services:
     ports:
       - 5003:5003
 
+  feedback:
+    image: ernestwambua/tusafiri-feedback-system:latest
+    ports:
+      - 5002:5002
+
   admin-ui:
     image: ernestwambua/tusafiri-admin-ui:latest
     ports:
