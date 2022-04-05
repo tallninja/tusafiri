@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { RefreshToken } = require('../../../models');
+const { RefreshToken, User } = require('../../../models');
 const { auth } = require('../../../../config');
 
 const handleError = (err, res) => {
@@ -45,7 +45,11 @@ module.exports = async (req, res) => {
 			{ expiresIn: auth.jwtTokenExpire }
 		);
 
+		const user = await User.findById(existingRefreshToken.user).exec();
+
 		const responseData = {
+			id: user._id,
+			email: user._email,
 			accessToken: newAccessToken,
 			refreshToken: existingRefreshToken.token,
 		};

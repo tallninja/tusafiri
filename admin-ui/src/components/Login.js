@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { signin } from '../api';
@@ -9,7 +9,7 @@ const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
-	const { setAuth } = useAuth();
+	const { setAuth, persist, setPersist } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -23,9 +23,14 @@ const Login = () => {
 			setAuth({ user: id, email, accessToken });
 			setEmail('');
 			setPassword('');
+			console.log(persist);
 			navigate(from, { replace: true });
 		}
 	};
+
+	useEffect(() => {
+		localStorage.setItem('persist', persist);
+	}, [persist]);
 
 	return (
 		<div className='wrap-login container d-flex align-items-center justify-content-center'>
@@ -62,6 +67,8 @@ const Login = () => {
 								type='checkbox'
 								className='form-check-input'
 								id='remember-me'
+								onChange={() => setPersist((prev) => !prev)}
+								checked={persist}
 							/>
 							<label className='form-check-label' htmlFor='remember-me'>
 								Remember me
