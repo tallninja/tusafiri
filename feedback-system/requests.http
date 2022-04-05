@@ -1,0 +1,4 @@
+@base_url=http://localhost:5002
+
+### Root route
+GET {{base_url}}/
