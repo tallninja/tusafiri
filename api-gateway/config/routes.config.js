@@ -8,6 +8,9 @@ module.exports = [
 			pathRewrite: {
 				[`^/employees`]: '',
 			},
+			onProxyRes: (proxyRes, req, res) => {
+				proxyRes.headers['Access-Control-Allow-Origin'] = req.headers.origin;
+			},
 		},
 	},
 	{
@@ -19,6 +22,9 @@ module.exports = [
 			pathRewrite: {
 				[`^/fleets`]: '',
 			},
+			onProxyRes: (proxyRes, req, res) => {
+				proxyRes.headers['Access-Control-Allow-Origin'] = req.headers.origin;
+			},
 		},
 	},
 	{
@@ -29,6 +35,9 @@ module.exports = [
 			changeOrigin: true,
 			pathRewrite: {
 				[`^/bookings`]: '',
+			},
+			onProxyRes: (proxyRes, req, res) => {
+				proxyRes.headers['Access-Control-Allow-Origin'] = req.headers.origin;
 			},
 		},
 	},

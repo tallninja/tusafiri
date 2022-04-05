@@ -11,7 +11,7 @@ const handleError = (err, res) => {
 
 module.exports = async (req, res) => {
 	try {
-		const requestToken = req.body.refreshToken;
+		const requestToken = req.body.refreshToken || req.cookies?.refreshToken;
 
 		if (!requestToken) {
 			return res

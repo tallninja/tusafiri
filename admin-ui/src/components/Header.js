@@ -3,9 +3,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 const Header = ({ title }) => {
 	const { setAuth } = useAuth();
+	const axios = useAxiosPrivate();
+
+	const logout = async () => {
+		await axios.get('/api/auth/users/signout', { withCredentials: true });
+		setAuth({});
+	};
 
 	return (
 		<header className='navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow'>
@@ -31,7 +38,7 @@ const Header = ({ title }) => {
 			/>
 			<div className='navbar-nav'>
 				<div className='nav-item text-nowrap'>
-					<a className='nav-link px-3' onClick={() => setAuth({})}>
+					<a className='nav-link px-3' onClick={() => logout()}>
 						Sign out
 					</a>
 				</div>

@@ -53,7 +53,13 @@ module.exports = async (req, res) => {
 			refreshToken: refreshToken,
 		};
 
-		return res.status(Sc.OK).json(responseData);
+		return res
+			.status(Sc.OK)
+			.cookie('refreshToken', refreshToken, {
+				httpOnly: true,
+				maxAge: auth.jwtRefreshExpire * 1000,
+			})
+			.json(responseData);
 	} catch (err) {
 		handleError(err, res);
 	}

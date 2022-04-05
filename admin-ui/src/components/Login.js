@@ -70,7 +70,7 @@ const Login = () => {
 						<a href='#'>Forgot Password ?</a>
 					</div>
 					<div className='d-grid'>
-						<button className='btn btn-secondary' type='submit'>
+						<button className='btn btn-dark' type='submit'>
 							Login
 						</button>
 					</div>

@@ -8,16 +8,16 @@ const { TokenExpiredError } = jwt;
 const catchTokenError = (err, res) => {
 	if (err instanceof TokenExpiredError) {
 		return res
-			.status(Sc.UNAUTHORIZED)
+			.status(Sc.FORBIDDEN)
 			.json({ message: 'Access token is expired !' });
 	}
-	return res.status(Sc.UNAUTHORIZED).json({ message: err.message });
+	return res.status(Sc.FORBIDDEN).json({ message: err.message });
 };
 
 exports.verifyToken = (req, res, next) => {
 	const token = req.headers['authorization'];
 	if (!token) {
-		return res.status(Sc.UNAUTHORIZED).json({ message: 'No token provided !' });
+		return res.status(Sc.FORBIDDEN).json({ message: 'No token provided !' });
 	}
 	jwt.verify(token.split(' ')[1], auth.jwtSecret, (err, decodedToken) => {
 		if (err) {
