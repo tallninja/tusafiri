@@ -1,4 +1,29 @@
 @base_url=http://localhost:5002
+@feedbacks_url={{base_url}}/api/feedbacks
 
 ### Root route
 GET {{base_url}}/
+
+### CREATE feedback
+POST {{feedbacks_url}}/new
+Content-Type: application/json
+
+{
+    "type": "complement",
+    "title": "Lorem Ipsum 9",
+    "email": "ernestwambua2@gmail.com",
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ex enim, euismod id faucibus quis."
+}
+
+### Fetch feedbacks
+GET {{feedbacks_url}}/
+
+
+### FETCH feedback
+GET {{feedbacks_url}}/624beafd0a6bdf5402b965c8
+
+### DELETE feedback
+DELETE {{feedbacks_url}}/delete?id=624beafd0a6bdf5402b965c8
+
+### FETCH spectfic types
+GET {{feedbacks_url}}?type=complement
