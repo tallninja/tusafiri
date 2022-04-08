@@ -1,5 +1,16 @@
+import { Routes, Route } from 'react-router-dom';
+
+import AppWrapper from './AppWrapper';
+import Home from './Home';
+
 const App = () => {
-	return <h1>Hello World !</h1>;
+	return (
+		<Routes>
+			<Route path='/' element={<AppWrapper />}>
+				<Route index element={<Home />} />
+			</Route>
+		</Routes>
+	);
 };
 
 export default App;
