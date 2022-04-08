@@ -15,7 +15,7 @@ module.exports = [
 	},
 	{
 		url: '/fleets',
-		auth: true,
+		auth: false,
 		proxy: {
 			target: 'http://fleet-man:5004/api',
 			changeOrigin: true,
