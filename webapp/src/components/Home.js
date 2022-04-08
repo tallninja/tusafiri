@@ -1,13 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import Search from './Search';
 import ShowcaseCard from './ShowcaseCard';
+import useSearch from '../hooks/useSearch';
 
 const Home = () => {
-	const [search, setSearch] = useState({});
+	const { search, setSearch } = useSearch();
+
+	useEffect(() => {
+		console.log(search);
+	}, [search]);
 
 	return (
 		<>
-			<Search handleSearch={(terms) => console.log(terms)} />
+			<Search handleSearch={(terms) => setSearch(terms)} />
 			<div className='container d-flex justify-content-center align-items-center py-2 my-3'>
 				<div className='row'>
 					<div className='col-md-4 d-flex mx-auto my-2 p-4 primary-invert'>

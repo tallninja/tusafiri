@@ -1,14 +1,13 @@
 import { useState, createContext } from 'react';
-import { Outlet } from 'react-router-dom';
 
 const SearchContext = createContext({});
 
-export const SearchProvider = () => {
+export const SearchProvider = ({ children }) => {
 	const [search, setSearch] = useState({});
 
 	return (
 		<SearchContext.Provider value={{ search, setSearch }}>
-			<Outlet />
+			{children}
 		</SearchContext.Provider>
 	);
 };

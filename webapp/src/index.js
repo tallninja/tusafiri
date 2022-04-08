@@ -8,6 +8,7 @@ import 'bootstrap/dist/js/bootstrap.bundle';
 import $ from 'jquery';
 import Popper from 'popper.js';
 
+import { SearchProvider } from './context/SearchProvider';
 import App from './components/App';
 
 const container = document.getElementById('root');
@@ -15,8 +16,10 @@ const root = createRoot(container);
 
 root.render(
 	<Router>
-		<Routes>
-			<Route path='/*' element={<App />} />
-		</Routes>
+		<SearchProvider>
+			<Routes>
+				<Route path='/*' element={<App />} />
+			</Routes>
+		</SearchProvider>
 	</Router>
 );
