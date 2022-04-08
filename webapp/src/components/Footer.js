@@ -16,17 +16,32 @@ const Footer = () => {
 
 				<ul className='nav col-md-4 justify-content-end list-unstyled d-flex'>
 					<li className='ms-3'>
-						<Link to='https://twitter.com' className='text-muted' href='#'>
+						<Link
+							to='https://twitter.com'
+							replace={true}
+							className='text-muted'
+							href='#'
+						>
 							<i className='fa-brands fa-twitter w-100 h-100'></i>
 						</Link>
 					</li>
 					<li className='ms-3'>
-						<Link to='https://instagram.com' className='text-muted' href='#'>
+						<Link
+							to='https://instagram.com'
+							replace
+							className='text-muted'
+							href='#'
+						>
 							<i className='fa-brands fa-instagram w-100 h-100'></i>
 						</Link>
 					</li>
 					<li className='ms-3'>
-						<Link to='https://facebook.com' className='text-muted' href='#'>
+						<Link
+							to='https://facebook.com'
+							replace
+							className='text-muted'
+							href='#'
+						>
 							<i className='fa-brands fa-facebook w-100 h-100'></i>
 						</Link>
 					</li>

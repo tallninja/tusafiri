@@ -1,6 +1,6 @@
 const ShowcaseCard = ({ iconClass, heading, text }) => {
 	return (
-		<div className='card col-md-4 d-flex justify-content-center align-items-center text-center mx-3 my-sm-2 p-4'>
+		<div className='card col-md-4 d-flex justify-content-center align-items-center text-center mx-3 my-2 p-4 primary-invert'>
 			<h1>
 				<i className={iconClass}></i>
 			</h1>

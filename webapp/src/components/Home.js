@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import Search from './Search';
 import ShowcaseCard from './ShowcaseCard';
 
 const Home = () => {
+	const [search, setSearch] = useState({});
+
 	return (
 		<>
-			<Search />
-
-			<div className='container d-flex justify-content-center align-items-center py-5'>
+			<Search handleSearch={(terms) => console.log(terms)} />
+			<div className='container d-flex justify-content-center align-items-center py-2 my-3'>
 				<div className='row'>
-					<div className='col-md-4 d-flex mx-auto my-md-2'>
+					<div className='col-md-4 d-flex mx-auto my-2 p-4 primary-invert'>
 						<h1 className='mx-3'>
 							<i className='fa-solid fa-globe'></i>
 						</h1>
@@ -17,7 +19,7 @@ const Home = () => {
 							<p>Our expert team handpicked all destinations in this site</p>
 						</div>
 					</div>
-					<div className='col-md-4 d-flex mx-auto my-md-2'>
+					<div className='col-md-4 d-flex mx-auto my-2 p-4 primary-invert'>
 						<h1 className='mx-3'>
 							<i className='fa-solid fa-dollar-sign'></i>
 						</h1>
@@ -26,7 +28,7 @@ const Home = () => {
 							<p>Price match within 48 hours of order confirmation</p>
 						</div>
 					</div>
-					<div className='col-md-4 d-flex mx-auto my-md-2'>
+					<div className='col-md-4 d-flex mx-auto my-2 p-4 primary-invert'>
 						<h1 className='mx-3'>
 							<i className='fa-solid fa-handshake-simple'></i>
 						</h1>
@@ -40,7 +42,7 @@ const Home = () => {
 				</div>
 			</div>
 
-			<div className='container d-flex flex-md-row flex-column justify-content-center align-items-center py-5'>
+			<div className='container d-flex flex-md-row flex-column justify-content-center align-items-center py-2 my-3'>
 				<ShowcaseCard
 					heading='Search'
 					text='Choose your origin, destination & journey dates'

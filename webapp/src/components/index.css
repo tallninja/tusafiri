@@ -40,3 +40,28 @@ body {
     line-height: 1.4;
     text-transform: uppercase;
 }
+
+.btn-primary {
+    background-color: #EA3E36;
+    color: white;
+    border: 0;
+}
+
+.btn-primary:hover {
+    background-color: #ED4C56;
+}
+
+.primary-invert:hover {
+    background-color: #EA3E36;
+    border-color: inherit;
+    color: white;
+}
+
+.navbar-light .navbar-nav .nav-link.active {
+    color: #EA3E36;
+}
+
+.navbar-light .navbar-nav .nav-link:hover
+{
+    color: #EA3E36;
+}

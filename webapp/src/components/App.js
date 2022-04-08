@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import './index.css';
 import AppWrapper from './AppWrapper';
+import SearchProvider from '../context/SearchProvider';
 import Home from './Home';
 import Login from './Login';
 
