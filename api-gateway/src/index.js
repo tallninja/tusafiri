@@ -32,7 +32,7 @@ app.use('/', routes);
 ROUTES.forEach((route) => {
 	app.use(
 		route.url,
-		[route.auth && verifyToken],
+		[route.auth ? verifyToken : (req, res, next) => next()],
 		createProxyMiddleware(route.proxy)
 	);
 });

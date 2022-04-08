@@ -35,4 +35,3 @@ Content-Type: application/json
 
 ### Testing the gateway
 GET {{base_url}}/fleets/buses
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNDVlMzhlNDE2YzIxMWVjZDIyYjgyMyIsImlhdCI6MTY0ODkwNDU4MiwiZXhwIjoxNjQ4OTA0NjQyfQ.m7k4JiNC7hYe3kYkVMHY7veRSilnFyB3cJ0cx8C_Lig

@@ -2,10 +2,10 @@ FROM node:alpine
 
 WORKDIR /app
 
-COPY ./package.json ./
+COPY ./package.json .
 
 RUN yarn install
 
-COPY ./ ./
+COPY . .
 
 ENTRYPOINT [ "yarn", "start" ]

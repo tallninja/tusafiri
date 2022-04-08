@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+	const navigate = useNavigate();
+
 	return (
 		<nav className='navbar navbar-expand-lg navbar-light bg-white py-md-4'>
 			<div className='container-fluid'>
@@ -46,7 +48,10 @@ const Navbar = () => {
 							</Link>
 						</li>
 					</ul>
-					<button className='btn btn-outline-dark' type='submit'>
+					<button
+						className='btn btn-outline-dark'
+						onClick={() => navigate('/login')}
+					>
 						Login
 					</button>
 				</div>

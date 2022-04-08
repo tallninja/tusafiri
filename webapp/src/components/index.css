@@ -1,0 +1,42 @@
+body {
+    font-size: .875rem;
+    height: 100vh;
+}
+
+#root {
+    height: 100%;
+    width: 100%;
+}
+
+.frac-width {
+    width: 30%;
+}
+
+.wrap-login {
+    height: 100%;
+    width: 100%
+}
+
+.login-container {
+    width: 560px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.login-form-title {
+    font-weight: 500;
+    font-size: 30px;
+    color: #555555;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-align: left;
+    width: 100%;
+    display: block;
+}
+
+.login-form-label {
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
