@@ -34,4 +34,4 @@ Content-Type: application/json
 }
 
 ### Testing the gateway
-GET {{base_url}}/fleets/buses
+GET {{base_url}}/fleets/locations

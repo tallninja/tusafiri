@@ -8,3 +8,12 @@ export const getLocations = async () => {
 		throw err;
 	}
 };
+
+export const searchJourneys = async (data) => {
+	try {
+		const res = await api.get('/fleets/journeys/search', { params: data });
+		return res.data;
+	} catch (err) {
+		throw err;
+	}
+};

@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LocationsSelect from './LocationsSelect';
 
+import { getLocations } from '../api';
+
 const Search = ({ handleSearch }) => {
+	const [locations, setLocations] = useState([]);
 	const [from, setFrom] = useState('');
 	const [to, setTo] = useState('');
 	const [date, setDate] = useState('');
@@ -15,6 +18,17 @@ const Search = ({ handleSearch }) => {
 		});
 	};
 
+	useEffect(() => {
+		(async () => {
+			try {
+				const locations = await getLocations();
+				setLocations(locations);
+			} catch (err) {
+				console.error(err);
+			}
+		})();
+	}, []);
+
 	return (
 		<div className='container d-flex justify-content-center align-items-center py-5 my-3'>
 			<form className='row' onSubmit={handleSubmit}>
@@ -25,6 +39,7 @@ const Search = ({ handleSearch }) => {
 					<LocationsSelect
 						id='from-select'
 						placeholder='Origin...'
+						locations={locations}
 						handleSelect={(value) => setFrom(value)}
 					/>
 				</div>
@@ -35,6 +50,7 @@ const Search = ({ handleSearch }) => {
 					<LocationsSelect
 						id='to-select'
 						placeholder='Destination...'
+						locations={locations}
 						handleSelect={(value) => setTo(value)}
 					/>
 				</div>
@@ -50,7 +66,11 @@ const Search = ({ handleSearch }) => {
 					/>
 				</div>
 				<div className='col-md-3 d-flex align-items-end p-2'>
-					<button id='submit-button' className='btn btn-lg btn-primary w-100'>
+					<button
+						id='submit-button'
+						type='submit'
+						className='btn btn-lg btn-primary w-100'
+					>
 						<i className='fa-solid fa-magnifying-glass'></i> Search
 					</button>
 				</div>

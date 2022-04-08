@@ -3,17 +3,21 @@ import { useEffect, useState } from 'react';
 import Search from './Search';
 import ShowcaseCard from './ShowcaseCard';
 import useSearch from '../hooks/useSearch';
+import { searchJourneys } from '../api';
 
 const Home = () => {
-	const { search, setSearch } = useSearch();
-
-	useEffect(() => {
-		console.log(search);
-	}, [search]);
+	const handleSearch = async (terms) => {
+		try {
+			const journeys = await searchJourneys(terms);
+			console.log(journeys);
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 	return (
 		<>
-			<Search handleSearch={(terms) => setSearch(terms)} />
+			<Search handleSearch={handleSearch} />
 			<div className='container d-flex justify-content-center align-items-center py-2 my-3'>
 				<div className='row'>
 					<div className='col-md-4 d-flex mx-auto my-2 p-4 primary-invert'>

@@ -9,3 +9,5 @@ exports.getJourney = require('./getJourney');
 exports.getJourneys = require('./getJourneys');
 
 exports.getAvailableJourneys = require('./getAvailableJourneys');
+
+exports.searchJourney = require('./searchJourney');

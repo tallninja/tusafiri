@@ -1,21 +1,10 @@
-import { useState, useEffect } from 'react';
-
-import { getLocations } from '../api';
-
-const LocationsSelect = ({ id, placeholder, handleSelect, defaultValue }) => {
-	const [locations, setLocations] = useState([]);
-
-	useEffect(() => {
-		(async () => {
-			try {
-				const locations = await getLocations();
-				setLocations(locations);
-			} catch (err) {
-				console.error(err);
-			}
-		})();
-	}, []);
-
+const LocationsSelect = ({
+	id,
+	placeholder,
+	locations,
+	handleSelect,
+	defaultValue,
+}) => {
 	return (
 		<select
 			id={id}

@@ -119,12 +119,14 @@ Content-Type: application/json
     "bookedSeats": []
 }
 
-### ADD drivers
-PATCH {{journeysApi}}/add-drivers?id=623d9677f0e6c4aabf18a124
+### SEARCH Journey
+POST {{journeysApi}}/search
 Content-Type: application/json
 
 {
-    "drivers": ["DRV0003/2015", "DRV0007/2017"]
+    "from": "ELD",
+    "to": "MSA",
+    "date": "2022-03-30"
 }
 
 ### DELETE journey
