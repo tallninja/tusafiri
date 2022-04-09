@@ -10,6 +10,7 @@ export const getLocations = async () => {
 };
 
 export const searchJourneys = async (data) => {
+	console.log(data);
 	try {
 		const res = await api.get('/fleets/journeys/search', { params: data });
 		return res.data;

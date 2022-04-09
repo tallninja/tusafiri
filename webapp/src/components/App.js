@@ -2,9 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 
 import './index.css';
 import AppWrapper from './AppWrapper';
-import SearchProvider from '../context/SearchProvider';
 import Home from './Home';
 import Login from './Login';
+import SearchResults from './SearchResults';
 
 const App = () => {
 	return (
@@ -12,6 +12,7 @@ const App = () => {
 			<Route path='/login' element={<Login />} />
 			<Route path='/' element={<AppWrapper />}>
 				<Route index element={<Home />} />
+				<Route path='search' element={<SearchResults />} />
 			</Route>
 		</Routes>
 	);

@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Search from './Search';
-import ShowcaseCard from './ShowcaseCard';
 import useSearch from '../hooks/useSearch';
-import { searchJourneys } from '../api';
 import AdCards from './AdCards';
 import ShowcaseCards from './ShowcaseCards';
 
 const Home = () => {
+	const navigate = useNavigate();
+	const { setSearch } = useSearch();
+
 	const handleSearch = async (terms) => {
 		try {
-			const journeys = await searchJourneys(terms);
-			console.log(journeys);
+			setSearch(terms);
+			navigate('/search');
 		} catch (err) {
 			console.error(err);
 		}

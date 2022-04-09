@@ -9,17 +9,16 @@ const handleError = (err, res) => {
 };
 
 const SearchSchema = Joi.object({
-	from: Joi.string(),
-	to: Joi.string(),
-	date: Joi.string(),
+	from: Joi.string().length(3),
+	to: Joi.string().length(3),
+	date: Joi.string().isoDate(),
 });
 
 module.exports = async (req, res) => {
 	try {
 		const searchDetails = await SearchSchema.validateAsync(req.query);
-		const date = searchDetails.date.split('-');
-		const nextDate = new Date(`${date[0]}-${date[1]}-${parseInt(date[2]) + 1}`);
 		searchDetails.date = new Date(searchDetails.date);
+		const nextDate = new Date().setDate(searchDetails.date.getDate() + 1);
 
 		const from = await Location.findOne({ code: searchDetails.from }).exec();
 		const to = await Location.findOne({ code: searchDetails.to }).exec();
@@ -38,7 +37,7 @@ module.exports = async (req, res) => {
 
 		const journeys = await Journey.find({
 			route: route._id,
-			departureTime: { $gte: date, $lt: nextDate },
+			departureTime: { $gte: searchDetails.date, $lt: nextDate },
 			availableSeats: { $gt: 0 },
 		})
 			.populate(['route', 'bus', 'drivers', 'bookedSeats'])
