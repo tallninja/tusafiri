@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
-import LocationsSelect from './LocationsSelect';
+import { useNavigate } from 'react-router-dom';
 
+import LocationsSelect from './LocationsSelect';
 import { getLocations } from '../api';
 
-const Search = ({ handleSearch }) => {
+const Search = ({ defaultValues }) => {
 	const [locations, setLocations] = useState([]);
-	const [from, setFrom] = useState('');
-	const [to, setTo] = useState('');
-	const [date, setDate] = useState('');
+	const [from, setFrom] = useState(defaultValues?.from || '');
+	const [to, setTo] = useState(defaultValues?.to || '');
+	const [date, setDate] = useState(defaultValues?.date || '');
+
+	const navigate = useNavigate();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		handleSearch({
-			from,
-			to,
-			date,
-		});
+		navigate(`/search?from=${from}&to=${to}&date=${date}`);
 	};
 
 	useEffect(() => {
@@ -27,7 +26,7 @@ const Search = ({ handleSearch }) => {
 				console.error(err);
 			}
 		})();
-	}, []);
+	}, [defaultValues]);
 
 	return (
 		<div className='container d-flex justify-content-center align-items-center py-5 my-3'>
@@ -41,6 +40,7 @@ const Search = ({ handleSearch }) => {
 						placeholder='Origin...'
 						locations={locations}
 						handleSelect={(value) => setFrom(value)}
+						defaultValue={from}
 					/>
 				</div>
 				<div className='col-md-3 p-2'>
@@ -52,6 +52,7 @@ const Search = ({ handleSearch }) => {
 						placeholder='Destination...'
 						locations={locations}
 						handleSelect={(value) => setTo(value)}
+						defaultValue={to}
 					/>
 				</div>
 				<div className='col-md-3 p-2'>
@@ -63,6 +64,7 @@ const Search = ({ handleSearch }) => {
 						className='form-control form-control-lg'
 						id='date-input'
 						onChange={(e) => setDate(e.target.value)}
+						defaultValue={date}
 					/>
 				</div>
 				<div className='col-md-3 d-flex align-items-end p-2'>

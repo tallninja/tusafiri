@@ -133,7 +133,7 @@ export const Journeys = () => {
 									</td>
 									<td>
 										{journey.arrivalTime
-											? new Date(journey.departureTime)
+											? new Date(journey.arrivalTime)
 													.toString()
 													.split(':')
 													.slice(0, -1)

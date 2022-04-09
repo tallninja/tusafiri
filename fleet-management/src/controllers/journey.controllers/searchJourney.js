@@ -40,7 +40,12 @@ module.exports = async (req, res) => {
 			departureTime: { $gte: searchDetails.date, $lt: nextDate },
 			availableSeats: { $gt: 0 },
 		})
-			.populate(['route', 'bus', 'drivers', 'bookedSeats'])
+			.populate([
+				{ path: 'route', populate: ['from', 'to'] },
+				'bus',
+				'drivers',
+				'bookedSeats',
+			])
 			.exec();
 
 		return res.status(Sc.OK).json(journeys);

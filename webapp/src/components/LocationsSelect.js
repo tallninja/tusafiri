@@ -10,7 +10,7 @@ const LocationsSelect = ({
 			id={id}
 			className='form-select form-select-lg'
 			onChange={(e) => handleSelect(e.target.value)}
-			defaultValue={defaultValue}
+			value={defaultValue}
 		>
 			<option value=''>{placeholder}</option>
 			{locations?.map((location) => (
