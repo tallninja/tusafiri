@@ -69,3 +69,13 @@ body {
 {
     color: #EA3E36;
 }
+
+.search-strip {
+    background-color: #EA3E36;
+    color: white;
+    border-radius: 5px;
+}
+
+.search-strip:hover {
+    background-color: #ED4C56;
+}
