@@ -7,7 +7,10 @@ const Navbar = () => {
 		<nav className='navbar navbar-expand-lg navbar-light bg-white py-md-4'>
 			<div className='container-fluid'>
 				<Link to='/' className='navbar-brand' href='#'>
-					Easy Coach
+					<span id='logo-span'>
+						<i className='fa-solid fa-bus'></i> Easy
+					</span>{' '}
+					Coach
 				</Link>
 				<button
 					className='navbar-toggler'
