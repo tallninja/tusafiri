@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import JourneyCollapse from './JourneyCollapse';
+
 const JourneysTable = ({ journeys }) => {
 	return (
 		<div className='table-responsive-sm my-4'>
@@ -17,26 +20,34 @@ const JourneysTable = ({ journeys }) => {
 				<tbody>
 					{journeys.map((journey, idx) => {
 						return (
-							<tr key={journey._id} onClick={() => console.log(journey._id)}>
-								<td>{idx + 1}</td>
-								<td>{journey.bus?.regNo || '-'}</td>
-								<td>{journey.route?.from?.name || '-'}</td>
-								<td>{journey.route?.to?.name || '-'}</td>
-								<td>Ksh {journey.fare}</td>
-								<td>
-									{journey.availableSeats} / {journey.bus?.capacity}
-								</td>
-								<td>
-									{journey.departureTime
-										? new Date(journey.departureTime).toLocaleTimeString()
-										: '-'}
-								</td>
-								<td>
-									{journey.arrivalTime
-										? new Date(journey.arrivalTime).toLocaleTimeString()
-										: '-'}
-								</td>
-							</tr>
+							<React.Fragment key={journey._id}>
+								<tr
+									data-bs-toggle='collapse'
+									data-bs-target={`#${btoa(journey._id).slice(0, -2)}`}
+									aria-expanded={false}
+									aria-controls={btoa(journey._id).slice(0, -2)}
+								>
+									<td>{idx + 1}</td>
+									<td>{journey.bus?.regNo || '-'}</td>
+									<td>{journey.route?.from?.name || '-'}</td>
+									<td>{journey.route?.to?.name || '-'}</td>
+									<td>Ksh {journey.fare}</td>
+									<td>
+										{journey.availableSeats} / {journey.bus?.capacity}
+									</td>
+									<td>
+										{journey.departureTime
+											? new Date(journey.departureTime).toLocaleTimeString()
+											: '-'}
+									</td>
+									<td>
+										{journey.arrivalTime
+											? new Date(journey.arrivalTime).toLocaleTimeString()
+											: '-'}
+									</td>
+								</tr>
+								<JourneyCollapse journey={journey} />
+							</React.Fragment>
 						);
 					})}
 				</tbody>

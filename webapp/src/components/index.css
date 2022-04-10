@@ -51,6 +51,10 @@ body {
     border: 0;
 }
 
+.btn-primary:disabled {
+    background-color: #ED4C56;
+}
+
 .btn-primary:hover {
     background-color: #ED4C56;
 }
@@ -78,4 +82,23 @@ body {
 
 .search-strip:hover {
     background-color: #ED4C56;
+}
+
+.seat {
+    background-color: #EA3E36;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+}
+
+.booked {
+    background-color: #d1e7dd;
+    color: #555555;
+    cursor: pointer;
+}
+
+.seats-available {
+    background-color: #EA3E36;
+    border-radius: 3px;
+    color: white;
 }
