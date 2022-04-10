@@ -58,7 +58,13 @@ const JourneyCollapse = ({ journey }) => {
 								{journey.bus?.seats?.map((seat, idx) => {
 									return (
 										<div
-											className='col-3'
+											className={`col-3 ${
+												journey.bookedSeats?.includes(seat._id) ||
+												seat.number === 1 ||
+												seat.number === 2
+													? 'seat-disabled'
+													: ''
+											}`}
 											key={idx}
 											onClick={() => handleSeatClicked(seat)}
 										>

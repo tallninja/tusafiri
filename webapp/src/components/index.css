@@ -91,6 +91,11 @@ body {
     cursor: pointer;
 }
 
+.seat-disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
 .booked {
     background-color: #d1e7dd;
     color: #555555;
