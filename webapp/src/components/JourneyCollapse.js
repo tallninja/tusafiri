@@ -1,16 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import useBooking from '../hooks/useBooking';
 
 const JourneyCollapse = ({ journey }) => {
 	const [bookedSeats, setBookedSeats] = useState([]);
+	const [amount, setAmount] = useState(bookedSeats.length * journey.fare);
+	const navigate = useNavigate();
+
+	const { setBooking } = useBooking();
 
 	const handleSeatClicked = (bookedSeat) => {
 		if (bookedSeats.includes(bookedSeat)) {
 			setBookedSeats((seats) =>
 				seats.filter((seat) => seat._id !== bookedSeat._id)
 			);
+			setAmount(amount - journey.fare);
 		} else {
 			setBookedSeats([...bookedSeats, bookedSeat]);
+			setAmount(amount + journey.fare);
 		}
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		setBooking((data) => {
+			return { bookedSeats, journey };
+		});
+		navigate('/book-journey');
 	};
 
 	return (
@@ -84,10 +101,10 @@ const JourneyCollapse = ({ journey }) => {
 					<div className='card col-md-4'>
 						<div className='card-body'>
 							<h3 className='card-title'>Tickets</h3>
-							<form className='form row'>
+							<form className='form row' onSubmit={handleSubmit}>
 								{bookedSeats.map((seat, idx) => {
 									return (
-										<div className='col-12'>
+										<div className='col-12' key={idx}>
 											<label htmlFor='nameInput' className='form-label'>
 												Seat #{seat.number}
 											</label>
@@ -101,9 +118,7 @@ const JourneyCollapse = ({ journey }) => {
 								})}
 								<div className='d-flex justify-content-around align-items-center align-content-center my-3'>
 									<p className='h4'>Total: </p>
-									<p className='h4 lead'>
-										Ksh {bookedSeats.length * journey.fare}
-									</p>
+									<p className='h4 lead'>Ksh {amount}</p>
 								</div>
 								<div className='d-grid'>
 									<button

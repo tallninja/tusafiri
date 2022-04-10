@@ -1,7 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 
+import useAuth from '../hooks/useAuth';
+import useLogout from '../hooks/useLogout';
+
 const Navbar = () => {
+	const { auth } = useAuth();
+
 	const navigate = useNavigate();
+	const logout = useLogout();
 
 	return (
 		<nav className='navbar navbar-expand-lg navbar-light bg-white py-md-4'>
@@ -53,9 +59,9 @@ const Navbar = () => {
 					</ul>
 					<button
 						className='btn btn-outline-dark'
-						onClick={() => navigate('/login')}
+						onClick={() => (auth.accessToken ? logout() : navigate('/login'))}
 					>
-						Login
+						{auth.accessToken ? 'Logout' : 'Login'}
 					</button>
 				</div>
 			</div>

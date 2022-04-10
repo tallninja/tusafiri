@@ -1,10 +1,41 @@
-import { Link } from 'react-router-dom';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+import { signin } from '../api';
+import useAuth from '../hooks/useAuth';
 
 const Login = () => {
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+
+	const { setAuth, persist, setPersist } = useAuth();
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const from = location.state?.from?.pathname || '/';
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const res = await signin({ email, password });
+			setAuth(res.data);
+			setEmail('');
+			setPassword('');
+			navigate(from, { replace: true });
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	useEffect(() => {
+		localStorage.setItem('persist', persist);
+	}, [persist]);
+
 	return (
 		<div className='wrap-login container d-flex align-items-center justify-content-center'>
 			<div className='login-container px-5 py-5'>
-				<form onSubmit={() => console.log('test')}>
+				<form onSubmit={handleSubmit}>
 					<span className='login-form-title pb-3'>Login</span>
 					<div className='mb-3'>
 						<label htmlFor='email' className='form-label login-form-label'>
@@ -15,7 +46,7 @@ const Login = () => {
 							className='form-control'
 							id='email'
 							name='email'
-							onChange={() => console.log('test')}
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</div>
 					<div className='mb-3'>
@@ -27,7 +58,7 @@ const Login = () => {
 							className='form-control'
 							id='password'
 							name='password'
-							onChange={() => console.log('test')}
+							onChange={(e) => setPassword(e.target.value)}
 						/>
 					</div>
 					<div className='d-flex justify-content-between'>
@@ -36,19 +67,17 @@ const Login = () => {
 								type='checkbox'
 								className='form-check-input'
 								id='remember-me'
-								onChange={() => console.log('test')}
-								checked={false}
+								onChange={() => setPersist((prev) => !prev)}
+								checked={persist}
 							/>
 							<label className='form-check-label' htmlFor='remember-me'>
 								Remember me
 							</label>
 						</div>
-						<Link to='/' href='#'>
-							Forgot Password ?
-						</Link>
+						<a href='#'>Create Account ?</a>
 					</div>
 					<div className='d-grid'>
-						<button className='btn btn-dark' type='submit'>
+						<button className='btn btn-primary' type='submit'>
 							Login
 						</button>
 					</div>
