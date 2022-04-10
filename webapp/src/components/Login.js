@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 import { signin } from '../api';
 import useAuth from '../hooks/useAuth';
@@ -74,7 +74,7 @@ const Login = () => {
 								Remember me
 							</label>
 						</div>
-						<a href='#'>Create Account ?</a>
+						<Link to='/register'>Create Account ?</Link>
 					</div>
 					<div className='d-grid'>
 						<button className='btn btn-primary' type='submit'>

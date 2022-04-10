@@ -1,5 +1,14 @@
 import { api, apiAuth } from './api';
 
+export const signup = async (data) => {
+	try {
+		const res = await api.post('/api/auth/users/signup', data);
+		return res;
+	} catch (err) {
+		throw err;
+	}
+};
+
 export const signin = async (data) => {
 	try {
 		const res = await api.post('/api/auth/users/signin', data, {
