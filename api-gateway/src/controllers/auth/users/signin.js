@@ -48,6 +48,8 @@ module.exports = async (req, res) => {
 
 		const responseData = {
 			id: user._id,
+			firstName: user.firstName,
+			lastName: user.lastName,
 			email: user.email,
 			phoneNo: user.phoneNo,
 			accessToken: token,
