@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Booking, Seat, Journey } = require('../../models');
+const { Booking, Seat, Journey, Ticket } = require('../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -12,6 +12,13 @@ const handleError = (err, res) => {
 const CreateBookingSchema = Joi.object({
 	journey: Joi.string(),
 	seats: Joi.array(),
+	tickets: Joi.array().items(
+		Joi.object({
+			journey: Joi.string(),
+			seat: Joi.string(),
+			passengerName: Joi.string(),
+		})
+	),
 });
 
 module.exports = async (req, res) => {
@@ -53,7 +60,20 @@ module.exports = async (req, res) => {
 
 		bookingDetails.createdAt = new Date();
 
-		let booking = await new Booking(bookingDetails).save();
+		let booking = await new Booking({
+			...bookingDetails,
+			user: req.user,
+		}).save();
+
+		bookingDetails.tickets.map(async (ticket) => {
+			let newTicket = await new Ticket({
+				...ticket,
+				user: req.user,
+				booking: booking._id,
+			}).save();
+			console.log('Info:', `Ticket ${newTicket._id} was created.`);
+		});
+
 		console.log('Info:', `Booking ${booking._id} was created.`);
 
 		let newBooking = await Booking.findById(booking._id)

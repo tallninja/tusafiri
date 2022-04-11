@@ -4,6 +4,7 @@ const { payments } = require('../../config');
 const Journey = require('./Journey');
 
 const InvoiceSchema = new mongoose.Schema({
+	user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 	booking: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'bookings',

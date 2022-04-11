@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 
 const Invoice = require('./Invoice');
 const Journey = require('./Journey');
+const Ticket = require('./Ticket');
 
 const BookingSchema = new mongoose.Schema({
+	user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 	journey: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'journeys',
@@ -60,6 +62,7 @@ BookingSchema.pre(
 				.filter((seat) => !bookingSeats.includes(seat))
 				?.map((seat) => JSON.parse(seat));
 			await journey.updateOne({ $set: { bookedSeats: newBookedSeats } });
+			await Ticket.deleteMany({ booking: this._id }).exec();
 			next();
 		} catch (err) {
 			throw err;
