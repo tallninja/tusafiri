@@ -37,3 +37,14 @@ export const searchJourneys = async (data) => {
 		throw err;
 	}
 };
+
+export const createBooking = async (data) => {
+	try {
+		const res = await apiAuth.post('/bookings/new', data, {
+			withCredentials: true,
+		});
+		return res.data;
+	} catch (err) {
+		throw err;
+	}
+};

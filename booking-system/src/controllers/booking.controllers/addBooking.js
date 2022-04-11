@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Booking, Seat, Journey, Ticket } = require('../../models');
+const { Booking, Seat, Journey, Ticket, Invoice } = require('../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -76,10 +76,10 @@ module.exports = async (req, res) => {
 
 		console.log('Info:', `Booking ${booking._id} was created.`);
 
-		let newBooking = await Booking.findById(booking._id)
-			.populate(['journey', 'seats'])
+		let invoice = await Invoice.findOne({ booking: booking._id })
+			.populate([{ path: 'booking', populate: ['journey', 'seats'] }])
 			.exec();
-		return res.status(Sc.OK).json(newBooking);
+		return res.status(Sc.OK).json(invoice);
 	} catch (err) {
 		return handleError(err, res);
 	}

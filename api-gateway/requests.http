@@ -35,3 +35,14 @@ Content-Type: application/json
 
 ### Testing the gateway
 GET {{base_url}}/fleets/locations
+
+### Testing POST request
+POST {{base_url}}/fleets/locations/new
+Content-Type: application/json
+
+{
+    "name": "Isiolo",
+    "code": "ISL",
+    "lat": 2.333445,
+    "lng": 2.334467
+}

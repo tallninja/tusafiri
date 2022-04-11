@@ -5,6 +5,7 @@ import useBooking from '../hooks/useBooking';
 
 const JourneyCollapse = ({ journey }) => {
 	const [bookedSeats, setBookedSeats] = useState([]);
+	const [tickets, setTickets] = useState([]);
 	const [amount, setAmount] = useState(bookedSeats.length * journey.fare);
 	const navigate = useNavigate();
 
@@ -22,12 +23,29 @@ const JourneyCollapse = ({ journey }) => {
 		}
 	};
 
+	const handleChange = (e, seat) => {
+		let newTicket = {
+			seat: seat._id,
+			passengerName: e.target.value,
+			journey: journey._id,
+		};
+		let existingTicket = tickets.find((ticket) => ticket.seat === seat._id);
+		if (existingTicket) {
+			let updatedTickets = [
+				...tickets.filter((ticket) => ticket.seat !== seat._id),
+				newTicket,
+			];
+			setTickets(updatedTickets);
+		} else {
+			setTickets([...tickets, newTicket]);
+		}
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setBooking((data) => {
-			return { bookedSeats, journey };
-		});
-		navigate('/book-journey');
+		let seats = bookedSeats.map((seat) => seat._id);
+		setBooking({ journey: journey._id, seats, tickets });
+		navigate('/invoice');
 	};
 
 	return (
@@ -78,7 +96,10 @@ const JourneyCollapse = ({ journey }) => {
 											className={`col-3 ${
 												journey.bookedSeats?.includes(seat._id) ||
 												seat.number === 1 ||
-												seat.number === 2
+												seat.number === 2 ||
+												journey.bookedSeats
+													.map((seat) => seat._id)
+													.includes(seat._id)
 													? 'seat-disabled'
 													: ''
 											}`}
@@ -112,6 +133,7 @@ const JourneyCollapse = ({ journey }) => {
 												type='text'
 												className='form-control'
 												placeholder='Passenger Name...'
+												onChange={(e) => handleChange(e, seat)}
 											/>
 										</div>
 									);

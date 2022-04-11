@@ -8,6 +8,7 @@ import SearchResults from './SearchResults';
 import ProtectedRoute from './ProtectedRoute';
 import PersistLogin from './PersistLogin';
 import Signup from './Signup';
+import Invoice from './Invoice';
 
 const App = () => {
 	return (
@@ -19,7 +20,7 @@ const App = () => {
 					<Route index element={<Home />} />
 					<Route path='search' element={<SearchResults />} />
 					<Route element={<ProtectedRoute />}>
-						<Route path='book-journey' element={<Home />} />
+						<Route path='invoice' element={<Invoice />} />
 					</Route>
 				</Route>
 			</Route>

@@ -16,8 +16,23 @@ const routes = require('./routes');
 const app = express();
 
 app.use(helmet());
-app.use(credentials);
 app.use(cors(corsOptions));
+app.use(credentials);
+
+ROUTES.forEach((route) => {
+	app.use(
+		route.url,
+		[
+			route.auth
+				? verifyToken
+				: (req, res, next) => {
+						next();
+				  },
+		],
+		createProxyMiddleware(route.proxy)
+	);
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -28,14 +43,6 @@ app.use(cookieParser());
 connectToDb();
 
 app.use('/', routes);
-
-ROUTES.forEach((route) => {
-	app.use(
-		route.url,
-		[route.auth ? verifyToken : (req, res, next) => next()],
-		createProxyMiddleware(route.proxy)
-	);
-});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (err) => {
