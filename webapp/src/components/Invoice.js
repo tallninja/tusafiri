@@ -64,7 +64,7 @@ const Invoice = () => {
 							Enter Account Number: <b>{auth.phoneNo}</b>
 						</li>
 						<li className='list-group-item'>
-							Enter Amount: <b>Ksh {2000}</b>
+							Enter Amount: <b>Ksh {invoice.totalAmountDue}</b>
 						</li>
 						<li className='list-group-item'>Enter your M-pesa Password.</li>
 						<li className='list-group-item'>Complete the transaction.</li>
