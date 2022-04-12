@@ -57,10 +57,13 @@ BookingSchema.pre(
 		try {
 			let journey = await Journey.findById(this.journey).exec();
 			let bookedSeats = journey.bookedSeats.map((seat) => JSON.stringify(seat));
+			// console.log('bookedSeats', bookedSeats);
 			let bookingSeats = this.seats.map((seat) => JSON.stringify(seat._id));
+			// console.log('bookingSeats', bookingSeats);
 			let newBookedSeats = bookedSeats
 				.filter((seat) => !bookingSeats.includes(seat))
-				?.map((seat) => JSON.parse(seat));
+				.map((seat) => JSON.parse(seat));
+			// console.log('newBookedSeats', newBookedSeats);
 			await journey.updateOne({ $set: { bookedSeats: newBookedSeats } });
 			await Ticket.deleteMany({ booking: this._id }).exec();
 			next();

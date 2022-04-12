@@ -20,14 +20,6 @@ const InvoiceSchema = new mongoose.Schema({
 	updatedAt: { type: Date },
 });
 
-InvoiceSchema.index(
-	{ createdAt: 1 },
-	{
-		expireAfterSeconds: payments.invoiceDue,
-		partialFilterExpression: { settled: false },
-	}
-);
-
 InvoiceSchema.statics.generateInvoice = async function (booking) {
 	try {
 		const journey = await Journey.findById(booking.journey).exec();
@@ -82,4 +74,21 @@ InvoiceSchema.statics.updateInvoice = async function (invoice, booking) {
 	}
 };
 
-module.exports = mongoose.model('invoices', InvoiceSchema);
+const InvoiceModel = mongoose.model('invoices', InvoiceSchema);
+
+InvoiceModel.collection.dropIndex('createdAt_1');
+
+InvoiceModel.collection.createIndex(
+	{ createdAt: 1 },
+	{
+		expireAfterSeconds: payments.invoiceDue,
+		partialFilterExpression: { settled: false },
+	},
+	(err) => {
+		if (err) {
+			throw err;
+		}
+	}
+);
+
+module.exports = InvoiceModel;

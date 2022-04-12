@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { getInvoice, deleteInvoice } from '../api';
 import InvoiceDocument from './InvoiceDocument';
-import Spinner from './Spinner';
+import Timer from './Timer';
 
 const Invoice = () => {
 	const [invoice, setInvoice] = useState({});
@@ -17,7 +17,11 @@ const Invoice = () => {
 		const fetchInvoice = async () => {
 			try {
 				const invoice = await getInvoice(id);
-				setInvoice(invoice);
+				if (!invoice) {
+					navigate('/');
+				} else {
+					setInvoice(invoice);
+				}
 			} catch (err) {
 				console.error(err);
 			}
@@ -36,16 +40,20 @@ const Invoice = () => {
 	};
 
 	return (
-		<>
-			<div className='container'>
+		<div className='container'>
+			<div className='d-flex flex-wrap justify-content-between align-items-center align-content-center'>
 				<h2>Invoice</h2>
-				<hr />
+				<div className='d-flex justify-content-end'>
+					<h5 className='mx-2'>Deadline: </h5>
+					<Timer date={invoice.dueDate} />
+				</div>
 			</div>
-			<div className='container d-flex flex-wrap justify-content-center'>
+			<hr />
+			<div className='d-flex flex-wrap justify-content-center my-3'>
 				<InvoiceDocument invoice={invoice} user={auth} />
 				<div>
 					<h3>Payment</h3>
-					<h5>Steps</h5>
+					<h5>Steps:</h5>
 					<ol className='list-group list-group-numbered'>
 						<li className='list-group-item'>
 							Click on the Safaricom toolkit on your phone or M-Pesa App.
@@ -76,12 +84,23 @@ const Invoice = () => {
 					</ol>
 				</div>
 			</div>
-			<div className='d-grid my-3 container'>
-				<button className='btn-primary btn-lg' onClick={cancelBooking}>
+			<div className='d-flex justify-content-between my-3 '>
+				<button
+					className='btn btn-primary btn-lg frac-width'
+					onClick={cancelBooking}
+				>
 					Cancel Booking
 				</button>
+				<button
+					className={`btn btn-success btn-lg frac-width ${
+						invoice.settled ? '' : 'disabled'
+					}`}
+					type='submit'
+				>
+					Next
+				</button>
 			</div>
-		</>
+		</div>
 	);
 };
 
