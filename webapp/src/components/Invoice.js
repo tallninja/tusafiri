@@ -1,34 +1,39 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
-import useBooking from '../hooks/useBooking';
-import { createBooking } from '../api';
+import { getInvoice, deleteInvoice } from '../api';
 import InvoiceDocument from './InvoiceDocument';
-import { useNavigate } from 'react-router-dom';
+import Spinner from './Spinner';
 
 const Invoice = () => {
 	const [invoice, setInvoice] = useState({});
-	const { auth } = useAuth();
-	const { booking } = useBooking();
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		console.log(booking);
-		if (booking.seats) {
-			const makeBooking = async () => {
-				try {
-					const invoice = await createBooking(booking);
-					setInvoice(invoice);
-				} catch (err) {
-					console.error(err);
-				}
-			};
+	const { auth } = useAuth();
+	const { id } = useParams();
 
-			makeBooking();
-		} else {
-			navigate(-1);
+	useEffect(() => {
+		const fetchInvoice = async () => {
+			try {
+				const invoice = await getInvoice(id);
+				setInvoice(invoice);
+			} catch (err) {
+				console.error(err);
+			}
+		};
+
+		fetchInvoice();
+	}, [id, navigate]);
+
+	const cancelBooking = async () => {
+		try {
+			await deleteInvoice(invoice._id);
+			navigate('/');
+		} catch (err) {
+			console.error(err);
 		}
-	}, [booking, navigate]);
+	};
 
 	return (
 		<>
@@ -36,9 +41,9 @@ const Invoice = () => {
 				<h2>Invoice</h2>
 				<hr />
 			</div>
-			<div className='d-flex flex-wrap justify-content-center'>
+			<div className='container d-flex flex-wrap justify-content-center'>
 				<InvoiceDocument invoice={invoice} user={auth} />
-				<div className='mx-2'>
+				<div>
 					<h3>Payment</h3>
 					<h5>Steps</h5>
 					<ol className='list-group list-group-numbered'>
@@ -70,6 +75,11 @@ const Invoice = () => {
 						<li className='list-group-item'>Complete the transaction.</li>
 					</ol>
 				</div>
+			</div>
+			<div className='d-grid my-3 container'>
+				<button className='btn-primary btn-lg' onClick={cancelBooking}>
+					Cancel Booking
+				</button>
 			</div>
 		</>
 	);

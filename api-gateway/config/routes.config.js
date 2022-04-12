@@ -28,13 +28,13 @@ module.exports = [
 		},
 	},
 	{
-		url: '/bookings',
+		url: '/booking-system',
 		auth: true,
 		proxy: {
-			target: 'http://booking:5003/api/bookings',
+			target: 'http://booking:5003/api',
 			changeOrigin: true,
 			pathRewrite: {
-				[`^/bookings`]: '',
+				[`^/booking-system`]: '',
 			},
 			onProxyRes: (proxyRes, req, res) => {
 				proxyRes.headers['Access-Control-Allow-Origin'] = req.headers.origin;

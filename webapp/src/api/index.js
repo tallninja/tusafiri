@@ -40,10 +40,27 @@ export const searchJourneys = async (data) => {
 
 export const createBooking = async (data) => {
 	try {
-		const res = await apiAuth.post('/bookings/new', data, {
+		const res = await apiAuth.post('/booking-system/bookings/new', data, {
 			withCredentials: true,
 		});
 		return res.data;
+	} catch (err) {
+		throw err;
+	}
+};
+
+export const getInvoice = async (id) => {
+	try {
+		const res = await apiAuth.get(`/booking-system/invoices/${id}`);
+		return res.data;
+	} catch (err) {
+		throw err;
+	}
+};
+
+export const deleteInvoice = async (id) => {
+	try {
+		await apiAuth.delete('/booking-system/invoices/delete', { params: { id } });
 	} catch (err) {
 		throw err;
 	}

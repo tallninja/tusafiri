@@ -45,7 +45,7 @@ const JourneyCollapse = ({ journey }) => {
 		e.preventDefault();
 		let seats = bookedSeats.map((seat) => seat._id);
 		setBooking({ journey: journey._id, seats, tickets });
-		navigate('/invoice');
+		navigate('/booking');
 	};
 
 	return (

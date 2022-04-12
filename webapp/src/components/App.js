@@ -9,6 +9,7 @@ import ProtectedRoute from './ProtectedRoute';
 import PersistLogin from './PersistLogin';
 import Signup from './Signup';
 import Invoice from './Invoice';
+import Booking from './Booking';
 
 const App = () => {
 	return (
@@ -19,8 +20,9 @@ const App = () => {
 				<Route path='/' element={<AppWrapper />}>
 					<Route index element={<Home />} />
 					<Route path='search' element={<SearchResults />} />
-					<Route element={<ProtectedRoute />}>
-						<Route path='invoice' element={<Invoice />} />
+					<Route path='booking' element={<ProtectedRoute />}>
+						<Route index element={<Booking />} />
+						<Route path='invoice/:id' element={<Invoice />} />
 					</Route>
 				</Route>
 			</Route>

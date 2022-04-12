@@ -7,6 +7,18 @@ const handleError = (err, res) => {
 	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
 
+exports.getInvoice = async (req, res) => {
+	const { id } = req.params;
+	try {
+		const invoice = await Invoice.findById(id)
+			.populate([{ path: 'booking', populate: ['journey', 'seats'] }])
+			.exec();
+		return res.status(Sc.OK).json(invoice);
+	} catch (err) {
+		return handleError(err, res);
+	}
+};
+
 exports.getInvoices = async (req, res) => {
 	try {
 		let invoices = await Invoice.find({}).exec();
