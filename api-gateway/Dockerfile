@@ -4,10 +4,10 @@ WORKDIR /app
 
 COPY ./package.json .
 
-RUN yarn install
+RUN npm install
 
 COPY . .
 
 EXPOSE 5000
 
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "npm", "start" ]

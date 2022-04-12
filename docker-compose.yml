@@ -6,7 +6,7 @@ services:
       - 5005:5005
 
   fleet-man:
-    image: ernestwambua/tusafir-fleet-management:latest
+    image: ernestwambua/tusafiri-fleet-management:latest
     ports:
       - 5004:5004
 
@@ -20,15 +20,15 @@ services:
     ports:
       - 5002:5002
 
-  admin-ui:
-    image: ernestwambua/tusafiri-admin-ui:latest
-    ports:
-      - 3005:3005
-
   api-gateway:
     image: ernestwambua/tusafiri-api-gateway:latest
     ports:
       - 5000:5000
+
+  admin-ui:
+    image: ernestwambua/tusafiri-admin-ui:latest
+    ports:
+      - 3005:3005
 
   webapp:
     image: ernestwambua/tusafiri-webapp:latest

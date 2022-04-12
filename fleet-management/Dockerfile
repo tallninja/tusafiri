@@ -2,12 +2,12 @@ FROM node:alpine
 
 WORKDIR /app
 
-COPY ./package.json ./
+COPY ./package.json .
 
-RUN yarn install
+RUN npm install
 
-COPY ./ ./
+COPY . .
 
 EXPOSE 5004
 
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "npm", "start" ]
