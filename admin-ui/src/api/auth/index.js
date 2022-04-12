@@ -1,9 +1,9 @@
-import axios from '../axios';
+import { api } from '../axios';
 
 const AUTH_URL = 'http://localhost:5000/api/auth/users';
 
 export const signin = async (credentials) => {
-	const res = await axios.post(`${AUTH_URL}/signin`, credentials, {
+	const res = await api.post(`${AUTH_URL}/signin`, credentials, {
 		withCredentials: true,
 	});
 
@@ -11,7 +11,7 @@ export const signin = async (credentials) => {
 };
 
 export const signout = async () => {
-	const res = await axios.get(`${AUTH_URL}/signout`, {
+	const res = await api.get(`${AUTH_URL}/signout`, {
 		withCredentials: true,
 	});
 
