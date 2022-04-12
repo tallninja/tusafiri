@@ -2,35 +2,56 @@ version: '3'
 services:
   employee-man:
     image: ernestwambua/tusafiri-employee-management:latest
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
     ports:
       - 5005:5005
 
   fleet-man:
     image: ernestwambua/tusafiri-fleet-management:latest
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
     ports:
       - 5004:5004
 
   booking:
     image: ernestwambua/tusafiri-booking-system:latest
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
     ports:
       - 5003:5003
 
   feedback:
     image: ernestwambua/tusafiri-feedback-system:latest
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
     ports:
       - 5002:5002
 
   api-gateway:
     image: ernestwambua/tusafiri-api-gateway:latest
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
     ports:
       - 5000:5000
 
   admin-ui:
     image: ernestwambua/tusafiri-admin-ui:latest
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
     ports:
       - 3005:3005
 
   webapp:
     image: ernestwambua/tusafiri-webapp:latest
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
     ports:
       - 3000:3000

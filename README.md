@@ -20,6 +20,14 @@ docker-compose -f docker-compose.dev.yml up
 
 ### Production
 
+Make sure you create a ```.env``` file at the root of the project. Inside the ```.env``` file add the MONGO_URI environment variable like so:
+
+```text
+MONGO_URI={mongodb URI string here...}
+```
+
+Then you can run the commands below.
+
 ```bash
 docker-compose up --build
 ```
