@@ -76,25 +76,27 @@ InvoiceSchema.statics.updateInvoice = async function (invoice, booking) {
 
 const InvoiceModel = mongoose.model('invoices', InvoiceSchema);
 
-let createdAtIndex = InvoiceModel.collection
-	.getIndexes()
-	.filter((index) => index.name === 'createdAt_1');
+(async () => {
+	try {
+		let indexes = await InvoiceModel.collection.getIndexes();
+		let createdAtIndex = Object.keys(indexes).find(
+			(indexName) => indexName === 'createdAt_1'
+		);
 
-if (createdAtIndex) {
-	InvoiceModel.collection.dropIndex('createdAt_1');
-}
-
-InvoiceModel.collection.createIndex(
-	{ createdAt: 1 },
-	{
-		expireAfterSeconds: payments.invoiceDue,
-		partialFilterExpression: { settled: false },
-	},
-	(err) => {
-		if (err) {
-			throw err;
+		if (createdAtIndex) {
+			await InvoiceModel.collection.dropIndex(createdAtIndex);
 		}
+
+		await InvoiceModel.collection.createIndex(
+			{ createdAt: 1 },
+			{
+				expireAfterSeconds: payments.invoiceDue,
+				partialFilterExpression: { settled: false },
+			}
+		);
+	} catch (err) {
+		console.log('Error:', err);
 	}
-);
+})();
 
 module.exports = InvoiceModel;
