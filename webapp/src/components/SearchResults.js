@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { searchJourneys } from '../api';
 import useQuery from '../hooks/useQuery';
 import JourneysTable from './JourneysTable';
+import NoResults from './NoResults';
 import Search from './Search';
 
 const SearchResults = () => {
@@ -53,7 +54,11 @@ const SearchResults = () => {
 						<h2>{new Date(query.get('date')).toDateString()}</h2>
 					</div>
 				</div>
-				<JourneysTable journeys={journeys} />
+				{journeys.length ? (
+					<JourneysTable journeys={journeys} />
+				) : (
+					<NoResults />
+				)}
 			</div>
 		</>
 	);

@@ -63,6 +63,7 @@ const Search = ({ defaultValues }) => {
 						type='date'
 						className='form-control form-control-lg'
 						id='date-input'
+						min={new Date().toISOString().split('T')[0]}
 						onChange={(e) => setDate(e.target.value)}
 						defaultValue={date}
 					/>
