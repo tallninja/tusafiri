@@ -23,7 +23,7 @@ services:
   admin-ui:
     image: ernestwambua/tusafiri-admin-ui:latest
     ports:
-      - 3003:3000
+      - 3005:3005
 
   api-gateway:
     image: ernestwambua/tusafiri-api-gateway:latest

@@ -1,23 +1,6 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 export const Dashboard = () => {
-	const location = useLocation();
-	const navigate = useNavigate();
-
-	const axiosPrivate = useAxiosPrivate();
-
-	const handleClick = async () => {
-		try {
-			const res = await axiosPrivate.get('/employees/drivers');
-			console.log(res.data);
-		} catch (err) {
-			navigate('/login', { state: { from: location }, replace: true });
-		}
-	};
-
 	return (
 		<>
 			<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom'>
@@ -42,9 +25,7 @@ export const Dashboard = () => {
 			</div>
 
 			<div className='d-flex justify-content-center'>
-				<button className='btn btn-dark' onClick={handleClick}>
-					Refresh
-				</button>
+				<h3>Dashboard</h3>
 			</div>
 		</>
 	);

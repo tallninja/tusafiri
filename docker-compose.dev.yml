@@ -38,17 +38,6 @@ services:
       - /app/node_modules
       - ./feedback-system:/app
 
-  admin-ui:
-    build:
-      context: ./admin-ui
-      dockerfile: ./Dockerfile.dev
-    volumes:
-      - /app/node_modules
-      - ./admin-ui:/app
-    ports:
-      - 3003:3000
-      # - 3000:3000
-
   api-gateway:
     build:
       context: ./api-gateway
@@ -58,6 +47,16 @@ services:
       - ./api-gateway:/app
     ports:
       - 5000:5000
+
+  admin-ui:
+    build:
+      context: ./admin-ui
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./admin-ui:/app
+    ports:
+      - 3005:3005
 
   webapp:
     build:
