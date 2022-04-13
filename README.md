@@ -2,6 +2,8 @@
 
 This is a bus booking and ticketing system that allows people to book buses to various destinations from the comfort of their home.
 
+![webapp home](./images/webapp_home.png)
+
 ## Running
 
 Make sure you have Docker and Docker-compose installed on your system
