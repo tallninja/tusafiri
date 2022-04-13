@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { User, SYSTEM_ROLES, RefreshToken } = require('../../../models');
-const { auth } = require('../../../../config');
+const { User, SYSTEM_ROLES, RefreshToken } = require('../../models');
+const { auth } = require('../../../config');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -21,12 +21,20 @@ module.exports = async (req, res) => {
 		const signinCredentials = await SigninSchema.validateAsync(req.body);
 		const user = await User.findOne({
 			email: signinCredentials.email,
-		}).exec();
+		})
+			.populate(['systemRole'])
+			.exec();
 
 		if (!user) {
 			return res
 				.status(Sc.BAD_REQUEST)
 				.json({ message: 'User does not exist.' });
+		}
+
+		if (user.systemRole.name !== SYSTEM_ROLES.admin) {
+			return res
+				.status(Sc.UNAUTHORIZED)
+				.json({ message: 'Admin role required.' });
 		}
 
 		const passwordIsValid = bcrypt.compareSync(
@@ -54,6 +62,7 @@ module.exports = async (req, res) => {
 			phoneNo: user.phoneNo,
 			accessToken: token,
 			refreshToken: refreshToken,
+			systemRole: user.systemRole.name.toUpperCase(),
 		};
 
 		return res

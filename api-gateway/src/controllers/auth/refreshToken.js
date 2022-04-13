@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { RefreshToken, User } = require('../../../models');
-const { auth } = require('../../../../config');
+const { RefreshToken, User } = require('../../models');
+const { auth } = require('../../../config');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -45,7 +45,9 @@ module.exports = async (req, res) => {
 			{ expiresIn: auth.jwtTokenExpire }
 		);
 
-		const user = await User.findById(existingRefreshToken.user).exec();
+		const user = await User.findById(existingRefreshToken.user)
+			.populate(['systemRole'])
+			.exec();
 
 		const responseData = {
 			id: user._id,
@@ -54,7 +56,8 @@ module.exports = async (req, res) => {
 			email: user.email,
 			phoneNo: user.phoneNo,
 			accessToken: newAccessToken,
-			refreshToken: existingRefreshToken.token,
+			refreshToken: requestToken.token,
+			systemRole: user.systemRole.name.toUpperCase(),
 		};
 
 		return res.status(Sc.OK).json(responseData);

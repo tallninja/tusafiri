@@ -43,10 +43,14 @@ const Invoice = () => {
 		<div className='container'>
 			<div className='d-flex flex-wrap justify-content-between align-items-center align-content-center'>
 				<h2>Invoice</h2>
-				<div className='d-flex justify-content-end'>
-					<h5 className='mx-2'>Deadline: </h5>
-					<Timer date={invoice.dueDate} />
-				</div>
+				{!invoice.settled ? (
+					<div className='d-flex justify-content-end'>
+						<h5 className='mx-2'>Deadline: </h5>
+						<Timer date={invoice.dueDate} />
+					</div>
+				) : (
+					<h5 className='mx-2 text-success'>Paid</h5>
+				)}
 			</div>
 			<hr />
 			<div className='d-flex flex-wrap justify-content-center my-3'>

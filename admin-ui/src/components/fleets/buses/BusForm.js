@@ -80,12 +80,12 @@ export const BusForm = ({ onSubmit, initialValues, action }) => {
 					className='form-control'
 					placeholder='20'
 					type={'number'}
-					min={10}
-					max={60}
+					min={5}
+					max={100}
 					defaultValue={busData.capacity}
 					onChange={(e) => setBusData({ ...busData, capacity: e.target.value })}
 				/>
-				<div className='form-text'>Must be between 10 and 60.</div>
+				<div className='form-text'>Must be between 5 and 100.</div>
 			</div>
 			<div className='d-flex justify-content-between my-3 '>
 				<a

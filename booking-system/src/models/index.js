@@ -49,4 +49,5 @@ module.exports = {
 	Journey: require('./Journey'),
 	Bus: require('./Bus'),
 	Seat: require('./Seat'),
+	User: require('./User'),
 };

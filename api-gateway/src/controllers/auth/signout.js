@@ -1,7 +1,7 @@
 const { StatusCodes: Sc } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 
-const { RefreshToken } = require('../../../models');
+const { RefreshToken } = require('../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);

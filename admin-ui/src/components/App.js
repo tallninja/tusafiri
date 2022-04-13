@@ -14,6 +14,7 @@ import { Buses, CreateBus, EditBus } from './fleets/buses';
 import { Journeys, CreateJourney, EditJourney } from './fleets/journeys';
 import { Employees, CreateEmployee, EditEmployee } from './employees';
 import { Bookings, CreateBooking, Invoices } from './bookings';
+import { Users } from './users';
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,10 @@ const App = () => {
 
 							<Route path='invoices'>
 								<Route index element={<Invoices />} />
+							</Route>
+
+							<Route path='users'>
+								<Route index element={<Users />} />
 							</Route>
 						</Route>
 					</Route>

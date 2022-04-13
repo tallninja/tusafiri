@@ -2,6 +2,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 
 const { auth } = require('../../config');
+const { User, SYSTEM_ROLES } = require('../models');
 
 const { TokenExpiredError } = jwt;
 
@@ -27,4 +28,25 @@ exports.verifyToken = (req, res, next) => {
 		next();
 		return;
 	});
+};
+
+exports.isAdmin = async (req, res, next) => {
+	try {
+		const user = await User.findById(req.user).populate(['systemRole']).exec();
+
+		if (!user) {
+			return res.status(Sc.BAD_REQUEST).json({ message: 'User not found.' });
+		}
+
+		if (user.systemRole.name === SYSTEM_ROLES.admin) {
+			return next();
+		}
+
+		return res
+			.status(Sc.UNAUTHORIZED)
+			.json({ message: 'Admin role required.' });
+	} catch (err) {
+		console.log('Error:', err);
+		return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
+	}
 };

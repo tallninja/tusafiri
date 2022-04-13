@@ -17,14 +17,16 @@ const Login = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const res = await signin({ email, password });
-		if (res.status === 200) {
-			const { id, email, accessToken } = res.data;
-			setAuth({ user: id, email, accessToken });
+		try {
+			const userDetails = await signin({ email, password });
+			setAuth(userDetails);
 			setEmail('');
 			setPassword('');
-			console.log(persist);
 			navigate(from, { replace: true });
+		} catch (err) {
+			setEmail('');
+			setPassword('');
+			console.error(err);
 		}
 	};
 

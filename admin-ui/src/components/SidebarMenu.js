@@ -108,7 +108,7 @@ const Navbar = () => {
 						</Link>
 					</li>
 					<li className='nav-item'>
-						<Link to='/' className='nav-link' href='#'>
+						<Link to='/users' className='nav-link' href='#'>
 							<span data-feather='layers'></span>
 							Users
 						</Link>

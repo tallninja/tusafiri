@@ -1,5 +1,6 @@
 @baseUrl = http://localhost:5003
 @bookingsApi = {{baseUrl}}/api/bookings
+@paymentsApi = {{baseUrl}}/api/payments
 
 
 ### ROOT route
@@ -30,3 +31,12 @@ Content-Type: application/json
 
 ### DELETE booking
 DELETE {{bookingsApi}}/delete/623cd3e0f5e6deda00ed8b5c
+
+### MAKE Payment
+POST {{paymentsApi}}
+Content-Type: application/json
+
+{
+    "amount": 1392,
+    "accountNo": "+245711347790"
+}

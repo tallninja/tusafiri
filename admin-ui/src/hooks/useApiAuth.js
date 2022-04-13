@@ -27,7 +27,10 @@ const useApiAuth = () => {
 				if (err?.response?.status === 403 && !prevRequest?.sent) {
 					prevRequest.sent = true;
 					const newAccessToken = await refresh();
-					prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+
+					if (newAccessToken) {
+						prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+					}
 					return apiAuth(prevRequest);
 				}
 

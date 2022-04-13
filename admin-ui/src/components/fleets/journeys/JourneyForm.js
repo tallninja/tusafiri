@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import DriverSelect from './DriverSelect';
+import BusSelect from './BusSelect';
+import RouteSelect from './RouteSelect';
 
 export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 	const [journeyData, setJourneyData] = useState({
@@ -32,18 +34,18 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 			<h3>{action} Journey</h3>
 			<hr />
 			<div className='col-md-12'>
-				<label htmlFor='busInput' className='form-label'>
+				<label htmlFor='busSelect' className='form-label'>
 					Bus
 				</label>
-				<input
-					id='busInput'
-					className='form-control'
-					placeholder='KBM 960X'
-					type={'text'}
-					defaultValue={journeyData.bus}
-					onChange={(e) =>
-						setJourneyData({ ...journeyData, bus: e.target.value })
+				<BusSelect
+					id='busSelect'
+					handleSelect={(value) =>
+						setJourneyData({
+							...journeyData,
+							bus: value,
+						})
 					}
+					defaultValue={journeyData.bus || ''}
 				/>
 				<div className='form-text'>Registration number of the bus.</div>
 			</div>
@@ -51,15 +53,15 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 				<label htmlFor='routeInput' className='form-label'>
 					Route
 				</label>
-				<input
-					id='routeInput'
-					className='form-control'
-					type={'text'}
-					placeholder='A1'
-					defaultValue={journeyData.route}
-					onChange={(e) =>
-						setJourneyData({ ...journeyData, route: e.target.value })
+				<RouteSelect
+					id='routeSelect'
+					handleSelect={(value) =>
+						setJourneyData({
+							...journeyData,
+							route: value,
+						})
 					}
+					defaultValue={journeyData.route || ''}
 				/>
 				<div className='form-text'>Code representing the route.</div>
 			</div>

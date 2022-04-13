@@ -19,7 +19,7 @@ const DriverSelect = ({ id, handleSelect, defaultValue }) => {
 			id={id}
 			className='form-select'
 			onChange={(e) => handleSelect(e.target.value)}
-			defaultValue={defaultValue}
+			value={defaultValue}
 		>
 			<option value=''>Select driver...</option>
 			{drivers?.map((driver) => (

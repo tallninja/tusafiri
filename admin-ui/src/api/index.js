@@ -5,3 +5,5 @@ export * from './employees';
 export * from './bookings';
 
 export * from './auth';
+
+export * from './users';
