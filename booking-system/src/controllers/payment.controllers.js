@@ -2,6 +2,7 @@ const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Payment, Invoice, Booking, User } = require('../models');
+const { intersection } = require('lodash');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -9,7 +10,7 @@ const handleError = (err, res) => {
 };
 
 const PaymentSchema = Joi.object({
-	amount: Joi.number(),
+	amountPaid: Joi.number(),
 	accountNo: Joi.string(),
 });
 
@@ -26,24 +27,25 @@ exports.createPayment = async (req, res) => {
 				.json({ message: 'Invalid account no.' });
 		}
 
-		paymentDetails.user = user._id;
-		const invoice = await Invoice.findOne({
-			user: user._id,
+		paymentDetails.user = user._id?.toString();
+
+		console.log({
+			user: paymentDetails.user,
 			settled: false,
+			totalAmountDue: paymentDetails.amountPaid,
+		});
+
+		const invoice = await Invoice.findOne({
+			user: paymentDetails.user,
+			settled: false,
+			totalAmountDue: paymentDetails.amountPaid,
 		}).exec();
 
 		if (!invoice) {
-			return res
-				.status(Sc.BAD_REQUEST)
-				.json({ message: 'Invoice does not exist.' });
+			return res.status(Sc.BAD_REQUEST).json({ message: 'Invoice not found.' });
 		}
 
 		paymentDetails.invoice = invoice._id;
-		if (paymentDetails.amount !== invoice.totalAmountDue) {
-			return res
-				.status(Sc.BAD_REQUEST)
-				.json({ message: 'Please pay the required amoint.' });
-		}
 
 		const booking = await Booking.findById(invoice.booking).exec();
 		if (!booking) {

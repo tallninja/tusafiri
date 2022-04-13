@@ -34,7 +34,8 @@ InvoiceSchema.statics.generateInvoice = async function (booking) {
 		dueDate.setSeconds(dueDate.getSeconds() + payments.invoiceDue);
 
 		new this({
-			booking: booking,
+			user: booking.user,
+			booking: booking._id,
 			amount: amount,
 			salesTax: payments.salesTax,
 			totalAmountDue: totalAmountDue,

@@ -23,6 +23,7 @@ const CreateBookingSchema = Joi.object({
 
 module.exports = async (req, res) => {
 	try {
+		const user = req.headers['x-user'];
 		let bookingDetails = await CreateBookingSchema.validateAsync(req.body);
 		let journey = await Journey.findById(bookingDetails.journey).exec();
 
@@ -62,13 +63,13 @@ module.exports = async (req, res) => {
 
 		let booking = await new Booking({
 			...bookingDetails,
-			user: req.user,
+			user,
 		}).save();
 
 		bookingDetails.tickets.map(async (ticket) => {
 			let newTicket = await new Ticket({
 				...ticket,
-				user: req.user,
+				user,
 				booking: booking._id,
 			}).save();
 			console.log('Info:', `Ticket ${newTicket._id} was created.`);

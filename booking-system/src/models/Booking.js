@@ -20,7 +20,10 @@ const BookingSchema = new mongoose.Schema({
 
 BookingSchema.pre('save', async function (next) {
 	try {
-		Invoice.generateInvoice(this);
+		const invoice = await Invoice.findOne({ booking: this._id });
+		if (!invoice) {
+			Invoice.generateInvoice(this);
+		}
 		let journey = await Journey.findById(this.journey).exec();
 		this.seats.map((seat) => journey.bookedSeats.push(seat));
 		journey.save();

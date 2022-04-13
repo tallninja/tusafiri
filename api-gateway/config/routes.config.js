@@ -36,6 +36,9 @@ module.exports = [
 			pathRewrite: {
 				[`^/booking-system`]: '',
 			},
+			onProxyReq: (proxyReq, req, res) => {
+				proxyReq.setHeader('x-user', req.user);
+			},
 			onProxyRes: (proxyRes, req, res) => {
 				proxyRes.headers['Access-Control-Allow-Origin'] = req.headers.origin;
 			},

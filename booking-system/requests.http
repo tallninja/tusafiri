@@ -37,6 +37,6 @@ POST {{paymentsApi}}
 Content-Type: application/json
 
 {
-    "amount": 1392,
-    "accountNo": "+245711347790"
+    "amountPaid": 1392,
+    "accountNo": "+254719286396"
 }
