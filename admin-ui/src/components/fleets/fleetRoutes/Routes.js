@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import { getRoutes, deleteRoute } from '../../../api';
+import NoResults from '../../NoResults';
 
 export const FleetRoutes = () => {
 	const [routes, setRoutes] = useState([]);
@@ -43,39 +45,40 @@ export const FleetRoutes = () => {
 					</Link>
 				</div>
 			</div>
-			<div className='table-responsive'>
-				<table className='table table-striped table-sm'>
-					<thead>
-						<tr>
-							<th scope='col'>#</th>
-							<th scope='col'>Name</th>
-							<th scope='col'>From</th>
-							<th scope='col'>To</th>
-							<th scope='col'>Created At</th>
-							<th scope='col'>Updated At</th>
-							<th scope='col'>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{routes.map((route, idx) => {
-							return (
-								<tr key={route._id}>
-									<td>{idx + 1}</td>
-									<td>{route.name}</td>
-									<td>{route.from.name}</td>
-									<td>{route.to.name}</td>
-									<td>
-										{route.createdAt
-											? new Date(route.createdAt).toDateString()
-											: '-'}
-									</td>
-									<td>
-										{route.updatedAt
-											? new Date(route.updatedAt).toDateString()
-											: '-'}
-									</td>
-									<td>
-										{/* <button
+			{routes.length ? (
+				<div className='table-responsive'>
+					<table className='table table-striped table-sm'>
+						<thead>
+							<tr>
+								<th scope='col'>#</th>
+								<th scope='col'>Name</th>
+								<th scope='col'>From</th>
+								<th scope='col'>To</th>
+								<th scope='col'>Created At</th>
+								<th scope='col'>Updated At</th>
+								<th scope='col'>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{routes.map((route, idx) => {
+								return (
+									<tr key={route._id}>
+										<td>{idx + 1}</td>
+										<td>{route.name}</td>
+										<td>{route.from.name}</td>
+										<td>{route.to.name}</td>
+										<td>
+											{route.createdAt
+												? new Date(route.createdAt).toDateString()
+												: '-'}
+										</td>
+										<td>
+											{route.updatedAt
+												? new Date(route.updatedAt).toDateString()
+												: '-'}
+										</td>
+										<td>
+											{/* <button
 											type='button'
 											className='btn btn-outline-dark btn-sm mx-1'
 											data-bs-toggle='tooltip'
@@ -84,33 +87,36 @@ export const FleetRoutes = () => {
 										>
 											<i className='fa-solid fa-eye'></i>
 										</button> */}
-										<button
-											type='button'
-											className='btn btn-warning btn-sm mx-1'
-											data-bs-toggle='tooltip'
-											data-bs-placement='top'
-											title='Edit'
-											onClick={() => handleEdit(route._id)}
-										>
-											<i className='fa-solid fa-pen-to-square'></i>
-										</button>
-										<button
-											type='button'
-											className='btn btn-danger btn-sm mx-1'
-											data-bs-toggle='tooltip'
-											data-bs-placement='top'
-											title='Delete'
-											onClick={() => handleDelete(route._id)}
-										>
-											<i className='fa-solid fa-trash-can'></i>
-										</button>
-									</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			</div>
+											<button
+												type='button'
+												className='btn btn-warning btn-sm mx-1'
+												data-bs-toggle='tooltip'
+												data-bs-placement='top'
+												title='Edit'
+												onClick={() => handleEdit(route._id)}
+											>
+												<i className='fa-solid fa-pen-to-square'></i>
+											</button>
+											<button
+												type='button'
+												className='btn btn-danger btn-sm mx-1'
+												data-bs-toggle='tooltip'
+												data-bs-placement='top'
+												title='Delete'
+												onClick={() => handleDelete(route._id)}
+											>
+												<i className='fa-solid fa-trash-can'></i>
+											</button>
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				</div>
+			) : (
+				<NoResults />
+			)}
 		</>
 	);
 };

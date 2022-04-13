@@ -8,6 +8,8 @@ import {
 	deleteEmployee,
 } from '../../api';
 
+import NoResults from '../NoResults';
+
 export const Employees = () => {
 	const [employees, setEmployees] = useState([]);
 	const navigate = useNavigate();
@@ -82,47 +84,48 @@ export const Employees = () => {
 					</Link>
 				</div>
 			</div>
-			<div className='table-responsive-xl'>
-				<table className='table table-striped table-sm'>
-					<thead>
-						<tr>
-							<th scope='col'>#</th>
-							<th scope='col'>Employee ID</th>
-							<th scope='col'>Role</th>
-							<th scope='col'>First Name</th>
-							<th scope='col'>Last Name</th>
-							<th scope='col'>ID No</th>
-							<th scope='col'>Email</th>
-							<th scope='col'>Phone No</th>
-							<th scope='col'>Created At</th>
-							<th scope='col'>Updated At</th>
-							<th scope='col'>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{employees.map((employee, idx) => {
-							return (
-								<tr key={employee._id}>
-									<td>{idx + 1}</td>
-									<td>{employee.employeeId}</td>
-									<td>{employee.role?.name || '-'}</td>
-									<td>{employee.firstName}</td>
-									<td>{employee.lastName}</td>
-									<td>{employee.idNo}</td>
-									<td>{employee.email}</td>
-									<td>{employee.phoneNumber}</td>
-									<td>
-										{employee.createdAt
-											? new Date(employee.createdAt).toDateString()
-											: '-'}
-									</td>
-									<td>
-										{employee.updatedAt
-											? new Date(employee.updatedAt).toDateString()
-											: '-'}
-									</td>
-									<td>
-										{/* <button
+			{employees.length ? (
+				<div className='table-responsive-xl'>
+					<table className='table table-striped table-sm'>
+						<thead>
+							<tr>
+								<th scope='col'>#</th>
+								<th scope='col'>Employee ID</th>
+								<th scope='col'>Role</th>
+								<th scope='col'>First Name</th>
+								<th scope='col'>Last Name</th>
+								<th scope='col'>ID No</th>
+								<th scope='col'>Email</th>
+								<th scope='col'>Phone No</th>
+								<th scope='col'>Created At</th>
+								<th scope='col'>Updated At</th>
+								<th scope='col'>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{employees.map((employee, idx) => {
+								return (
+									<tr key={employee._id}>
+										<td>{idx + 1}</td>
+										<td>{employee.employeeId}</td>
+										<td>{employee.role?.name || '-'}</td>
+										<td>{employee.firstName}</td>
+										<td>{employee.lastName}</td>
+										<td>{employee.idNo}</td>
+										<td>{employee.email}</td>
+										<td>{employee.phoneNumber}</td>
+										<td>
+											{employee.createdAt
+												? new Date(employee.createdAt).toDateString()
+												: '-'}
+										</td>
+										<td>
+											{employee.updatedAt
+												? new Date(employee.updatedAt).toDateString()
+												: '-'}
+										</td>
+										<td>
+											{/* <button
 											type='button'
 											className='btn btn-outline-dark btn-sm mx-1'
 											data-bs-toggle='tooltip'
@@ -131,33 +134,36 @@ export const Employees = () => {
 										>
 											<i className='fa-solid fa-eye'></i>
 										</button> */}
-										<button
-											type='button'
-											className='btn btn-warning btn-sm mx-1'
-											data-bs-toggle='tooltip'
-											data-bs-placement='top'
-											title='Edit'
-											onClick={() => handleEdit(employee._id)}
-										>
-											<i className='fa-solid fa-pen-to-square'></i>
-										</button>
-										<button
-											type='button'
-											className='btn btn-danger btn-sm mx-1'
-											data-bs-toggle='tooltip'
-											data-bs-placement='top'
-											title='Delete'
-											onClick={() => handleDelete(employee._id)}
-										>
-											<i className='fa-solid fa-trash-can'></i>
-										</button>
-									</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			</div>
+											<button
+												type='button'
+												className='btn btn-warning btn-sm mx-1'
+												data-bs-toggle='tooltip'
+												data-bs-placement='top'
+												title='Edit'
+												onClick={() => handleEdit(employee._id)}
+											>
+												<i className='fa-solid fa-pen-to-square'></i>
+											</button>
+											<button
+												type='button'
+												className='btn btn-danger btn-sm mx-1'
+												data-bs-toggle='tooltip'
+												data-bs-placement='top'
+												title='Delete'
+												onClick={() => handleDelete(employee._id)}
+											>
+												<i className='fa-solid fa-trash-can'></i>
+											</button>
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				</div>
+			) : (
+				<NoResults />
+			)}
 		</>
 	);
 };

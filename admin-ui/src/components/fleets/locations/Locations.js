@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import { getLocations, deleteLocation } from '../../../api';
+import NoResults from '../../NoResults';
 
 export const Locations = () => {
 	const [locations, setLocations] = useState([]);
@@ -48,41 +50,42 @@ export const Locations = () => {
 					</Link>
 				</div>
 			</div>
-			<div className='table-responsive'>
-				<table className='table table-striped table-sm'>
-					<thead>
-						<tr>
-							<th scope='col'>#</th>
-							<th scope='col'>Name</th>
-							<th scope='col'>Code</th>
-							<th scope='col'>Latitude</th>
-							<th scope='col'>Longitude</th>
-							<th scope='col'>Created At</th>
-							<th scope='col'>Updated At</th>
-							<th scope='col'>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{locations.map((location, idx) => {
-							return (
-								<tr key={location._id}>
-									<td>{idx + 1}</td>
-									<td>{location.name}</td>
-									<td>{location.code}</td>
-									<td>{location.lat}</td>
-									<td>{location.lng}</td>
-									<td>
-										{location.createdAt
-											? new Date(location.createdAt).toDateString()
-											: '-'}
-									</td>
-									<td>
-										{location.updatedAt
-											? new Date(location.updatedAt).toDateString()
-											: '-'}
-									</td>
-									<td>
-										{/* <button
+			{locations.length ? (
+				<div className='table-responsive'>
+					<table className='table table-striped table-sm'>
+						<thead>
+							<tr>
+								<th scope='col'>#</th>
+								<th scope='col'>Name</th>
+								<th scope='col'>Code</th>
+								<th scope='col'>Latitude</th>
+								<th scope='col'>Longitude</th>
+								<th scope='col'>Created At</th>
+								<th scope='col'>Updated At</th>
+								<th scope='col'>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{locations.map((location, idx) => {
+								return (
+									<tr key={location._id}>
+										<td>{idx + 1}</td>
+										<td>{location.name}</td>
+										<td>{location.code}</td>
+										<td>{location.lat}</td>
+										<td>{location.lng}</td>
+										<td>
+											{location.createdAt
+												? new Date(location.createdAt).toDateString()
+												: '-'}
+										</td>
+										<td>
+											{location.updatedAt
+												? new Date(location.updatedAt).toDateString()
+												: '-'}
+										</td>
+										<td>
+											{/* <button
 											type='button'
 											className='btn btn-outline-dark btn-sm mx-1'
 											data-bs-toggle='tooltip'
@@ -91,33 +94,36 @@ export const Locations = () => {
 										>
 											<i className='fa-solid fa-eye'></i>
 										</button> */}
-										<button
-											type='button'
-											className='btn btn-warning btn-sm mx-1'
-											data-bs-toggle='tooltip'
-											data-bs-placement='top'
-											title='Edit'
-											onClick={() => handleEdit(location._id)}
-										>
-											<i className='fa-solid fa-pen-to-square'></i>
-										</button>
-										<button
-											type='button'
-											className='btn btn-danger btn-sm mx-1'
-											data-bs-toggle='tooltip'
-											data-bs-placement='top'
-											title='Delete'
-											onClick={() => handleDelete(location._id)}
-										>
-											<i className='fa-solid fa-trash-can'></i>
-										</button>
-									</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			</div>
+											<button
+												type='button'
+												className='btn btn-warning btn-sm mx-1'
+												data-bs-toggle='tooltip'
+												data-bs-placement='top'
+												title='Edit'
+												onClick={() => handleEdit(location._id)}
+											>
+												<i className='fa-solid fa-pen-to-square'></i>
+											</button>
+											<button
+												type='button'
+												className='btn btn-danger btn-sm mx-1'
+												data-bs-toggle='tooltip'
+												data-bs-placement='top'
+												title='Delete'
+												onClick={() => handleDelete(location._id)}
+											>
+												<i className='fa-solid fa-trash-can'></i>
+											</button>
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				</div>
+			) : (
+				<NoResults />
+			)}
 		</>
 	);
 };
