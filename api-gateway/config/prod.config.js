@@ -1,6 +1,6 @@
 module.exports = {
 	db: {
-		MONGO_URI: process.env.MONGO_URI,
+		MONGO_URI: process.env.DB_URI,
 	},
 	auth: {
 		jwtSecret: 'pTm2$D0xxDTW2Iw5&b9#lcNMxmhjsOoh',
