@@ -9,6 +9,7 @@ const TicketSchema = new mongoose.Schema({
 	booking: { type: mongoose.Schema.Types.ObjectId, ref: 'bookings' },
 	seat: { type: mongoose.Schema.Types.ObjectId, ref: 'seats' },
 	passengerName: { type: String, required: true },
+	createdAt: { type: Date, default: Date.now },
 });
 
 TicketSchema.pre(

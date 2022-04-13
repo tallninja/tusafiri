@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import { deleteUser } from '../../api';
 import useApiAuth from '../../hooks/useApiAuth';
 import useAuth from '../../hooks/useAuth';
 import NoResults from '../NoResults';
@@ -26,8 +25,8 @@ export const Users = () => {
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure you want to delete this record ?')) {
 			try {
-				let deletedUser = await deleteUser(id);
-				setUsers(users.filter((user) => user._id !== deletedUser._id));
+				const res = await apiAuth.delete(`/api/users/${id}`);
+				setUsers(users.filter((user) => user._id !== res.data._id));
 			} catch (err) {
 				console.error(err);
 			}
@@ -64,18 +63,18 @@ export const Users = () => {
 										<td>{idx + 1}</td>
 										<td>{user._id}</td>
 										<td>{user.firstName}</td>
-										<td>{user.lasName}</td>
+										<td>{user.lastName}</td>
 										<td>{user.email}</td>
 										<td>{user.phoneNo}</td>
 										<td>
 											{user.confirmed ? (
 												<i
-													class='fa-solid fa-check'
+													className='fa-solid fa-check'
 													style={{ color: 'green' }}
 												></i>
 											) : (
 												<i
-													class='fa-solid fa-xmark'
+													className='fa-solid fa-xmark'
 													style={{ color: 'red' }}
 												></i>
 											)}

@@ -1,4 +1,5 @@
 import React from 'react';
+import SmallBox from './SmallBox';
 
 export const Dashboard = () => {
 	return (
@@ -24,9 +25,44 @@ export const Dashboard = () => {
 				</div>
 			</div>
 
-			<div className='d-flex justify-content-center'>
-				<h3>Dashboard</h3>
-			</div>
+			<section className='content'>
+				<div className='container-fluid'>
+					<div className='row'>
+						<div className='col-lg-3 col-6'>
+							<SmallBox
+								count={150}
+								text='New Orders'
+								icon='ion ion-bag'
+								color='info'
+							/>
+						</div>
+						<div className='col-lg-3 col-6'>
+							<SmallBox
+								count={150}
+								text='New Orders'
+								icon='ion ion-bag'
+								color='success'
+							/>
+						</div>
+						<div className='col-lg-3 col-6'>
+							<SmallBox
+								count={150}
+								text='New Orders'
+								icon='ion ion-bag'
+								color='warning'
+							/>
+						</div>
+						<div className='col-lg-3 col-6'>
+							<SmallBox
+								count={150}
+								text='New Orders'
+								icon='ion ion-bag'
+								color='danger'
+							/>
+						</div>
+					</div>
+				</div>
+			</section>
 		</>
 	);
 };

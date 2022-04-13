@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import './App.css';
+import './index.css';
 import Login from './Login';
 import PersistLogin from './PersistLogin';
 import ProtectedRoute from './ProtectedRoute';
@@ -15,6 +15,8 @@ import { Journeys, CreateJourney, EditJourney } from './fleets/journeys';
 import { Employees, CreateEmployee, EditEmployee } from './employees';
 import { Bookings, CreateBooking, Invoices } from './bookings';
 import { Users } from './users';
+import { Payments } from './payments';
+import { Tickets } from './tickets';
 
 const queryClient = new QueryClient();
 
@@ -67,6 +69,14 @@ const App = () => {
 
 							<Route path='invoices'>
 								<Route index element={<Invoices />} />
+							</Route>
+
+							<Route path='payments'>
+								<Route index element={<Payments />} />
+							</Route>
+
+							<Route path='tickets'>
+								<Route index element={<Tickets />} />
 							</Route>
 
 							<Route path='users'>

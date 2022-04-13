@@ -68,7 +68,7 @@ exports.getPayment = async (req, res) => {
 	const { id } = req.params;
 	try {
 		const payment = await Payment.findById(id)
-			.populate([{ path: 'booking', populate: ['journey', 'seats'] }])
+			.populate([{ path: 'user', select: '-password' }, 'invoice'])
 			.exec();
 		return res.status(Sc.OK).json(payment);
 	} catch (err) {
@@ -78,7 +78,9 @@ exports.getPayment = async (req, res) => {
 
 exports.getPayments = async (req, res) => {
 	try {
-		let payments = await Payment.find({}).exec();
+		let payments = await Payment.find({})
+			.populate([{ path: 'user', select: 'firstName lastName' }])
+			.exec();
 
 		return res.status(Sc.OK).json(payments);
 	} catch (err) {

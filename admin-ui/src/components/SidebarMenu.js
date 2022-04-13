@@ -96,13 +96,13 @@ const Navbar = () => {
 						</Link>
 					</li>
 					<li className='nav-item'>
-						<Link to='/' className='nav-link' href='#'>
+						<Link to='/payments' className='nav-link' href='#'>
 							<span data-feather='bar-chart-2'></span>
 							Payments
 						</Link>
 					</li>
 					<li className='nav-item'>
-						<Link to='/' className='nav-link'>
+						<Link to='/tickets' className='nav-link'>
 							<span data-feather='file'></span>
 							Tickets
 						</Link>

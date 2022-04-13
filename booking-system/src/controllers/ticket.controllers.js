@@ -11,7 +11,7 @@ exports.getTicket = async (req, res) => {
 	const { id } = req.params;
 	try {
 		const ticket = await Ticket.findById(id)
-			.populate([{ path: 'booking', populate: ['journey', 'seats'] }])
+			.populate(['booking', 'journey', { path: 'user', select: '-password' }])
 			.exec();
 		return res.status(Sc.OK).json(ticket);
 	} catch (err) {
@@ -21,7 +21,12 @@ exports.getTicket = async (req, res) => {
 
 exports.getTickets = async (req, res) => {
 	try {
-		let tickets = await Ticket.find({}).exec();
+		let tickets = await Ticket.find({})
+			.populate([
+				{ path: 'user', select: 'firstName lastName' },
+				{ path: 'seat', select: 'number -_id' },
+			])
+			.exec();
 
 		return res.status(Sc.OK).json(tickets);
 	} catch (err) {
