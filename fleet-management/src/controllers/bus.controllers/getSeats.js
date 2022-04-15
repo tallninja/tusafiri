@@ -9,7 +9,6 @@ const handleError = (err, res) => {
 
 module.exports = async (req, res) => {
 	const { bus } = req.params;
-
 	try {
 		const busSeats = await Seat.find({ bus: bus }).exec();
 

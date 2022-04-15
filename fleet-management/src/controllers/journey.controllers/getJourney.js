@@ -10,7 +10,6 @@ const handleError = (err, res) => {
 
 module.exports = async (req, res) => {
 	const { id } = req.params;
-
 	try {
 		let journey = await Journey.findById(id)
 			.populate(['bus', 'drivers', { path: 'route', populate: ['from', 'to'] }])

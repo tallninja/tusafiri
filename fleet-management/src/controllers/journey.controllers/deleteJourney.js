@@ -10,13 +10,6 @@ const handleError = (err, res) => {
 
 module.exports = async (req, res) => {
 	const { id } = req.params;
-
-	if (!id) {
-		return res
-			.status(Sc.BAD_REQUEST)
-			.json({ message: 'Please provide the journey id.' });
-	}
-
 	try {
 		let journey = await Journey.findById(id)
 			.populate(['bus', { path: 'route', populate: ['from', 'to'] }])

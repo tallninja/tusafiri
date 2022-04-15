@@ -19,13 +19,6 @@ const EditJourneySchema = Joi.object({
 
 module.exports = async (req, res) => {
 	const { id } = req.params;
-
-	if (!id) {
-		return res
-			.status(Sc.BAD_REQUEST)
-			.json({ message: 'Please provide the journey id.' });
-	}
-
 	try {
 		let updatedFields = await EditJourneySchema.validateAsync(req.body);
 
@@ -79,7 +72,7 @@ module.exports = async (req, res) => {
 		console.log('Info:', `${currentJourney._id} was updated.`);
 
 		let updatedJourney = await Journey.findById(currentJourney._id)
-			.populate(['bus', 'route', 'drivers', 'bookedSeats'])
+			.populate(['bus', 'route', 'drivers'])
 			.exec();
 
 		return res.status(Sc.OK).json(updatedJourney);

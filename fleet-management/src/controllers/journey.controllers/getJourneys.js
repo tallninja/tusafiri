@@ -9,10 +9,15 @@ const handleError = (err, res) => {
 };
 
 module.exports = async (req, res) => {
+	const { count } = req.query;
 	try {
-		let journeys = await Journey.find()
+		const journeys = await Journey.find()
 			.populate(['bus', { path: 'route', populate: ['from', 'to'] }, 'drivers'])
 			.exec();
+
+		if (count) {
+			return res.status(Sc.OK).json({ count: journeys.length });
+		}
 
 		return res
 			.status(Sc.OK)

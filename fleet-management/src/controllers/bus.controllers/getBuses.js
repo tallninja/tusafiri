@@ -8,8 +8,13 @@ const handleError = (err, res) => {
 };
 
 module.exports = async (req, res) => {
+	const { count } = req.query;
 	try {
-		let buses = await Bus.find().exec();
+		const buses = await Bus.find().exec();
+
+		if (count) {
+			return res.status(Sc.OK).json({ count: buses.length });
+		}
 
 		return res.status(Sc.OK).json(buses);
 	} catch (err) {

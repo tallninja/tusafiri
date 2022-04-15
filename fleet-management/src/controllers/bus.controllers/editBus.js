@@ -16,14 +16,7 @@ const EditBusSchema = Joi.object({
 });
 
 module.exports = async (req, res) => {
-	const { id } = req.query;
-
-	if (!id) {
-		return res
-			.status(Sc.BAD_REQUEST)
-			.json({ message: 'Please provide the bus id.' });
-	}
-
+	const { id } = req.params;
 	try {
 		let updatedFields = await EditBusSchema.validateAsync(req.body);
 		let currentBus = await Bus.findById(id).exec();

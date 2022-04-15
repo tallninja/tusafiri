@@ -9,7 +9,6 @@ const handleError = (err, res) => {
 
 module.exports = async (req, res) => {
 	const { id } = req.params;
-
 	try {
 		let bus = await Bus.findById(id).exec();
 

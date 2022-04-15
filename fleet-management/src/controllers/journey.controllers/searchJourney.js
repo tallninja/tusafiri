@@ -42,9 +42,8 @@ module.exports = async (req, res) => {
 		})
 			.populate([
 				{ path: 'route', populate: ['from', 'to'] },
-				{ path: 'bus', populate: ['seats'] },
+				{ path: 'bus' },
 				{ path: 'drivers', select: ['firstName', 'lastName'] },
-				'bookedSeats',
 			])
 			.exec();
 
