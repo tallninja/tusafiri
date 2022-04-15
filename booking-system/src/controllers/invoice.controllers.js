@@ -19,6 +19,18 @@ exports.getInvoice = async (req, res) => {
 	}
 };
 
+exports.getBookingInvoice = async (req, res) => {
+	const { booking } = req.params;
+	try {
+		const invoice = await Invoice.findOne({ booking })
+			.populate([{ path: 'booking', populate: ['journey', 'seats'] }])
+			.exec();
+		return res.status(Sc.OK).json(invoice);
+	} catch (err) {
+		return handleError(err, res);
+	}
+};
+
 exports.getInvoices = async (req, res) => {
 	try {
 		let invoices = await Invoice.find({}).exec();

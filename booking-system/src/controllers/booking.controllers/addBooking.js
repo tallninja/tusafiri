@@ -47,9 +47,7 @@ module.exports = async (req, res) => {
 		let existingBooking = await Booking.findOne(bookingDetails).exec();
 
 		if (existingBooking) {
-			return res
-				.status(Sc.BAD_REQUEST)
-				.json({ message: 'Booking exists.', existingBooking });
+			return res.status(Sc.BAD_REQUEST).json({ message: 'Booking exists.' });
 		}
 
 		// check if bus is full
@@ -94,6 +92,7 @@ module.exports = async (req, res) => {
 				...ticket,
 				user,
 				booking: booking._id,
+				validUntil: journey.arrivalTime || new Date(),
 			}).save();
 			console.log('Info:', `Ticket ${newTicket._id} was created.`);
 		});

@@ -20,4 +20,5 @@ module.exports = {
 	Employee: require('./Employee'),
 	Role: mongoose.model('roles', new mongoose.Schema({}), 'roles'),
 	Seat: require('./Seat'),
+	BookedSeat: require('./BookedSeat'),
 };

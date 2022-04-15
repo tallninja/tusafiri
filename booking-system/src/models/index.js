@@ -51,4 +51,6 @@ module.exports = {
 	Seat: require('./Seat'),
 	BookedSeat: require('./BookedSeat'),
 	User: require('./User'),
+	Location: require('./Location'),
+	Route: require('./Route'),
 };

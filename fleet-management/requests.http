@@ -146,7 +146,7 @@ Content-Type: application/json
 }
 
 ###
-@journey_id = 625965c6e622ff5270245eb1
+@journey_id = 625965b6e622ff5270245ea4
 
 ### FETCH journey
 GET {{journeysApi}}/{{journey_id}}
@@ -161,6 +161,9 @@ Content-Type: application/json
 
 ### SEARCH Journey
 GET {{journeysApi}}/search?from=NRB&to=KSM&date=2022-04-22
+
+### FETCH journey booked seats
+GET {{journeysApi}}/{{journey_id}}/booked-seats
 
 ### DELETE journey
 DELETE {{journeysApi}}/{{journey_id}}

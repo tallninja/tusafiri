@@ -1,9 +1,9 @@
 import React from 'react';
-import JourneyCollapse from './JourneyCollapse';
+import { Link } from 'react-router-dom';
 
 const JourneysTable = ({ journeys }) => {
 	return (
-		<div className='table-responsive-sm my-4'>
+		<div className='table-responsive-lg my-4'>
 			<table className='table table-hover table-lg'>
 				<thead>
 					<tr>
@@ -15,18 +15,14 @@ const JourneysTable = ({ journeys }) => {
 						<th scope='col'>Available Seats</th>
 						<th scope='col'>Departure Time</th>
 						<th scope='col'>Arrival Time</th>
+						<th scope='col'>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					{journeys.map((journey, idx) => {
 						return (
 							<React.Fragment key={journey._id}>
-								<tr
-									data-bs-toggle='collapse'
-									data-bs-target={`#${btoa(journey._id).slice(0, -2)}`}
-									aria-expanded={false}
-									aria-controls={btoa(journey._id).slice(0, -2)}
-								>
+								<tr>
 									<td>{idx + 1}</td>
 									<td>{journey.bus?.regNo || '-'}</td>
 									<td>{journey.route?.from?.name || '-'}</td>
@@ -45,8 +41,15 @@ const JourneysTable = ({ journeys }) => {
 											? new Date(journey.arrivalTime).toLocaleTimeString()
 											: '-'}
 									</td>
+									<td>
+										<Link
+											to={`/journeys/${journey._id}`}
+											className='btn btn-dark'
+										>
+											View Seats
+										</Link>
+									</td>
 								</tr>
-								<JourneyCollapse journey={journey} />
 							</React.Fragment>
 						);
 					})}
