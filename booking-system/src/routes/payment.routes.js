@@ -6,8 +6,8 @@ const {
 	getPayments,
 } = require('../controllers/payment.controllers');
 
+router.post('/', createPayment);
 router.get('/', getPayments);
 router.get('/:id', getPayment);
-router.post('/', createPayment);
 
 module.exports = router;

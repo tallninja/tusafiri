@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Invoice = require('./Invoice');
 const Journey = require('./Journey');
 const Ticket = require('./Ticket');
+const BookedSeat = require('./BookedSeat');
 
 const BookingSchema = new mongoose.Schema({
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
@@ -13,41 +14,41 @@ const BookingSchema = new mongoose.Schema({
 		required: true,
 	},
 	seats: [{ type: mongoose.Schema.Types.ObjectId, ref: 'seats' }],
-	createdAt: { type: Date },
+	createdAt: { type: Date, default: Date.now },
 	updatedAt: { type: Date },
 	paid: { type: Boolean, default: false },
 });
 
 BookingSchema.pre('save', async function (next) {
 	try {
-		const invoice = await Invoice.findOne({ booking: this._id });
+		const { seats } = this.$__.saveOptions;
+		let booking = this;
+
+		let journey = await Journey.findById(booking.journey).exec();
+
+		// Adds booked seat to the DB
+		seats.forEach(async function (seat) {
+			const bookedSeat = await new BookedSeat({
+				seat: seat,
+				booking: booking._id,
+				journey: booking.journey,
+			}).save();
+			console.log(`Booked Seat ${bookedSeat._id} was created.`);
+		});
+
+		// checks if invoice already exists and if not it generates a new invoice.
+		const invoice = await Invoice.findOne({ booking: booking._id });
 		if (!invoice) {
-			Invoice.generateInvoice(this);
+			await Invoice.generateInvoice(booking);
 		}
-		let journey = await Journey.findById(this.journey).exec();
-		this.seats.map((seat) => journey.bookedSeats.push(seat));
-		journey.save();
-		next();
-	} catch (err) {
-		throw err;
-	}
-});
 
-BookingSchema.pre('updateOne', async function (next) {
-	try {
-		let booking = await this.model.findOne(this.getQuery()).exec();
-		let invoice = await Invoice.findOne({ booking: booking._id }).exec();
-		Invoice.updateInvoice(invoice, booking);
-		next();
-	} catch (err) {
-		throw err;
-	}
-});
+		console.log('Invoice Generated');
 
-BookingSchema.post('updateOne', async function () {
-	try {
-		let booking = await this.model.findOne(this.getQuery()).exec();
-		await booking.save();
+		// calculates the vailable seats
+		let availableSeats = journey.availableSeats - seats.length;
+		await journey.updateOne({ $set: { availableSeats: availableSeats } });
+
+		next();
 	} catch (err) {
 		throw err;
 	}
@@ -58,16 +59,17 @@ BookingSchema.pre(
 	{ document: true, query: false },
 	async function (next) {
 		try {
-			let journey = await Journey.findById(this.journey).exec();
-			let bookedSeats = journey.bookedSeats.map((seat) => JSON.stringify(seat));
-			// console.log('bookedSeats', bookedSeats);
-			let bookingSeats = this.seats.map((seat) => JSON.stringify(seat._id));
-			// console.log('bookingSeats', bookingSeats);
-			let newBookedSeats = bookedSeats
-				.filter((seat) => !bookingSeats.includes(seat))
-				.map((seat) => JSON.parse(seat));
-			// console.log('newBookedSeats', newBookedSeats);
-			await journey.updateOne({ $set: { bookedSeats: newBookedSeats } });
+			const journey = await Journey.findById(this.journey).exec();
+
+			if (journey) {
+				const { deletedCount } = await BookedSeat.deleteMany({
+					booking: this._id,
+					journey: journey._id,
+				}).exec();
+				const availableSeats = journey.availableSeats + deletedCount;
+				await journey.updateOne({ $set: { availableSeats: availableSeats } });
+			}
+
 			await Ticket.deleteMany({ booking: this._id }).exec();
 			next();
 		} catch (err) {

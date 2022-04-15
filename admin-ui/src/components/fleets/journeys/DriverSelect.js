@@ -1,19 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
-import { getDrivers } from '../../../api';
-
-const DriverSelect = ({ id, handleSelect, defaultValue }) => {
-	const [drivers, setDrivers] = useState();
-
-	useEffect(() => {
-		(async () => {
-			const res = await getDrivers();
-			if (res.status === 200) {
-				setDrivers(res.data);
-			}
-		})();
-	}, []);
-
+const DriverSelect = ({ id, handleSelect, defaultValue, drivers }) => {
 	return (
 		<select
 			id={id}

@@ -69,12 +69,12 @@ export const Bookings = () => {
 										<td>
 											{booking.paid ? (
 												<i
-													class='fa-solid fa-check'
+													className='fa-solid fa-check'
 													style={{ color: 'green' }}
 												></i>
 											) : (
 												<i
-													class='fa-solid fa-xmark'
+													className='fa-solid fa-xmark'
 													style={{ color: 'red' }}
 												></i>
 											)}

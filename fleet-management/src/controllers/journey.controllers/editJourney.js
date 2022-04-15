@@ -12,21 +12,13 @@ const EditJourneySchema = Joi.object({
 	bus: Joi.string().optional(),
 	route: Joi.string().optional(),
 	fare: Joi.number().min(50).max(10000).optional(),
-	bookedSeats: Joi.array().optional(),
 	departureTime: Joi.date().optional(),
 	arrivalTime: Joi.date().optional(),
 	drivers: Joi.array().optional(),
 });
 
 module.exports = async (req, res) => {
-	const { id } = req.query;
-
-	if (!id) {
-		return res
-			.status(Sc.BAD_REQUEST)
-			.json({ message: 'Please provide the journey id.' });
-	}
-
+	const { id } = req.params;
 	try {
 		let updatedFields = await EditJourneySchema.validateAsync(req.body);
 
@@ -80,7 +72,7 @@ module.exports = async (req, res) => {
 		console.log('Info:', `${currentJourney._id} was updated.`);
 
 		let updatedJourney = await Journey.findById(currentJourney._id)
-			.populate(['bus', 'route', 'drivers', 'bookedSeats'])
+			.populate(['bus', 'route', 'drivers'])
 			.exec();
 
 		return res.status(Sc.OK).json(updatedJourney);

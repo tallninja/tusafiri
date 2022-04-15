@@ -1,17 +1,15 @@
 const router = require('express').Router();
 
 const {
-  addBooking,
-  editBooking,
-  deleteBooking,
-  getBooking,
-  getBookings,
+	addBooking,
+	deleteBooking,
+	getBooking,
+	getBookings,
 } = require('../controllers/booking.controllers');
 
 router.get('/', getBookings);
+router.post('/', addBooking);
 router.get('/:id', getBooking);
-router.post('/new', addBooking);
-router.patch('/edit/', editBooking);
-router.delete('/delete/', deleteBooking);
+router.delete('/:id', deleteBooking);
 
 module.exports = router;

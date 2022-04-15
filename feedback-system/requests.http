@@ -4,6 +4,9 @@
 ### Root route
 GET {{base_url}}/
 
+### Fetch feedbacks
+GET {{feedbacks_url}}/
+
 ### CREATE feedback
 POST {{feedbacks_url}}/new
 Content-Type: application/json
@@ -15,15 +18,14 @@ Content-Type: application/json
     "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ex enim, euismod id faucibus quis."
 }
 
-### Fetch feedbacks
-GET {{feedbacks_url}}/
-
+###
+@feedback_id = 624beafd0a6bdf5402b965c8
 
 ### FETCH feedback
-GET {{feedbacks_url}}/624beafd0a6bdf5402b965c8
+GET {{feedbacks_url}}/{{feedback_id}}
 
 ### DELETE feedback
-DELETE {{feedbacks_url}}/delete?id=624beafd0a6bdf5402b965c8
+DELETE {{feedbacks_url}}/{{feedback_id}}
 
 ### FETCH spectfic types
 GET {{feedbacks_url}}?type=complement

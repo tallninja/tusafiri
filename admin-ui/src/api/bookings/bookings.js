@@ -8,14 +8,12 @@ export const getBookings = async () => {
 };
 
 export const deleteBooking = async (id) => {
-	const res = await axios.delete(`${BOOKING_URL}/delete`, {
-		params: { id: id },
-	});
+	const res = await axios.delete(`${BOOKING_URL}/${id}`);
 	return res;
 };
 
 export const createBooking = async (data) => {
-	const res = await axios.post(`${BOOKING_URL}/new`, data);
+	const res = await axios.post(`${BOOKING_URL}/`, data);
 	return res;
 };
 

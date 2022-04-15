@@ -71,6 +71,10 @@ body {
   text-transform: uppercase;
 }
 
+main {
+  height: 100vh;
+}
+
 /*
  * Navbar
  */

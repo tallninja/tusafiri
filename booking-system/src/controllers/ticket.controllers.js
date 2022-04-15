@@ -34,6 +34,37 @@ exports.getTickets = async (req, res) => {
 	}
 };
 
+exports.getBookingTickets = async (req, res) => {
+	const { booking } = req.params;
+	try {
+		let tickets = await Ticket.find({ booking })
+			.populate([
+				{ path: 'user', select: 'firstName lastName' },
+				{ path: 'seat', select: 'number -_id' },
+				{
+					path: 'journey',
+					select: 'bus route fare',
+					populate: [
+						{ path: 'bus', model: 'buses' },
+						{
+							path: 'route',
+							model: 'routes',
+							populate: [
+								{ path: 'from', model: 'locations' },
+								{ path: 'to', model: 'locations' },
+							],
+						},
+					],
+				},
+			])
+			.exec();
+
+		return res.status(Sc.OK).json(tickets);
+	} catch (err) {
+		return handleError(err, res);
+	}
+};
+
 exports.deleteTicket = async (req, res) => {
 	const { id } = req.query;
 

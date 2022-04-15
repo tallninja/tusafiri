@@ -49,7 +49,7 @@ export const Journeys = () => {
 				</div>
 			</div>
 			{journeys.length ? (
-				<div className='table-responsive-sm'>
+				<div className='table-responsive-lg'>
 					<table className='table table-striped table-sm'>
 						<thead>
 							<tr>

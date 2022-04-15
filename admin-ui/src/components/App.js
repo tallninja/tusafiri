@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import './index.css';
+import PageNotFound from './PageNotFound';
 import Login from './Login';
 import PersistLogin from './PersistLogin';
 import ProtectedRoute from './ProtectedRoute';
@@ -82,6 +83,7 @@ const App = () => {
 							<Route path='users'>
 								<Route index element={<Users />} />
 							</Route>
+							<Route path='/*' element={<PageNotFound />} />
 						</Route>
 					</Route>
 				</Route>

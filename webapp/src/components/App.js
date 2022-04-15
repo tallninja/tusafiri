@@ -10,6 +10,8 @@ import PersistLogin from './PersistLogin';
 import Signup from './Signup';
 import Invoice from './Invoice';
 import Booking from './Booking';
+import Journey from './Journey';
+import Tickets from './Tickets';
 
 const App = () => {
 	return (
@@ -20,9 +22,11 @@ const App = () => {
 				<Route path='/' element={<AppWrapper />}>
 					<Route index element={<Home />} />
 					<Route path='search' element={<SearchResults />} />
+					<Route path='journeys/:id' element={<Journey />} />
 					<Route path='booking' element={<ProtectedRoute />}>
 						<Route index element={<Booking />} />
-						<Route path='invoice/:id' element={<Invoice />} />
+						<Route path='invoice/:booking' element={<Invoice />} />
+						<Route path='tickets/:booking' element={<Tickets />} />
 					</Route>
 				</Route>
 			</Route>

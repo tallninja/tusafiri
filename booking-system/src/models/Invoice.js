@@ -33,7 +33,7 @@ InvoiceSchema.statics.generateInvoice = async function (booking) {
 		let dueDate = new Date();
 		dueDate.setSeconds(dueDate.getSeconds() + payments.invoiceDue);
 
-		new this({
+		await new this({
 			user: booking.user,
 			booking: booking._id,
 			amount: amount,
@@ -46,30 +46,6 @@ InvoiceSchema.statics.generateInvoice = async function (booking) {
 				throw err;
 			}
 		});
-	} catch (err) {
-		throw err;
-	}
-};
-
-InvoiceSchema.statics.updateInvoice = async function (invoice, booking) {
-	try {
-		const journey = await Journey.findById(booking.journey).exec();
-
-		if (!journey) {
-			throw new Error('Journey not found');
-		}
-
-		let amount = journey.fare * booking.seats.length;
-		let updatedAmount = amount + amount * payments.salesTax;
-
-		invoice.updateOne(
-			{ $set: { totalAmountDue: updatedAmount, updatedAt: new Date() } },
-			(err) => {
-				if (err) {
-					throw err;
-				}
-			}
-		);
 	} catch (err) {
 		throw err;
 	}

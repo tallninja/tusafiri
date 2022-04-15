@@ -30,34 +30,38 @@ export const Dashboard = () => {
 					<div className='row'>
 						<div className='col-lg-3 col-6'>
 							<SmallBox
-								count={150}
-								text='New Orders'
+								count={100}
+								text='New Bookings'
 								icon='ion ion-bag'
 								color='info'
+								link='/bookings'
 							/>
 						</div>
 						<div className='col-lg-3 col-6'>
 							<SmallBox
-								count={150}
-								text='New Orders'
-								icon='ion ion-bag'
+								count={20}
+								text='New Buses'
+								icon='ion ion-android-bus'
 								color='success'
+								link='/fleets/buses'
 							/>
 						</div>
 						<div className='col-lg-3 col-6'>
 							<SmallBox
-								count={150}
-								text='New Orders'
-								icon='ion ion-bag'
+								count={10}
+								text='New Users'
+								icon='ion ion-person-add'
 								color='warning'
+								link='/users'
 							/>
 						</div>
 						<div className='col-lg-3 col-6'>
 							<SmallBox
-								count={150}
-								text='New Orders'
-								icon='ion ion-bag'
+								count={50}
+								text='New Destinations'
+								icon='ion ion-location'
 								color='danger'
+								link='/fleets/locations'
 							/>
 						</div>
 					</div>

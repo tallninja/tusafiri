@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
 
-const Timer = ({ date }) => {
+const Timeout = ({ handleTimeOut }) => {
+	useEffect(() => {
+		handleTimeOut();
+	}, [handleTimeOut]);
+	return (
+		<p className='mx-1 h5 lead' on>
+			Time's Up.
+		</p>
+	);
+};
+
+const Timer = ({ date, handleTimeOut }) => {
 	const calculateTimeLeft = () => {
 		let currentTime = new Date().getTime();
 		let futureTime = new Date(date).getTime();
@@ -38,7 +49,17 @@ const Timer = ({ date }) => {
 		}
 
 		timerComponents.push(
-			<span className='mx-1 h5 lead'>
+			<span
+				className={`mx-1 h5 lead ${
+					!timeLeft.days &&
+					!timeLeft.hours &&
+					!timeLeft.minutes &&
+					timeLeft.seconds <= 59
+						? 'text-danger'
+						: ''
+				}`}
+				key={interval}
+			>
 				{timeLeft[interval]} {interval}
 			</span>
 		);
@@ -49,7 +70,7 @@ const Timer = ({ date }) => {
 			{timerComponents.length ? (
 				timerComponents
 			) : (
-				<p className='mx-1 h5 lead'>Time's Up.</p>
+				<Timeout handleTimeOut={handleTimeOut} />
 			)}
 		</>
 	);

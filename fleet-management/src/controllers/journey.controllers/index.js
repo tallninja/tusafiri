@@ -11,3 +11,5 @@ exports.getJourneys = require('./getJourneys');
 exports.getAvailableJourneys = require('./getAvailableJourneys');
 
 exports.searchJourney = require('./searchJourney');
+
+exports.getBookedSeats = require('./getBookedSeats');

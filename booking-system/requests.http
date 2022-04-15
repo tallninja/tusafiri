@@ -7,12 +7,19 @@
 GET {{baseUrl}}
 
 ### CREATE booking
-POST {{bookingsApi}}/new
+### journey "62594919d05a8c9a9ed299fc"
+### bus "62593a0d3810192cf96f2ec0"
+### seats "62593a0d3810192cf96f2ee4" "62593a0d3810192cf96f2ee6"
+POST {{bookingsApi}}/
 Content-Type: application/json
 
 {
-    "journey": "623c7d1ce2b563a09608cd97",
-    "seats": ["623c7d0de2b563a09608cd7b", "623c7d0de2b563a09608cd7d"]
+    "journey": "62594919d05a8c9a9ed299fc",
+    "seats": ["62593a0d3810192cf96f2ee4", "62593a0d3810192cf96f2ee6"],
+    "tickets": [
+        { "seat": "62593a0d3810192cf96f2ee4", "passengerName": "Ernest Wambua" },
+        { "seat": "62593a0d3810192cf96f2ee6", "passengerName": "Charles Obama" }
+    ]
 }
 
 ### FETCH bookings
@@ -21,22 +28,14 @@ GET {{bookingsApi}}/
 ### FETCH booking
 GET {{bookingsApi}}/623cc24f027c1a07828163d9
 
-### EDIT booking
-PATCH {{bookingsApi}}/edit/623c47776d05c90ddbb9405b
-Content-Type: application/json
-
-{
-    "seats": ["623b27f4f43a2efdd58fc349", "623b27f4f43a2efdd58fc348", "623b27f4f43a2efdd58fc345", "623b27f4f43a2efdd58fc341"]
-}
-
 ### DELETE booking
-DELETE {{bookingsApi}}/delete/623cd3e0f5e6deda00ed8b5c
+DELETE {{bookingsApi}}/625949480ce5ca91e7a556bd
 
 ### MAKE Payment
 POST {{paymentsApi}}
 Content-Type: application/json
 
 {
-    "amountPaid": 1392,
-    "accountNo": "+254719286396"
+    "amountPaid": 4640,
+    "accountNo": "+245711347790"
 }

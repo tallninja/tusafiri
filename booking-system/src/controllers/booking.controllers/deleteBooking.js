@@ -9,7 +9,7 @@ const handleError = (err, res) => {
 };
 
 module.exports = async (req, res) => {
-	const { id } = req.query;
+	const { id } = req.params;
 
 	try {
 		let booking = await Booking.findById(id)

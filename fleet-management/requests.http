@@ -7,8 +7,17 @@
 ### Root route
 GET {{baseUrl}}/
 
+
+### LOCATIONS
+
+### FETCH Locations
+GET {{locationsApi}}/
+
+### FETCH Locations count
+GET {{locationsApi}}/?count=true
+
 ### CREATE Location
-POST {{locationsApi}}/new
+POST {{locationsApi}}/
 Content-Type: application/json
 
 {
@@ -18,14 +27,14 @@ Content-Type: application/json
     "lng": 9.3330776
 }
 
-### FETCH Locations
-GET {{locationsApi}}/
+###
+@location_id = 62595f27409897aa1cec88c7
 
 ### FETCH Location
-GET {{locationsApi}}/623d8ff511e1cee33fc3ff36
+GET {{locationsApi}}/{{location_id}}
 
 ### EDIT Location
-PATCH {{locationsApi}}/edit?id=623d8ff511e1cee33fc3ff36
+PATCH {{locationsApi}}/{{location_id}}
 Content-Type: application/json
 
 {
@@ -34,103 +43,130 @@ Content-Type: application/json
 }
 
 ### DELETE Location
-DELETE {{locationsApi}}/delete?id=623c674c9ba3d91bd0a4ed67
+DELETE {{locationsApi}}/{{location_id}}
 
-### CREATE route
-POST {{routesApi}}/new
-Content-Type: application/json
 
-{
-    "name": "B8",
-    "from": "WJR",
-    "to": "MRS"
-}
+### ROUTES
 
 ### FETCH routes
 GET {{routesApi}}/
 
-### FETCH route
-GET {{routesApi}}/623d90d943fca7e8de609ceb
+### FETCH routes count
+GET {{routesApi}}/?count=true
 
-### EDIT route
-PATCH {{routesApi}}/edit?id=623d90d943fca7e8de609ceb
+### CREATE route
+POST {{routesApi}}/
 Content-Type: application/json
 
 {
-    "from": "MRS",
-    "to": "NRB"
+    "name": "T1",
+    "from": "MKS",
+    "to": "KMG"
+}
+
+###
+@route_id = 62595f87409897aa1cec88d5
+
+### FETCH route
+GET {{routesApi}}/{{route_id}}
+
+### EDIT route
+PATCH {{routesApi}}/{{route_id}}
+Content-Type: application/json
+
+{
+    "from": "KMG",
+    "to": "MKS"
 }
 
 ### Delete route
-DELETE {{routesApi}}/delete?id=623d90d943fca7e8de609ceb
+DELETE {{routesApi}}/{{route_id}}
 
 
-### CREATE Bus
-POST {{busesApi}}/new
-Content-Type: application/json
-
-{
-    "regNo": "KDA 123A",
-    "make": "Hound",
-    "yom": 2021,
-    "capacity": 5
-}
+### BUS
 
 ### FETCH all buses
 GET {{busesApi}}/
 
+### FETCH all buses count
+GET {{busesApi}}/?count=true
+
+### CREATE Bus
+POST {{busesApi}}/
+Content-Type: application/json
+
+{
+    "regNo": "KCK 555K",
+    "make": "Scania",
+    "yom": 2021,
+    "capacity": 51
+}
+
+###
+@bus_id = 62596040409897aa1cec88eb
+
 ### FETCH bus
-GET {{busesApi}}/623f40ddecaefea9476a6853
+GET {{busesApi}}/{{bus_id}}
 
 ### EDIT bus
-PATCH {{busesApi}}/edit?id=623d916643fca7e8de609d05
+PATCH {{busesApi}}/{{bus_id}}
 Content-Type: application/json
 
 {
-    "yom": 2017,
-    "capacity": 10
+    "make": "Isuzu",
+    "capacity": 49
 }
+
+### GET bus seats
+GET {{busesApi}}/seats/{{bus_id}}
 
 ### DELETE bus
-DELETE {{busesApi}}/delete?id=623d916643fca7e8de609d05
+DELETE {{busesApi}}/{{bus_id}}
 
-### CREATE journey let date = new Date("2022-03-30T17:30+03:00").getTime()
-POST {{journeysApi}}/new
-Content-Type: application/json
 
-{
-    "bus": "KDA 123A",
-    "route": "B1",
-    "fare": 650,
-    "departureTime": 1648650600000
-}
+
+### JOURNEY
 
 ### FETCH journeys
 GET {{journeysApi}}/
 
-### FETCH journey
-GET {{journeysApi}}/623d9677f0e6c4aabf18a124
+### FETCH journeys count
+GET {{journeysApi}}/?count=true
 
-### EDIT journey
-PATCH {{journeysApi}}/edit?id=623d9677f0e6c4aabf18a124
+### CREATE journey
+POST {{journeysApi}}/
 Content-Type: application/json
 
 {
-    "bookedSeats": []
+    "bus": "KCC 333C",
+    "route": "B1",
+    "fare": 1000,
+    "departureTime": 1650672000000,
+    "drivers": ["DRV0001/2022", "DRV0002/2022"]
+}
+
+###
+@journey_id = 625965b6e622ff5270245ea4
+
+### FETCH journey
+GET {{journeysApi}}/{{journey_id}}
+
+### EDIT journey
+PATCH {{journeysApi}}/{{journey_id}}
+Content-Type: application/json
+
+{
+    "fare": 750
 }
 
 ### SEARCH Journey
-POST {{journeysApi}}/search
-Content-Type: application/json
+GET {{journeysApi}}/search?from=NRB&to=KSM&date=2022-04-22
 
-{
-    "from": "ELD",
-    "to": "MSA",
-    "date": "2022-03-30"
-}
+### FETCH journey booked seats
+GET {{journeysApi}}/{{journey_id}}/booked-seats
 
 ### DELETE journey
-DELETE {{journeysApi}}/delete?id=623d9677f0e6c4aabf18a124
+DELETE {{journeysApi}}/{{journey_id}}
 
 ### FETCH available journeys
 GET {{journeysApi}}/available?route=B1

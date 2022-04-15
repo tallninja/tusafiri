@@ -6,27 +6,51 @@ import DriverSelect from './DriverSelect';
 import BusSelect from './BusSelect';
 import RouteSelect from './RouteSelect';
 
+import { getDrivers } from '../../../api';
+
 export const JourneyForm = ({ onSubmit, initialValues, action }) => {
-	const [journeyData, setJourneyData] = useState({
-		bus: '',
-		route: '',
-		fare: null,
-		departureTime: null,
-		arrivalTime: null,
-		drivers: [],
-	});
+	const [bus, setBus] = useState('');
+	const [route, setRoute] = useState('');
+	const [fare, setFare] = useState('');
+	const [departureTime, setDepartureTime] = useState('');
+	const [arrivalTime, setarrivalTime] = useState('');
+	const [driver1, setDriver1] = useState('');
+	const [driver2, setDriver2] = useState('');
+	const [fetchedDrivers, setFetchedDrivers] = useState([]);
+
+	useEffect(() => {
+		if (initialValues?._id) {
+			setBus(initialValues.bus);
+			setRoute(initialValues.route);
+			setFare(initialValues.fare);
+			setDepartureTime(initialValues.departureTime);
+			setarrivalTime(initialValues.arrivalTime);
+			setDriver1(initialValues.drivers[0]);
+			setDriver2(initialValues.drivers[1]);
+		}
+	}, [initialValues]);
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (initialValues) {
-			setJourneyData(initialValues);
-		}
-	}, [initialValues]);
+		(async () => {
+			const res = await getDrivers();
+			if (res.status === 200) {
+				setFetchedDrivers(res.data);
+			}
+		})();
+	}, []);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		onSubmit(journeyData);
+		onSubmit({
+			bus,
+			route,
+			fare,
+			departureTime,
+			arrivalTime,
+			drivers: [driver1, driver2],
+		});
 	};
 
 	return (
@@ -39,13 +63,8 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 				</label>
 				<BusSelect
 					id='busSelect'
-					handleSelect={(value) =>
-						setJourneyData({
-							...journeyData,
-							bus: value,
-						})
-					}
-					defaultValue={journeyData.bus || ''}
+					handleSelect={(value) => setBus(value)}
+					defaultValue={bus || ''}
 				/>
 				<div className='form-text'>Registration number of the bus.</div>
 			</div>
@@ -55,13 +74,8 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 				</label>
 				<RouteSelect
 					id='routeSelect'
-					handleSelect={(value) =>
-						setJourneyData({
-							...journeyData,
-							route: value,
-						})
-					}
-					defaultValue={journeyData.route || ''}
+					handleSelect={(value) => setRoute(value)}
+					defaultValue={route || ''}
 				/>
 				<div className='form-text'>Code representing the route.</div>
 			</div>
@@ -77,10 +91,8 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 					min={50}
 					max={5000}
 					placeholder='1100'
-					defaultValue={journeyData.fare}
-					onChange={(e) =>
-						setJourneyData({ ...journeyData, fare: e.target.value })
-					}
+					defaultValue={fare}
+					onChange={(e) => setFare(e.target.value)}
 				/>
 				<div className='form-text'>Fare per person in Ksh.</div>
 			</div>
@@ -96,10 +108,8 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 					className='form-control'
 					type={'datetime-local'}
 					min={new Date().toISOString().split(':').slice(0, 2).join(':')}
-					defaultValue={journeyData.departureTime}
-					onChange={(e) =>
-						setJourneyData({ ...journeyData, departureTime: e.target.value })
-					}
+					defaultValue={departureTime}
+					onChange={(e) => setDepartureTime(e.target.value)}
 				/>
 				<div className='form-text'>Date and time of departure.</div>
 			</div>
@@ -112,10 +122,8 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 					className='form-control'
 					type={'datetime-local'}
 					min={new Date().toISOString().split(':').slice(0, 2).join(':')}
-					defaultValue={journeyData.arrivalTime}
-					onChange={(e) =>
-						setJourneyData({ ...journeyData, arrivalTime: e.target.value })
-					}
+					defaultValue={arrivalTime}
+					onChange={(e) => setarrivalTime(e.target.value)}
 				/>
 				<div className='form-text'>ETA - Estimated Time of Arrival.</div>
 			</div>
@@ -128,13 +136,9 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 				</label>
 				<DriverSelect
 					id='driver1Select'
-					handleSelect={(value) =>
-						setJourneyData({
-							...journeyData,
-							drivers: [...journeyData.drivers, value],
-						})
-					}
-					defaultValue={journeyData.drivers?.[0] || ''}
+					drivers={fetchedDrivers}
+					handleSelect={(value) => setDriver1(value)}
+					defaultValue={driver1}
 				/>
 			</div>
 
@@ -144,13 +148,9 @@ export const JourneyForm = ({ onSubmit, initialValues, action }) => {
 				</label>
 				<DriverSelect
 					id='driver2Select'
-					handleSelect={(value) =>
-						setJourneyData({
-							...journeyData,
-							drivers: [...journeyData.drivers, value],
-						})
-					}
-					defaultValue={journeyData.drivers?.[1] || ''}
+					drivers={fetchedDrivers}
+					handleSelect={(value) => setDriver2(value)}
+					defaultValue={driver2}
 				/>
 			</div>
 

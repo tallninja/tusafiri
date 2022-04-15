@@ -12,8 +12,9 @@ export const EditJourney = () => {
 
 	useEffect(() => {
 		(async () => {
-			let res = await getJourney(id);
-			if (res.status === 200) {
+			try {
+				let res = await getJourney(id);
+				let drivers = res.data?.drivers?.map((driver) => driver.employeeId);
 				setJourneyData({
 					...res.data,
 					bus: res.data.bus.regNo,
@@ -28,10 +29,10 @@ export const EditJourney = () => {
 						.split(':')
 						.slice(0, 2)
 						.join(':'),
-					drivers: [],
+					drivers: drivers,
 				});
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err);
 			}
 		})();
 	}, [id]);

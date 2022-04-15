@@ -8,14 +8,12 @@ export const getBuses = async () => {
 };
 
 export const deleteBus = async (id) => {
-	const res = await axios.delete(`${BUSES_URL}/delete`, {
-		params: { id: id },
-	});
+	const res = await axios.delete(`${BUSES_URL}/${id}`);
 	return res;
 };
 
 export const createBus = async (data) => {
-	const res = await axios.post(`${BUSES_URL}/new`, data);
+	const res = await axios.post(`${BUSES_URL}/`, data);
 	return res;
 };
 
@@ -25,8 +23,6 @@ export const getBus = async (id) => {
 };
 
 export const editBus = async (id, data) => {
-	const res = await axios.patch(`${BUSES_URL}/edit`, data, {
-		params: { id: id },
-	});
+	const res = await axios.patch(`${BUSES_URL}/${id}`, data);
 	return res;
 };

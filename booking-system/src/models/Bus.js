@@ -7,7 +7,6 @@ const BusSchema = new mongoose.Schema({
 	make: { type: String },
 	yom: { type: Number },
 	capacity: { type: Number },
-	seats: [{ type: mongoose.Schema.Types.ObjectId }],
 });
 
 module.exports = mongoose.model('buses', BusSchema, 'buses');
