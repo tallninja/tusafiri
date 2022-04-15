@@ -7,9 +7,9 @@ const {
 	getFeedbacks,
 } = require('../controllers');
 
+router.post('/', createFeedback);
 router.get('/', getFeedbacks);
 router.get('/:id', getFeedback);
-router.post('/new', createFeedback);
-router.delete('/delete', deleteFeedback);
+router.delete('/:id', deleteFeedback);
 
 module.exports = router;

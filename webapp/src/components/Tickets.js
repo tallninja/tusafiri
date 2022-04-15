@@ -25,7 +25,7 @@ const Tickets = () => {
 	}, [booking, apiAuth]);
 
 	return (
-		<div className='container'>
+		<div className='container h-75'>
 			<h2>Tickets</h2>
 			<hr />
 			{tickets.length ? (
@@ -55,7 +55,11 @@ const Tickets = () => {
 										<td>{ticket.journey?.bus?.regNo || '-'}</td>
 										<td>{ticket.journey?.route?.from?.name || '-'}</td>
 										<td>{ticket.journey?.route?.to?.name || '-'}</td>
-										<td>{new Date(ticket.validUntil).toDateString() || '-'}</td>
+										<td>
+											{ticket.validUntil
+												? new Date(ticket.validUntil).toDateString()
+												: '-'}
+										</td>
 										<td>
 											<button
 												type='button'

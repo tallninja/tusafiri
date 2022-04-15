@@ -5,6 +5,9 @@
 ### Root route
 GET {{base_url}}/
 
+### FETCH employees
+GET {{employees_api}}/
+
 ### CREATE employee
 POST {{employees_api}}/new
 Content-Type: application/json
@@ -20,14 +23,13 @@ Content-Type: application/json
     "role": "help-desk"
 }
 
-### FETCH employees
-GET {{employees_api}}/
+@employee_id = 623d4db7a6730e28b15eb019
 
 ### FETCH employee
-GET {{employees_api}}/623d4db7a6730e28b15eb019
+GET {{employees_api}}/{{employee_id}}
 
 ### EDIT employee
-PATCH {{employees_api}}/edit?id=623d4db7a6730e28b15eb019
+PATCH {{employees_api}}/{{employee_id}}
 Content-Type: application/json
 
 {
@@ -35,7 +37,7 @@ Content-Type: application/json
 }
 
 ### Change password
-PATCH {{employees_api}}/change-password?id=623d4db7a6730e28b15eb019
+PATCH {{employees_api}}/employee/change-password?id=623d4db7a6730e28b15eb019
 Content-Type: application/json
 
 {
@@ -44,7 +46,7 @@ Content-Type: application/json
 }
 
 ### Change role
-PATCH {{employees_api}}/change-role?id=623d4db7a6730e28b15eb019
+PATCH {{employees_api}}/employee/change-role?id=623d4db7a6730e28b15eb019
 Content-Type: application/json
 
 {
@@ -52,7 +54,7 @@ Content-Type: application/json
 }
 
 ### DELETE Employee
-DELETE {{employees_api}}/delete?id=623d4db7a6730e28b15eb019
+DELETE {{employees_api}}/{{employee_id}}
 
 
 ### FETCH drivers

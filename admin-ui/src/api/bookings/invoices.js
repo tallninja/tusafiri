@@ -8,14 +8,12 @@ export const getInvoices = async () => {
 };
 
 export const deleteInvoice = async (id) => {
-	const res = await axios.delete(`${INVOICES_URL}/delete`, {
-		params: { id: id },
-	});
+	const res = await axios.delete(`${INVOICES_URL}/${id}`);
 	return res;
 };
 
 export const createInvoice = async (data) => {
-	const res = await axios.post(`${INVOICES_URL}/new`, data);
+	const res = await axios.post(`${INVOICES_URL}/`, data);
 	return res;
 };
 

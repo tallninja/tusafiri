@@ -8,14 +8,12 @@ export const getJourneys = async () => {
 };
 
 export const deleteJourney = async (id) => {
-	const res = await axios.delete(`${JOURNEYS_URL}/delete`, {
-		params: { id: id },
-	});
+	const res = await axios.delete(`${JOURNEYS_URL}/${id}`);
 	return res;
 };
 
 export const createJourney = async (data) => {
-	const res = await axios.post(`${JOURNEYS_URL}/new`, data);
+	const res = await axios.post(`${JOURNEYS_URL}/`, data);
 	return res;
 };
 
@@ -25,8 +23,6 @@ export const getJourney = async (id) => {
 };
 
 export const editJourney = async (id, data) => {
-	const res = await axios.patch(`${JOURNEYS_URL}/edit`, data, {
-		params: { id: id },
-	});
+	const res = await axios.patch(`${JOURNEYS_URL}/${id}`, data);
 	return res;
 };

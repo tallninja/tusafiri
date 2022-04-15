@@ -8,14 +8,12 @@ export const getRoutes = async () => {
 };
 
 export const deleteRoute = async (id) => {
-	const res = await axios.delete(`${ROUTES_URL}/delete`, {
-		params: { id: id },
-	});
+	const res = await axios.delete(`${ROUTES_URL}/${id}`);
 	return res;
 };
 
 export const createRoute = async (data) => {
-	const res = await axios.post(`${ROUTES_URL}/new`, data);
+	const res = await axios.post(`${ROUTES_URL}/`, data);
 	return res;
 };
 
@@ -25,8 +23,6 @@ export const getRoute = async (id) => {
 };
 
 export const editRoute = async (id, data) => {
-	const res = await axios.patch(`${ROUTES_URL}/edit`, data, {
-		params: { id: id },
-	});
+	const res = await axios.patch(`${ROUTES_URL}/${id}`, data);
 	return res;
 };

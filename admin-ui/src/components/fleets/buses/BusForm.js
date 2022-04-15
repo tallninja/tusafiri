@@ -3,24 +3,30 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const BusForm = ({ onSubmit, initialValues, action }) => {
-	const [busData, setBusData] = useState({
-		regNo: '',
-		make: '',
-		yom: null,
-		capacity: null,
-	});
+	const [regNo, setRegNo] = useState('');
+	const [make, setMake] = useState('');
+	const [yom, setYom] = useState('');
+	const [capacity, setCapacity] = useState();
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (initialValues) {
-			setBusData(initialValues);
+			setRegNo(initialValues?.regNo);
+			setMake(initialValues?.make);
+			setYom(initialValues?.yom);
+			setCapacity(initialValues?.capacity);
 		}
 	}, [initialValues]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		onSubmit(busData);
+		onSubmit({
+			regNo,
+			make,
+			yom,
+			capacity,
+		});
 	};
 
 	return (
@@ -36,8 +42,8 @@ export const BusForm = ({ onSubmit, initialValues, action }) => {
 					className='form-control'
 					placeholder='KBM 960X'
 					type={'text'}
-					defaultValue={busData.regNo}
-					onChange={(e) => setBusData({ ...busData, regNo: e.target.value })}
+					defaultValue={regNo}
+					onChange={(e) => setRegNo(e.target.value)}
 				/>
 			</div>
 			<div className='col-md-12'>
@@ -49,8 +55,8 @@ export const BusForm = ({ onSubmit, initialValues, action }) => {
 					className='form-control'
 					placeholder='Scania'
 					type={'text'}
-					defaultValue={busData.make}
-					onChange={(e) => setBusData({ ...busData, make: e.target.value })}
+					defaultValue={make}
+					onChange={(e) => setMake(e.target.value)}
 				/>
 			</div>
 			<div className='col-md-12'>
@@ -64,8 +70,8 @@ export const BusForm = ({ onSubmit, initialValues, action }) => {
 					type={'number'}
 					min={2005}
 					max={new Date().getFullYear()}
-					defaultValue={busData.yom}
-					onChange={(e) => setBusData({ ...busData, yom: e.target.value })}
+					defaultValue={yom}
+					onChange={(e) => setYom(e.target.value)}
 				/>
 				<div className='form-text'>
 					Must be between 2005 and {new Date().getFullYear()}.
@@ -82,8 +88,8 @@ export const BusForm = ({ onSubmit, initialValues, action }) => {
 					type={'number'}
 					min={5}
 					max={100}
-					defaultValue={busData.capacity}
-					onChange={(e) => setBusData({ ...busData, capacity: e.target.value })}
+					defaultValue={capacity}
+					onChange={(e) => setCapacity(e.target.value)}
 				/>
 				<div className='form-text'>Must be between 5 and 100.</div>
 			</div>

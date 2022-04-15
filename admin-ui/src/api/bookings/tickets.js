@@ -13,9 +13,7 @@ export const getTickets = async () => {
 
 export const deleteTicket = async (id) => {
 	try {
-		const res = await axios.delete(`${TICKETS_URL}/delete`, {
-			params: { id: id },
-		});
+		const res = await axios.delete(`${TICKETS_URL}/${id}`);
 		return res.data;
 	} catch (err) {
 		throw err;

@@ -3,24 +3,25 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const LocationForm = ({ onSubmit, initialValues, action }) => {
-	const [locationData, setLocationData] = useState({
-		name: '',
-		code: '',
-		lat: null,
-		lng: null,
-	});
+	const [name, setName] = useState('');
+	const [code, setCode] = useState('');
+	const [lat, setLat] = useState();
+	const [lng, setLng] = useState();
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (initialValues) {
-			setLocationData(initialValues);
+			setName(initialValues?.name);
+			setCode(initialValues?.code);
+			setLat(initialValues?.lat);
+			setLng(initialValues?.lng);
 		}
 	}, [initialValues]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		onSubmit(locationData);
+		onSubmit({ name, code, lat, lng });
 	};
 
 	return (
@@ -32,14 +33,12 @@ export const LocationForm = ({ onSubmit, initialValues, action }) => {
 					Name
 				</label>
 				<input
-					defaultValue={locationData.name}
+					defaultValue={name}
 					type={'text'}
 					className='form-control'
 					id='inputEmail4'
 					placeholder='Nairobi'
-					onChange={(e) =>
-						setLocationData({ ...locationData, name: e.target.value })
-					}
+					onChange={(e) => setName(e.target.value)}
 				/>
 			</div>
 			<div className='col-md-4'>
@@ -47,14 +46,12 @@ export const LocationForm = ({ onSubmit, initialValues, action }) => {
 					Code
 				</label>
 				<input
-					defaultValue={locationData.code}
+					defaultValue={code}
 					type={'text'}
 					className='form-control'
 					id='inputPassword4'
 					placeholder='NRB'
-					onChange={(e) =>
-						setLocationData({ ...locationData, code: e.target.value })
-					}
+					onChange={(e) => setCode(e.target.value)}
 				/>
 				<div className='form-text'>
 					3 letter code representing the location.
@@ -67,17 +64,12 @@ export const LocationForm = ({ onSubmit, initialValues, action }) => {
 					Latitude
 				</label>
 				<input
-					defaultValue={locationData.lat}
+					defaultValue={lat}
 					type={'text'}
 					className='form-control'
 					id='inputCity'
 					placeholder='-1.281924462106501'
-					onChange={(e) =>
-						setLocationData({
-							...locationData,
-							lat: parseFloat(e.target.value),
-						})
-					}
+					onChange={(e) => setLat(parseFloat(e.target.value))}
 				/>
 			</div>
 			<div className='col-md-6'>
@@ -85,17 +77,12 @@ export const LocationForm = ({ onSubmit, initialValues, action }) => {
 					Longitude
 				</label>
 				<input
-					defaultValue={locationData.lng}
+					defaultValue={lng}
 					type={'text'}
 					className='form-control'
 					id='inputCity'
 					placeholder='36.81030448514034'
-					onChange={(e) =>
-						setLocationData({
-							...locationData,
-							lng: parseFloat(e.target.value),
-						})
-					}
+					onChange={(e) => setLng(parseFloat(e.target.value))}
 				/>
 			</div>
 			<div className='d-flex justify-content-between my-3 '>
