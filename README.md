@@ -6,6 +6,8 @@ This is a bus booking and ticketing system that allows people to book buses to v
 
 ![admin home](./images/admin_home.png)
 
+![invoice](./images/invoice.png)
+
 ## Running
 
 Make sure you have Docker and Docker-compose installed on your system
