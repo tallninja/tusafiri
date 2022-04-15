@@ -12,14 +12,13 @@ const EditJourneySchema = Joi.object({
 	bus: Joi.string().optional(),
 	route: Joi.string().optional(),
 	fare: Joi.number().min(50).max(10000).optional(),
-	bookedSeats: Joi.array().optional(),
 	departureTime: Joi.date().optional(),
 	arrivalTime: Joi.date().optional(),
 	drivers: Joi.array().optional(),
 });
 
 module.exports = async (req, res) => {
-	const { id } = req.query;
+	const { id } = req.params;
 
 	if (!id) {
 		return res

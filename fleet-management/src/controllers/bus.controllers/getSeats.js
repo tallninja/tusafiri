@@ -1,17 +1,19 @@
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Bus } = require('../../models');
+const { Seat } = require('../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
+	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
 
 module.exports = async (req, res) => {
-	try {
-		let buses = await Bus.find().exec();
+	const { bus } = req.params;
 
-		return res.status(Sc.OK).json(buses);
+	try {
+		const busSeats = await Seat.find({ bus: bus }).exec();
+
+		return res.status(Sc.OK).json(busSeats);
 	} catch (err) {
 		return handleError(err, res);
 	}

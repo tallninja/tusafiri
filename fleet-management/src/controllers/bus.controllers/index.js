@@ -7,3 +7,5 @@ exports.deleteBus = require('./deleteBus');
 exports.getBus = require('./getBus');
 
 exports.getBuses = require('./getBuses');
+
+exports.getSeats = require('./getSeats');

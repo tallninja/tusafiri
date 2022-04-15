@@ -33,8 +33,7 @@ module.exports = async (req, res) => {
 		let newBus = await new Bus(busDetails).save();
 
 		for (let i = 1; i <= newBus.capacity; i++) {
-			let seat = await new Seat({ number: i, bus: newBus._id }).save();
-			newBus.seats.push(seat._id);
+			await new Seat({ number: i, bus: newBus._id }).save();
 		}
 
 		await newBus.save();

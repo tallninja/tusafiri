@@ -73,7 +73,7 @@ Content-Type: application/json
     "regNo": "KDA 123A",
     "make": "Hound",
     "yom": 2021,
-    "capacity": 5
+    "capacity": 20
 }
 
 ### FETCH all buses
@@ -94,25 +94,29 @@ Content-Type: application/json
 ### DELETE bus
 DELETE {{busesApi}}/delete?id=623d916643fca7e8de609d05
 
+### GET seats
+GET {{busesApi}}/seats/62593a0d3810192cf96f2ec0
+
 ### CREATE journey let date = new Date("2022-03-30T17:30+03:00").getTime()
-POST {{journeysApi}}/new
+POST {{journeysApi}}/
 Content-Type: application/json
 
 {
     "bus": "KDA 123A",
     "route": "B1",
     "fare": 650,
-    "departureTime": 1648650600000
+    "departureTime": 1650014781999,
+    "drivers": ["DRV0001/2022", "DRV0002/2022"]
 }
 
 ### FETCH journeys
 GET {{journeysApi}}/
 
 ### FETCH journey
-GET {{journeysApi}}/623d9677f0e6c4aabf18a124
+GET {{journeysApi}}/62594768d05a8c9a9ed299e5
 
 ### EDIT journey
-PATCH {{journeysApi}}/edit?id=623d9677f0e6c4aabf18a124
+PATCH {{journeysApi}}/62594768d05a8c9a9ed299e5
 Content-Type: application/json
 
 {
@@ -130,7 +134,7 @@ Content-Type: application/json
 }
 
 ### DELETE journey
-DELETE {{journeysApi}}/delete?id=623d9677f0e6c4aabf18a124
+DELETE {{journeysApi}}/62594768d05a8c9a9ed299e5
 
 ### FETCH available journeys
 GET {{journeysApi}}/available?route=B1

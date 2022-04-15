@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { Journey, Bus, Route, Role, Employee } = require('../../models');
+const { Journey, Bus, Route, Role, Employee, Seat } = require('../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);
@@ -60,13 +60,16 @@ module.exports = async (req, res) => {
 
 		journeyDetails.drivers = drivers.map((driver) => driver._id);
 
+		// initialize the number of available seats
+		journeyDetails.availableSeats = bus.capacity - 2;
+
 		journeyDetails.createdAt = new Date();
 		let newJourney = await new Journey(journeyDetails).save();
 
 		console.log('Info:', `Journey ${newJourney._id} was created.`);
 
 		let createdJourney = await Journey.findById(newJourney._id)
-			.populate(['bus', 'route'])
+			.populate(['bus', { path: 'route', populate: ['from', 'to'] }])
 			.exec();
 
 		return res.status(Sc.OK).json(createdJourney);
