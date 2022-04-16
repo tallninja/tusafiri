@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import useApiAuth from '../hooks/useApiAuth';
 
@@ -9,20 +9,25 @@ const Tickets = () => {
 	const [tickets, setTickets] = useState([]);
 	const { booking } = useParams();
 
+	const navigate = useNavigate();
 	const apiAuth = useApiAuth();
 
 	useEffect(() => {
 		(async () => {
 			try {
-				const res = await apiAuth.get(
-					`/booking-system/tickets/booking/${booking}`
-				);
-				setTickets(res.data);
+				const res = await apiAuth.get(`/booking-system/bookings/${booking}`);
+				if (!res?.data?.paid) navigate(-1);
+				else {
+					const tickets = await apiAuth.get(
+						`/booking-system/tickets/booking/${booking}`
+					);
+					setTickets(tickets.data);
+				}
 			} catch (err) {
 				console.error(err);
 			}
 		})();
-	}, [booking, apiAuth]);
+	}, [booking, apiAuth, navigate]);
 
 	return (
 		<div className='container h-75'>

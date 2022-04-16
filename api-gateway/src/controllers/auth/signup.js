@@ -2,7 +2,7 @@ const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const { StatusCodes: Sc } = require('http-status-codes');
 
-const { User } = require('../../models');
+const { User, SystemRole, SYSTEM_ROLES } = require('../../models');
 
 const handleError = (err, res) => {
 	console.log('Error:', err);

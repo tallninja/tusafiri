@@ -42,6 +42,18 @@ const Invoice = () => {
 		}
 	};
 
+	const handleTimeOut = async () => {
+		try {
+			const res = await apiAuth.get(
+				`/booking-system/invoices/booking/${booking}`
+			);
+			if (res.data.settled) navigate(`/booking/tickets/${invoice.booking._id}`);
+			else navigate('/');
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
 	return (
 		<>
 			{invoice._id ? (
@@ -49,6 +61,7 @@ const Invoice = () => {
 					<div className='d-flex flex-wrap justify-content-between my-3 '>
 						<button
 							className='btn btn-warning btn-lg frac-width'
+							disabled={invoice.settled}
 							onClick={cancelBooking}
 						>
 							Cancel
@@ -71,10 +84,7 @@ const Invoice = () => {
 						{!invoice.settled ? (
 							<div className='d-flex justify-content-end'>
 								<h5 className='mx-2'>Deadline: </h5>
-								<Timer
-									date={invoice.dueDate}
-									handleTimeOut={() => navigate('/')}
-								/>
+								<Timer date={invoice.dueDate} handleTimeOut={handleTimeOut} />
 							</div>
 						) : (
 							<h5 className='mx-2 text-success'>Paid</h5>
