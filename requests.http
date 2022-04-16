@@ -10,17 +10,8 @@ GET http://localhost:5003/
 ### API Gateway
 GET http://localhost:5000/
 
-### Payment
-POST http://localhost:5003/api/payments
-Content-Type: application/json
-
-{
-    "amountPaid": 4640,
-    "accountNo": "+245711347790"
-}
-
 ### Signup user
-POST http://localhost:5000/users/signup
+POST http://localhost:5000/api/auth/users/signup
 Content-Type: application/json
 
 {
@@ -29,4 +20,13 @@ Content-Type: application/json
     "email": "admin@admin.tusafiri.co.ke",
     "phoneNo": "+254712345678",
     "password": "@dmin123"
+}
+
+### Payment
+POST http://localhost:5003/api/payments
+Content-Type: application/json
+
+{
+    "amountPaid": 4640,
+    "accountNo": "+245711347790"
 }
