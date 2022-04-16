@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { api } from '../api/api';
 
 import Spinner from './Spinner';
@@ -24,8 +25,7 @@ const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 					const res = await api.get(
 						`/fleets/journeys/${journey._id}/booked-seats`
 					);
-					const bsSeatIds = res.data?.map((bs) => bs.seat);
-					setBookedSeats(bsSeatIds);
+					setBookedSeats(res.data);
 				} catch (err) {
 					console.err(err);
 				}
@@ -47,10 +47,9 @@ const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 					{seats.map((seat, idx) => (
 						<div
 							className={`col-3 ${
-								bookedSeats.includes(seat._id) ||
 								seat.number === 1 ||
 								seat.number === 2 ||
-								bookedSeats.map((seat) => seat._id).includes(seat._id)
+								bookedSeats.map((seat) => seat.seat).includes(seat._id)
 									? 'seat-disabled'
 									: ''
 							}`}
@@ -58,7 +57,7 @@ const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 							onClick={() => onSeatClicked(seat)}
 						>
 							<div
-								className={`d-flex justify-content-center align-items-center align-content-center p-2 mb-2 seat ${
+								className={`d-flex justify-content-center align-items-center align-content-center p-2 mb-2 w-75 seat ${
 									selectedSeats.includes(seat) ? 'booked' : ''
 								}`}
 							>

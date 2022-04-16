@@ -21,7 +21,7 @@ const BookingSchema = new mongoose.Schema({
 
 BookingSchema.pre('save', async function (next) {
 	try {
-		const { seats } = this.$__.saveOptions;
+		const { seats, user } = this.$__.saveOptions;
 		let booking = this;
 
 		let journey = await Journey.findById(booking.journey).exec();
@@ -30,6 +30,7 @@ BookingSchema.pre('save', async function (next) {
 		seats.forEach(async function (seat) {
 			const bookedSeat = await new BookedSeat({
 				seat: seat,
+				user: user,
 				booking: booking._id,
 				journey: booking.journey,
 			}).save();

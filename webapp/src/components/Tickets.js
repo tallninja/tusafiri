@@ -36,6 +36,7 @@ const Tickets = () => {
 								<th scope='col'>#</th>
 								<th scope='col'>Code</th>
 								<th scope='col'>Passenger Name</th>
+								<th scope='col'>Passenger Phone</th>
 								<th scope='col'>seat</th>
 								<th scope='col'>Bus</th>
 								<th scope='col'>From</th>
@@ -51,6 +52,7 @@ const Tickets = () => {
 										<td>{idx + 1}</td>
 										<td>{ticket._id}</td>
 										<td>{ticket.passengerName}</td>
+										<td>{ticket.passengerPhone || '-'}</td>
 										<td>{ticket.seat?.number}</td>
 										<td>{ticket.journey?.bus?.regNo || '-'}</td>
 										<td>{ticket.journey?.route?.from?.name || '-'}</td>

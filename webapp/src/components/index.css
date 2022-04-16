@@ -107,7 +107,9 @@ body {
 }
 
 .seats-available {
-    background-color: #EA3E36;
+    /* background-color: #EA3E36; */
+    height: 20%;
+    font-size: xx-large;
     border-radius: 3px;
     color: white;
 }

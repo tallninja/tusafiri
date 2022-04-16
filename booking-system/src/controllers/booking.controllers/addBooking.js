@@ -24,6 +24,7 @@ const CreateBookingSchema = Joi.object({
 			journey: Joi.string(),
 			seat: Joi.string(),
 			passengerName: Joi.string(),
+			passengerPhone: Joi.string().optional(),
 		})
 	),
 });
@@ -85,7 +86,7 @@ module.exports = async (req, res) => {
 		let booking = await new Booking({
 			...bookingDetails,
 			user,
-		}).save({ seats: bookingDetails.seats }); // save options to pass the seats to the pre save hooks
+		}).save({ seats: bookingDetails.seats, user }); // save options to pass the seats to the pre save hooks
 
 		bookingDetails.tickets.map(async (ticket) => {
 			let newTicket = await new Ticket({

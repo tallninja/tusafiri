@@ -2,12 +2,27 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { getLocations } from '../../../api';
+import LocationSelect from './LocationSelect';
+
 export const RouteForm = ({ onSubmit, initialValues, action }) => {
 	const [name, setName] = useState('');
 	const [from, setFrom] = useState('');
 	const [to, setTo] = useState('');
+	const [locations, setLocations] = useState();
 
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const res = await getLocations();
+				setLocations(res.data);
+			} catch (err) {
+				console.error(err);
+			}
+		})();
+	}, []);
 
 	useEffect(() => {
 		if (initialValues) {
@@ -45,29 +60,25 @@ export const RouteForm = ({ onSubmit, initialValues, action }) => {
 				<label htmlFor='fromInput' className='form-label'>
 					From
 				</label>
-				<input
-					defaultValue={from}
-					type={'fromInput'}
-					className='form-control'
-					id='fromInput'
-					placeholder='MSA'
-					onChange={(e) => setFrom(e.target.value)}
+				<LocationSelect
+					id='toSelect'
+					locations={locations}
+					defaultValue={to}
+					handleSelect={(value) => setTo(value)}
 				/>
 				<div className='form-text'>
 					3 letter code representing the location.
 				</div>
 			</div>
 			<div className='col-md-6'>
-				<label htmlFor='toInput' className='form-label'>
+				<label htmlFor='fromSelect' className='form-label'>
 					To
 				</label>
-				<input
-					defaultValue={to}
-					type={'text'}
-					className='form-control'
-					id='toInput'
-					placeholder='NRB'
-					onChange={(e) => setTo(e.target.value)}
+				<LocationSelect
+					id='fromSelect'
+					locations={locations}
+					defaultValue={from}
+					handleSelect={(value) => setFrom(value)}
 				/>
 				<div className='form-text'>
 					3 letter code representing the location.

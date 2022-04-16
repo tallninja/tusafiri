@@ -49,6 +49,7 @@ export const Tickets = () => {
 								<th scope='col'>#</th>
 								<th scope='col'>Id</th>
 								<th scope='col'>Passenger Name</th>
+								<th scope='col'>Passenger Phone</th>
 								<th scope='col'>seat</th>
 								<th scope='col'>Journey</th>
 								<th scope='col'>Booking</th>
@@ -64,6 +65,7 @@ export const Tickets = () => {
 										<td>{idx + 1}</td>
 										<td>{ticket._id}</td>
 										<td>{ticket.passengerName}</td>
+										<td>{ticket.passengerPhone || '-'}</td>
 										<td>{ticket.seat?.number}</td>
 										<td>{ticket.journey}</td>
 										<td>{ticket.booking}</td>
