@@ -5,7 +5,7 @@ const AdCards = () => {
 		<div className='container d-flex justify-content-center align-items-center py-2 my-3'>
 			<div className='row'>
 				<AdCard
-					title='700+ DESTINATIONS'
+					title='20+ DESTINATIONS'
 					text='Our expert team handpicked all destinations in this site'
 					iconClass='fa-solid fa-globe'
 				/>
