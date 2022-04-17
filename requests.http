@@ -27,6 +27,6 @@ POST http://localhost:5003/api/payments
 Content-Type: application/json
 
 {
-    "amountPaid": 4640,
-    "accountNo": "+245711347790"
+    "amountPaid": 1737.68,
+    "accountNo": "+254719286396"
 }

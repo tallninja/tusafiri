@@ -67,7 +67,7 @@ const Journey = () => {
 			</div>
 
 			<div className='row mt-4 p-2'>
-				<div className='card col-md-6'>
+				<div className='card col-md-6 h-auto'>
 					<div className='card-body'>
 						<h1 className='card-title'>Details</h1>
 						<hr />

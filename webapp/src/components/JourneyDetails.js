@@ -52,7 +52,7 @@ const JourneyDetails = ({ journey }) => {
 				<div className='col-6 h4 lead'>Ksh {journey.fare} / seat</div>
 			</div>
 			<hr />
-			<div className='d-flex justify-content-center align-items-center align-content-center p-2 mt-4 bg-dark seats-available'>
+			<div className='d-flex justify-content-center align-items-center align-content-center p-2 my-4 bg-dark seats-available'>
 				<p>{journey.availableSeats} seats available</p>
 			</div>
 		</>
