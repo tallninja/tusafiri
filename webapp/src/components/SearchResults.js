@@ -5,9 +5,11 @@ import useQuery from '../hooks/useQuery';
 import JourneysTable from './JourneysTable';
 import NoResults from './NoResults';
 import Search from './Search';
+import Spinner from './Spinner';
 
 const SearchResults = () => {
 	const [journeys, setJourneys] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const query = useQuery();
 
 	useEffect(() => {
@@ -21,6 +23,7 @@ const SearchResults = () => {
 			try {
 				const results = await searchJourneys(search);
 				setJourneys(results);
+				setIsLoading(false);
 			} catch (err) {
 				console.error(err);
 			}
@@ -54,8 +57,10 @@ const SearchResults = () => {
 						<h2>{new Date(query.get('date')).toDateString()}</h2>
 					</div>
 				</div>
-				{journeys.length ? (
+				{journeys.length && !isLoading ? (
 					<JourneysTable journeys={journeys} />
+				) : isLoading ? (
+					<Spinner />
 				) : (
 					<NoResults />
 				)}
