@@ -4,9 +4,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import useApiAuth from '../hooks/useApiAuth';
 
 import NoResults from './NoResults';
+import Spinner from './Spinner';
 
 const Tickets = () => {
 	const [tickets, setTickets] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const { booking } = useParams();
 
 	const navigate = useNavigate();
@@ -22,6 +24,7 @@ const Tickets = () => {
 						`/booking-system/tickets/booking/${booking}`
 					);
 					setTickets(tickets.data);
+					setIsLoading(false);
 				}
 			} catch (err) {
 				console.error(err);
@@ -33,7 +36,7 @@ const Tickets = () => {
 		<div className='container h-75'>
 			<h2>Tickets</h2>
 			<hr />
-			{tickets.length ? (
+			{tickets.length && !isLoading ? (
 				<div className='table-responsive'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -74,7 +77,7 @@ const Tickets = () => {
 												data-bs-toggle='tooltip'
 												data-bs-placement='top'
 												title='Download'
-												onClick={() => console.log(ticket._id)}
+												onClick={() => navigate(`/tickets/${ticket._id}`)}
 											>
 												<i className='fa-solid fa-download'></i>
 											</button>
@@ -85,6 +88,8 @@ const Tickets = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
 			) : (
 				<NoResults />
 			)}

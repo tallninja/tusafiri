@@ -2,6 +2,8 @@
 @bookingsApi = {{baseUrl}}/api/bookings
 @paymentsApi = {{baseUrl}}/api/payments
 
+@ticketsApi = {{baseUrl}}/api/tickets
+
 
 ### ROOT route
 GET {{baseUrl}}
@@ -30,6 +32,9 @@ GET {{bookingsApi}}/623cc24f027c1a07828163d9
 
 ### DELETE booking
 DELETE {{bookingsApi}}/625949480ce5ca91e7a556bd
+
+### GET Tickets
+GET {{ticketsApi}}/625ace4cc13ea0998bc1a139
 
 ### MAKE Payment
 POST {{paymentsApi}}

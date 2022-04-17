@@ -12,6 +12,7 @@ import Invoice from './Invoice';
 import Booking from './Booking';
 import Journey from './Journey';
 import Tickets from './Tickets';
+import TicketView from './TicketView';
 
 const App = () => {
 	return (
@@ -28,6 +29,7 @@ const App = () => {
 						<Route path='invoice/:booking' element={<Invoice />} />
 						<Route path='tickets/:booking' element={<Tickets />} />
 					</Route>
+					<Route path='/tickets/:id' element={<TicketView />} />
 				</Route>
 			</Route>
 		</Routes>

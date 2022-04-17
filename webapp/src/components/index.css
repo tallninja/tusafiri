@@ -197,3 +197,22 @@ body {
         text-align: center;
     }
 }
+
+#ticket {
+    padding: 0;
+    width: 500px;
+    background-color: #FFF;
+    overflow: hidden;
+}
+
+#ticket-details {
+    border: 3px solid rgb(31, 37, 41);
+}
+
+.border-right {
+    border-right: 2px dashed rgb(109, 117, 125);
+}
+
+#amount {
+    border-radius: 5px;
+}

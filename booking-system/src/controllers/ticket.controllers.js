@@ -11,7 +11,25 @@ exports.getTicket = async (req, res) => {
 	const { id } = req.params;
 	try {
 		const ticket = await Ticket.findById(id)
-			.populate(['booking', 'journey', { path: 'user', select: '-password' }])
+			.populate([
+				{ path: 'user', select: 'firstName lastName' },
+				{ path: 'seat', select: 'number -_id' },
+				{
+					path: 'journey',
+					select: 'bus route fare departureTime arrivalTime',
+					populate: [
+						{ path: 'bus', model: 'buses' },
+						{
+							path: 'route',
+							model: 'routes',
+							populate: [
+								{ path: 'from', model: 'locations' },
+								{ path: 'to', model: 'locations' },
+							],
+						},
+					],
+				},
+			])
 			.exec();
 		return res.status(Sc.OK).json(ticket);
 	} catch (err) {
