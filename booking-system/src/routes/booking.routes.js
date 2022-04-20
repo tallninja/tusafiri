@@ -10,8 +10,8 @@ const {
 
 router.get('/', getBookings);
 router.post('/', addBooking);
+router.get('/user', getUserBookings);
 router.get('/:id', getBooking);
 router.delete('/:id', deleteBooking);
-router.get('/user', getUserBookings);
 
 module.exports = router;
