@@ -5,11 +5,13 @@ const {
 	deleteBooking,
 	getBooking,
 	getBookings,
+	getUserBookings,
 } = require('../controllers/booking.controllers');
 
 router.get('/', getBookings);
 router.post('/', addBooking);
 router.get('/:id', getBooking);
 router.delete('/:id', deleteBooking);
+router.get('/user', getUserBookings);
 
 module.exports = router;
