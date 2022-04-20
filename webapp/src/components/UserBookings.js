@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import useApiAuth from '../hooks/useApiAuth';
+
 import NoResults from './NoResults';
 import Spinner from './Spinner';
 import Error from './Error';

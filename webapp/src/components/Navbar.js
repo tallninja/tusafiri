@@ -72,12 +72,17 @@ const Navbar = () => {
 									>
 										<li>
 											<Link to='/user/bookings' className='dropdown-item'>
-												My Bookings
+												<i class='fa-solid fa-bookmark'></i> My Bookings
 											</Link>
 										</li>
 										<li>
 											<Link to='/user/invoices' className='dropdown-item'>
-												My Invoices
+												<i className='fa-solid fa-file-invoice'></i> My Invoices
+											</Link>
+										</li>
+										<li>
+											<Link to='/' className='dropdown-item'>
+												<i className='fa-solid fa-user'></i> Profile
 											</Link>
 										</li>
 										<li>

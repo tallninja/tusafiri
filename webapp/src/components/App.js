@@ -27,9 +27,12 @@ const App = () => {
 					<Route path='search' element={<SearchResults />} />
 					<Route path='journeys/:id' element={<Journey />} />
 					<Route path='user' element={<ProtectedRoute />}>
+						<Route path='booking'>
+							<Route index element={<Booking />} />
+						</Route>
+
 						<Route path='bookings'>
 							<Route index element={<UserBookings />} />
-							<Route path=':id' element={<Booking />} />
 						</Route>
 
 						<Route path='invoices'>

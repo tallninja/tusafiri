@@ -4,9 +4,14 @@ import { useParams } from 'react-router-dom';
 import useApiAuth from '../hooks/useApiAuth';
 
 import NoResults from './NoResults';
+import Spinner from './Spinner';
+import Error from './Error';
 
 const Tickets = () => {
 	const [tickets, setTickets] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
+
 	const { booking } = useParams();
 
 	const apiAuth = useApiAuth();
@@ -18,8 +23,11 @@ const Tickets = () => {
 					`/booking-system/tickets/booking/${booking}`
 				);
 				setTickets(res.data);
+				setIsLoading(false);
 			} catch (err) {
 				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, [booking, apiAuth]);
@@ -28,7 +36,7 @@ const Tickets = () => {
 		<div className='container h-75'>
 			<h2>Tickets</h2>
 			<hr />
-			{tickets.length ? (
+			{!isLoading && tickets.length ? (
 				<div className='table-responsive'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -78,6 +86,10 @@ const Tickets = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Dashboard</title>
+</head>
+<body>
+    <!--Navigation bar-->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark py-2 fixed-top">
+        <div class="container">
+        <a href="#" class="navbar-brand"><span class="text-danger">EasyCoach</span></a>
+        
+        <button 
+        class="navbar-toggler" 
+        type="button" 
+        data-bs-toggle="collapse"
+         data-bs-target="#navmenu">
+         <span class="navbar-toggler-icon"></span>
+        </button>
+
+        
+         </div>
+    </nav>
+    <!--Showcase-->
+    <section class="bg-dark text-light p-5 text-center text-sm-start">
+        <div class="container">
+            <div class="d-md-flex align-items-center justify-content-between">
+                <div id="#about"><h3>Welcome to <span class="text-danger">EasyCoach</span>  Transport Service</h3>
+                <p>We are a passenger transport and courier service provider offering reliable services.</p>
+            <button class="btn btn-primary btn-md" data-bs-toggle="modal" data-bs-target="#signup">Get Started</button>    
+            </div>
+            
+                <img src="bg.png" alt="" class="img-fluid w-50 d-none d-sm-block">
+            </div>
+        </div>
+
+    </section>
+    <!--Newsletter section-->
+    <section id="#newsletter" class="bg-black bg-opacity-50 text-light p-5">
+        <div class="container">
+            <div class="d-md-flex justify-content-between align-items-centre">
+               
+                <h3 class="mb-3 mb-md-0">Sign up for our newsletter</h3>
+                <div class="input-group news-input">
+                    <input type="text" class="form-control" placeholder="Enter your email">
+                    
+                    <button class="btn btn-dark btn-md" type="button">Submit</button>
+                  </div>
+            </div>
+        </div>
+    </section>
+    <!--Grids-->
+    
+    <section class="p-5">
+        <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md">
+                <div class="card bg-dark text-light">
+                   <div class="card-body text-center">
+                    <div class="h1 mb-3">
+                        <i class="bi bi-truck"></i>
+            </div>
+            <h3 class="card-title">Travel</h3>
+            <p class="card-text">
+                We cover 37 routes and a total of 20 outlets countrywide
+            </p>
+            <a href="#travel" class="btn-outline-success">Read More</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md">
+        <div class="card bg-dark text-light">
+           <div class="card-body text-center">
+            <div class="h1 mb-3">
+                <i class="bi bi-truck-flatbed"></i>
+    </div>
+    <h3 class="card-title">Courier</h3>
+    <p class="card-text">
+        We offer courier services too
+    </p>
+    <a href="#courier" class="btn-outline-success">Read More</a>
+    </div>
+</div>
+</div>
+
+    </section>
+    <!--Grid part 2-->
+    <section id="travel" class="p-5 bg-black text-success">
+        <div class="container">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-md">
+                <img src="coach.png" class="img-fluid"alt="">
+            </div>
+            <div class="col-md p-5">
+                <h2>Travel services</h2>
+                <p>From scheduled passenger services to 37 destinations to a dedicated bus hire service and corporate travel for companies, Easy Coach is a go-to provider of long-distance travel solutions.
+                </p>
+               <a href="#" class="btn btn-light mt-3">Read more
+               <i class="bi bi-chevron-right"></i>
+           </a>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <section id="courier" class="p-5 bg-dark text-danger">
+        <div class="container">
+        <div class="row align-items-center justify-content-between">
+            
+            <div class="col-md p-5">
+                <h2>Courier services</h2>
+                <p>Our company is licensed to carry cargo in the undercarrieage boots.
+                </p>
+           <a href="#" class="btn btn-light mt-3">Read more
+               <i class="bi bi-chevron-right"></i>
+           </a>
+            </div>
+            <div class="col-md">
+                <img src="courier.jpg" class="img-fluid"alt="">
+            </div>
+        </div>
+        </div>
+    </section>
+    <!--FAQ-->
+    <section id="faq"class="p-5">
+        <div class="container ">
+            <h2 class="text-center text-light">FAQ</h2>
+            <div class="accordion accordion-flush" id="questions">
+                <!--Item 1-->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                      Can i book a bus prior to the travel date
+                    </button>
+                  </h2>
+                  <div id="flush-collapseOne" class="accordion-collapse collapse text-success" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">Yes you can through any internet-enabled device. Once you register on our website, all these services are available to you.</div>
+                  </div>
+                </div>
+                <!--Item 2-->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="flush-headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                      How easily can i manouvre through the system?
+                    </button>
+                  </h2>
+                  <div id="flush-collapseTwo" class="accordion-collapse collapse text-success" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">The whole process is guided. This makes it easy for both a new and existing user to interact with the system.</div>
+                  </div>
+                </div>
+                <!--Item 3-->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="flush-headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                      Can i access my travel and courier history for future reference?
+                    </button>
+                  </h2>
+                  <div id="flush-collapseThree" class="accordion-collapse collapse text-success" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">You can easily retrieve your history and gain access to your previously fulfilled services</div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </section>
+
+    <!--Contact and map-->
+    <section class="p-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md">
+                    <h2 class="text-center mb-4">Contact Info</h2>
+                    <ul class="list-group list-group-flush lead">
+                        <li class="list-group-item">
+                            <span class="fw-bold"> Main Location:</span> Kenya Railways Nairobi
+                        </li>
+                        <li class="list-group-item">
+                            <span class="fw-bold"> Contact:</span> 0738200300 || 0726354300
+                        </li>
+                        <li class="list-group-item">
+                            <span class="fw-bold"> Email:</span> info@easycoachltd.com
+                        </li>
+                        <li class="list-group-item">
+                            <span class="fw-bold"> Our social media handles:</span> @Easycoachltd
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!--Footer-->
+    <section>
+        <footer class="bg-dark p-5 text-white text-center position-relative">
+            <div class="container">
+                <p class="lead">Copyright &copy; 2022 Samuel Baraka Project</p>
+                <a href="" class="position-absolute bottom-0 end-0 p-5">
+                    <i class="bi bi-arrow-up-circle h1"></i>
+                </a>
+            </div>
+        </footer>
+
+        <div class="modal fade" id="signup" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="signup">Our purpose</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Please sign up with us to access our services</p>
+                </div>
+                <div class="modal-footer">
+                  
+                 <a href="signup.html"> <button type="button" class="btn btn-primary">Join us today.</button></a>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+</body>
+</html>

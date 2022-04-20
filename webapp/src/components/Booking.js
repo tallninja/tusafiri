@@ -11,12 +11,11 @@ const Booking = () => {
 	const apiAuth = useApiAuth();
 
 	useEffect(() => {
-		console.log(booking);
 		if (booking.seats) {
 			const makeBooking = async () => {
 				try {
 					const res = await apiAuth.post('/booking-system/bookings', booking);
-					navigate(`/booking/invoice/${res.data._id}`);
+					navigate(`/user/invoices/${res.data._id}`);
 				} catch (err) {
 					console.error(err);
 				}

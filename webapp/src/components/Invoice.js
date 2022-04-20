@@ -58,9 +58,7 @@ const Invoice = () => {
 								invoice.settled ? '' : 'disabled'
 							}`}
 							type='submit'
-							onClick={() =>
-								navigate(`/booking/tickets/${invoice.booking._id}`)
-							}
+							onClick={() => navigate(`/user/tickets/${invoice.booking._id}`)}
 						>
 							Next
 						</button>

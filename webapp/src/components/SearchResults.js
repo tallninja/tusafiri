@@ -3,11 +3,16 @@ import { useEffect, useState } from 'react';
 import { searchJourneys } from '../api';
 import useQuery from '../hooks/useQuery';
 import JourneysTable from './JourneysTable';
-import NoResults from './NoResults';
 import Search from './Search';
+
+import NoResults from './NoResults';
+import Spinner from './Spinner';
+import Error from './Error';
 
 const SearchResults = () => {
 	const [journeys, setJourneys] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 	const query = useQuery();
 
 	useEffect(() => {
@@ -21,8 +26,11 @@ const SearchResults = () => {
 			try {
 				const results = await searchJourneys(search);
 				setJourneys(results);
+				setIsLoading(false);
 			} catch (err) {
 				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		};
 
@@ -54,8 +62,12 @@ const SearchResults = () => {
 						<h2>{new Date(query.get('date')).toDateString()}</h2>
 					</div>
 				</div>
-				{journeys.length ? (
+				{!isLoading && journeys.length ? (
 					<JourneysTable journeys={journeys} />
+				) : isLoading ? (
+					<Spinner />
+				) : isError ? (
+					<Error />
 				) : (
 					<NoResults />
 				)}

@@ -62,7 +62,7 @@ const Journey = () => {
 		e.preventDefault();
 		let seats = selectedSeats.map((seat) => seat._id);
 		setBooking({ journey: journey._id, seats, tickets });
-		navigate('/booking');
+		navigate('/user/booking');
 	};
 
 	return (

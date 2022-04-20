@@ -45,9 +45,7 @@ exports.getUserInvoices = async (req, res) => {
 	const user = req.headers['x-user'];
 
 	try {
-		const userInvoices = await Invoice.find({ user })
-			.populate(['booking'])
-			.exec();
+		const userInvoices = await Invoice.find({ user }).sort('-createdAt').exec();
 		return res.status(Sc.OK).json(userInvoices);
 	} catch (err) {
 		return handleError(err, res);
