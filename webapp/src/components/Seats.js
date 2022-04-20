@@ -45,12 +45,13 @@ const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 	}, [journey]);
 
 	useEffect(() => {
-		if (seats.length && bookedSeats.length) setIsLoading(false);
+		console.log('rerender');
+		if (seats.length) setIsLoading(false);
 	}, [seats, bookedSeats]);
 
 	return (
 		<>
-			{!isLoading && seats.length && bookedSeats.length ? (
+			{!isLoading && seats.length ? (
 				<div className='row'>
 					{seats.map((seat, idx) => (
 						<div
