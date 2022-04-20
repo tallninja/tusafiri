@@ -2,19 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { getLocations, deleteLocation } from '../../../api';
+
 import NoResults from '../../NoResults';
+import Spinner from '../../Spinner';
+import Error from '../../Error';
 
 export const Locations = () => {
 	const [locations, setLocations] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		(async () => {
-			let res = await getLocations();
-			if (res.status === 200) {
+			try {
+				let res = await getLocations();
 				setLocations(res.data);
-			} else {
-				console.log(res.data);
+				setIsLoading(false);
+			} catch (err) {
+				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, []);
@@ -50,7 +59,7 @@ export const Locations = () => {
 					</Link>
 				</div>
 			</div>
-			{locations.length ? (
+			{!isLoading && locations.length ? (
 				<div className='table-responsive'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -85,15 +94,6 @@ export const Locations = () => {
 												: '-'}
 										</td>
 										<td>
-											{/* <button
-											type='button'
-											className='btn btn-outline-dark btn-sm mx-1'
-											data-bs-toggle='tooltip'
-											data-bs-placement='top'
-											title='view'
-										>
-											<i className='fa-solid fa-eye'></i>
-										</button> */}
 											<button
 												type='button'
 												className='btn btn-warning btn-sm mx-1'
@@ -121,6 +121,10 @@ export const Locations = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
 
 import { getInvoices, deleteInvoice } from '../../api';
+
 import NoResults from '../NoResults';
+import Spinner from '../Spinner';
+import Error from '../Error';
 
 export const Invoices = () => {
 	const [invoices, setInvoices] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 
 	useEffect(() => {
 		(async () => {
 			let res = await getInvoices();
 			if (res.status === 200) {
 				setInvoices(res.data);
+				setIsLoading(false);
 			} else {
 				console.log(res.data);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, []);
@@ -33,7 +41,7 @@ export const Invoices = () => {
 			<div className='d-flex justify-content-between pt-3 pb-2 mb-3 border-bottom'>
 				<h2>Invoices</h2>
 			</div>
-			{invoices.length ? (
+			{!isLoading && invoices.length ? (
 				<div className='table-responsive'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -107,6 +115,10 @@ export const Invoices = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

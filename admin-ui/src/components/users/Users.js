@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import useApiAuth from '../../hooks/useApiAuth';
 import useAuth from '../../hooks/useAuth';
+
 import NoResults from '../NoResults';
+import Spinner from '../Spinner';
+import Error from '../Error';
 
 export const Users = () => {
 	const [users, setUsers] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 
 	const apiAuth = useApiAuth();
 	const { auth } = useAuth();
@@ -15,9 +20,11 @@ export const Users = () => {
 			try {
 				let res = await apiAuth.get('/api/users');
 				setUsers(res.data);
-				console.log(res.data);
+				setIsLoading(false);
 			} catch (err) {
 				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, [apiAuth]);
@@ -110,6 +117,10 @@ export const Users = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

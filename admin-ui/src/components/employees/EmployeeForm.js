@@ -34,11 +34,11 @@ export const EmployeeForm = ({ onSubmit, initialValues, action }) => {
 				break;
 
 			case ROLES.snmManagers:
-				setEmployeeData((data) => ({ ...data, role: 'help-desk' }));
+				setEmployeeData((data) => ({ ...data, role: 'snm-manager' }));
 				break;
 
 			case ROLES.helpDesk:
-				setEmployeeData((data) => ({ ...data, role: 'snm-manager' }));
+				setEmployeeData((data) => ({ ...data, role: 'help-desk' }));
 				break;
 
 			default:

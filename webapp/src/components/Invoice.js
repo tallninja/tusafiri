@@ -47,8 +47,8 @@ const Invoice = () => {
 			const res = await apiAuth.get(
 				`/booking-system/invoices/booking/${booking}`
 			);
-			if (res.data.settled) navigate(`/booking/tickets/${invoice.booking._id}`);
-			else navigate('/');
+			if (res.data.settled) navigate(`/user/tickets/${invoice.booking._id}`);
+			else navigate('/home');
 		} catch (err) {
 			console.error(err);
 		}
@@ -71,9 +71,7 @@ const Invoice = () => {
 								invoice.settled ? '' : 'disabled'
 							}`}
 							type='submit'
-							onClick={() =>
-								navigate(`/booking/tickets/${invoice.booking._id}`)
-							}
+							onClick={() => navigate(`/user/tickets/${invoice.booking._id}`)}
 						>
 							Next
 						</button>

@@ -2,20 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { getBuses, deleteBus } from '../../../api';
+
 import NoResults from '../../NoResults';
+import Spinner from '../../Spinner';
+import Error from '../../Error';
 
 export const Buses = () => {
 	const [buses, setBuses] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		(async () => {
-			let res = await getBuses();
-			if (res.status === 200) {
+			try {
+				let res = await getBuses();
 				setBuses(res.data);
-			} else {
-				console.log(res.data);
-				window.alert(JSON.stringify(res.data));
+				setIsLoading(false);
+			} catch (err) {
+				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, []);
@@ -49,7 +57,7 @@ export const Buses = () => {
 					</Link>
 				</div>
 			</div>
-			{buses.length ? (
+			{!isLoading && buses.length ? (
 				<div className='table-responsive'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -120,6 +128,10 @@ export const Buses = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

@@ -3,24 +3,33 @@ import { useEffect, useState } from 'react';
 import { api } from '../api/api';
 
 import Spinner from './Spinner';
+import NoResults from './NoResults';
+import Error from './Error';
 
 const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 	const [seats, setSeats] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
 	const [bookedSeats, setBookedSeats] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 
 	useEffect(() => {
 		if (journey._id) {
-			const getBusSeats = async () => {
+			(async () => {
 				try {
 					const res = await api.get(`/fleets/buses/seats/${journey.bus._id}`);
 					setSeats(res.data);
 				} catch (err) {
 					console.error(err);
+					setIsLoading(false);
+					setIsError(true);
 				}
-			};
+			})();
+		}
+	}, [journey]);
 
-			const getBookedSeats = async () => {
+	useEffect(() => {
+		if (journey._id) {
+			(async () => {
 				try {
 					const res = await api.get(
 						`/fleets/journeys/${journey._id}/booked-seats`
@@ -28,21 +37,20 @@ const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 					setBookedSeats(res.data);
 				} catch (err) {
 					console.err(err);
+					setIsLoading(false);
+					setIsError(true);
 				}
-			};
-
-			getBusSeats();
-			getBookedSeats();
-		} else {
-			setIsLoading(false);
+			})();
 		}
 	}, [journey]);
 
+	useEffect(() => {
+		if (seats.length && bookedSeats.length) setIsLoading(false);
+	}, [seats, bookedSeats]);
+
 	return (
 		<>
-			{isLoading ? (
-				<Spinner />
-			) : (
+			{!isLoading && seats.length && bookedSeats.length ? (
 				<div className='row'>
 					{seats.map((seat, idx) => (
 						<div
@@ -66,6 +74,12 @@ const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 						</div>
 					))}
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
+			) : (
+				<NoResults />
 			)}
 		</>
 	);

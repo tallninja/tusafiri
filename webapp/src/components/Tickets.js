@@ -3,15 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import useApiAuth from '../hooks/useApiAuth';
 
-import NoResults from './NoResults';
 import Spinner from './Spinner';
+import NoResults from './NoResults';
+import Error from './Error';
 
 const Tickets = () => {
 	const [tickets, setTickets] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const { booking } = useParams();
+	const [isError, setIsError] = useState(false);
 
 	const navigate = useNavigate();
+	const { booking } = useParams();
 	const apiAuth = useApiAuth();
 
 	useEffect(() => {
@@ -28,6 +30,8 @@ const Tickets = () => {
 				}
 			} catch (err) {
 				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, [booking, apiAuth, navigate]);
@@ -90,6 +94,8 @@ const Tickets = () => {
 				</div>
 			) : isLoading ? (
 				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 import useApiAuth from '../../hooks/useApiAuth';
+
 import NoResults from '../NoResults';
+import Spinner from '../Spinner';
+import Error from '../Error';
 
 export const Payments = () => {
 	const [payments, setPayments] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 
 	const apiAuth = useApiAuth();
 
@@ -13,8 +18,11 @@ export const Payments = () => {
 			try {
 				let res = await apiAuth.get('/booking-system/payments');
 				setPayments(res.data);
+				setIsLoading(false);
 			} catch (err) {
 				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, [apiAuth]);
@@ -24,7 +32,7 @@ export const Payments = () => {
 			<div className='d-flex justify-content-between pt-3 pb-2 mb-3 border-bottom'>
 				<h2>Payments</h2>
 			</div>
-			{payments.length ? (
+			{!isLoading && payments.length ? (
 				<div className='table-responsive'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -59,6 +67,10 @@ export const Payments = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

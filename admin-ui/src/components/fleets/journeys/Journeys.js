@@ -2,19 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { getJourneys, deleteJourney } from '../../../api';
+
 import NoResults from '../../NoResults';
+import Spinner from '../../Spinner';
+import Error from '../../Error';
 
 export const Journeys = () => {
 	const [journeys, setJourneys] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		(async () => {
-			let res = await getJourneys();
-			if (res.status === 200) {
+			try {
+				let res = await getJourneys();
 				setJourneys(res.data);
-			} else {
-				console.log(res.data);
+				setIsLoading(false);
+			} catch (err) {
+				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, []);
@@ -48,7 +57,7 @@ export const Journeys = () => {
 					</Link>
 				</div>
 			</div>
-			{journeys.length ? (
+			{!isLoading && journeys.length ? (
 				<div className='table-responsive-lg'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -181,6 +190,10 @@ export const Journeys = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import useApiAuth from '../../hooks/useApiAuth';
 import useAuth from '../../hooks/useAuth';
+
 import NoResults from '../NoResults';
+import Spinner from '../Spinner';
+import Error from '../Error';
 
 export const Tickets = () => {
 	const [tickets, setTickets] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 
 	const apiAuth = useApiAuth();
 	const { auth } = useAuth();
@@ -15,8 +20,11 @@ export const Tickets = () => {
 			try {
 				let res = await apiAuth.get('/booking-system/tickets');
 				setTickets(res.data);
+				setIsLoading(false);
 			} catch (err) {
 				console.error(err);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, [apiAuth]);
@@ -41,7 +49,7 @@ export const Tickets = () => {
 			<div className='d-flex justify-content-between pt-3 pb-2 mb-3 border-bottom'>
 				<h2>Tickets</h2>
 			</div>
-			{tickets.length ? (
+			{!isLoading && tickets.length ? (
 				<div className='table-responsive'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -97,6 +105,10 @@ export const Tickets = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

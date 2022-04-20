@@ -9,11 +9,15 @@ import {
 } from '../../api';
 
 import NoResults from '../NoResults';
+import Spinner from '../Spinner';
+import Error from '../Error';
 
 export const Employees = () => {
 	const [employees, setEmployees] = useState([]);
-	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 
+	const navigate = useNavigate();
 	const { role } = useParams();
 
 	useEffect(() => {
@@ -47,8 +51,11 @@ export const Employees = () => {
 			let res = await getEmployees();
 			if (res.status === 200) {
 				setEmployees(res.data);
+				setIsLoading(false);
 			} else {
 				console.log(res.data);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, [role]);
@@ -84,7 +91,7 @@ export const Employees = () => {
 					</Link>
 				</div>
 			</div>
-			{employees.length ? (
+			{!isLoading && employees.length ? (
 				<div className='table-responsive-xl'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -161,6 +168,10 @@ export const Employees = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}

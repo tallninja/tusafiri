@@ -2,18 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { getBookings, deleteBooking } from '../../api';
+
 import NoResults from '../NoResults';
+import Spinner from '../Spinner';
+import Error from '../Error';
 
 export const Bookings = () => {
 	const [bookings, setBookings] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 
 	useEffect(() => {
 		(async () => {
 			let res = await getBookings();
 			if (res.status === 200) {
 				setBookings(res.data);
+				setIsLoading(false);
 			} else {
 				console.log(res.data);
+				setIsLoading(false);
+				setIsError(true);
 			}
 		})();
 	}, []);
@@ -43,7 +51,7 @@ export const Bookings = () => {
 					</Link>
 				</div>
 			</div>
-			{bookings.length ? (
+			{!isLoading && bookings.length ? (
 				<div className='table-responsive'>
 					<table className='table table-striped table-sm'>
 						<thead>
@@ -107,6 +115,10 @@ export const Bookings = () => {
 						</tbody>
 					</table>
 				</div>
+			) : isLoading ? (
+				<Spinner />
+			) : isError ? (
+				<Error />
 			) : (
 				<NoResults />
 			)}
