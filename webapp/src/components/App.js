@@ -15,6 +15,7 @@ import Journey from './Journey';
 import Tickets from './Tickets';
 import UserBookings from './UserBookings';
 import UserInvoices from './UserInvoices';
+import LandingPage from './LandingPage';
 
 const App = () => {
 	return (
@@ -23,7 +24,8 @@ const App = () => {
 			<Route path='/register' element={<Signup />} />
 			<Route element={<PersistLogin />}>
 				<Route path='/' element={<AppWrapper />}>
-					<Route index element={<Home />} />
+					<Route index element={<LandingPage />} />
+					<Route path='home' element={<Home />} />
 					<Route path='search' element={<SearchResults />} />
 					<Route path='journeys/:id' element={<Journey />} />
 					<Route path='user' element={<ProtectedRoute />}>

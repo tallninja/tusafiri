@@ -12,7 +12,7 @@ const Navbar = () => {
 	return (
 		<nav className='navbar navbar-expand-lg navbar-light bg-white py-md-4'>
 			<div className='container-fluid'>
-				<Link to='/' className='navbar-brand'>
+				<Link to='/home' className='navbar-brand'>
 					<span id='logo-span'>
 						<i className='fa-solid fa-bus'></i> Easy
 					</span>{' '}
@@ -32,22 +32,22 @@ const Navbar = () => {
 				<div className='collapse navbar-collapse' id='navbarNav'>
 					<ul className='navbar-nav mx-auto'>
 						<li className='nav-item'>
-							<Link to='/' className='nav-link active' aria-current='page'>
+							<Link to='/home' className='nav-link active' aria-current='page'>
 								Home
 							</Link>
 						</li>
 						<li className='nav-item'>
-							<Link to='/' className='nav-link'>
+							<Link to='#about' className='nav-link'>
 								About Us
 							</Link>
 						</li>
 						<li className='nav-item'>
-							<Link to='/' className='nav-link'>
+							<Link to='#contact' className='nav-link'>
 								Contact Us
 							</Link>
 						</li>
 						<li className='nav-item'>
-							<Link to='/' className='nav-link'>
+							<Link to='#faq' className='nav-link'>
 								FAQs
 							</Link>
 						</li>
@@ -81,7 +81,7 @@ const Navbar = () => {
 											</Link>
 										</li>
 										<li>
-											<Link to='/' className='dropdown-item'>
+											<Link to='/home' className='dropdown-item'>
 												<i className='fa-solid fa-user'></i> Profile
 											</Link>
 										</li>
