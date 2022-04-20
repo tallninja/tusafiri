@@ -41,6 +41,19 @@ exports.getInvoices = async (req, res) => {
 	}
 };
 
+exports.getUserInvoices = async (req, res) => {
+	const user = req.headers['x-user'];
+
+	try {
+		const userInvoices = await Invoice.find({ user })
+			.populate(['booking'])
+			.exec();
+		return res.status(Sc.OK).json(userInvoices);
+	} catch (err) {
+		return handleError(err, res);
+	}
+};
+
 exports.deleteInvoice = async (req, res) => {
 	const { id } = req.query;
 
