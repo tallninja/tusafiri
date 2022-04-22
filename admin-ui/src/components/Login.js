@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { signin } from '../api';
 import useAuth from '../hooks/useAuth';
@@ -27,6 +28,7 @@ const Login = () => {
 			setEmail('');
 			setPassword('');
 			console.error(err);
+			toast.error(err.response.data);
 		}
 	};
 

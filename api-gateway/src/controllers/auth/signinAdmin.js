@@ -7,8 +7,11 @@ const { User, SYSTEM_ROLES, RefreshToken } = require('../../models');
 const { auth } = require('../../../config');
 
 const handleError = (err, res) => {
+	if (err.isJoi) {
+		return res.status(Sc.BAD_REQUEST).json({ message: err.details[0].message });
+	}
 	console.log('Error:', err);
-	res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
+	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
 };
 
 const SigninSchema = Joi.object({

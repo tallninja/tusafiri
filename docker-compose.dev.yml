@@ -108,7 +108,7 @@ services:
       context: ./webapp
       dockerfile: ./Dockerfile.dev
     volumes:
-      # - /app/node_modules
+      - /app/node_modules
       - ./webapp:/app
     ports:
       - 3000:3000
