@@ -7,3 +7,5 @@ export * from './bookings';
 export * from './auth';
 
 export * from './users';
+
+export * from './feedback';

@@ -6,8 +6,13 @@ const { Feedback, FeedbackType, FEEDBACK_TYPES } = require('../models');
 const handleError = require('../utils/handleError');
 
 const FeedbackSchema = Joi.object({
+	firstName: Joi.string().optional(),
+	lastName: Joi.string().optional(),
+	phoneNo: Joi.string().optional(),
+	email: Joi.string()
+		.email({ allowFullyQualified: ['.com', '.ke', '.edu'] })
+		.optional(),
 	type: Joi.string(),
-	email: Joi.string().email({ allowFullyQualified: ['.com', '.ke', '.edu'] }),
 	title: Joi.string(),
 	content: Joi.string(),
 });

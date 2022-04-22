@@ -69,6 +69,8 @@ services:
       dockerfile: ./Dockerfile.dev
     environment:
       - DB_URI=${DB_URI}
+    ports:
+      - 5002:5002
     volumes:
       - /app/node_modules
       - ./feedback-system:/app

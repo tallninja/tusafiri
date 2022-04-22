@@ -9,16 +9,34 @@ module.exports = async (req, res) => {
 
 	try {
 		if (!type) {
-			const feedbacks = await Feedback.find().exec();
+			const feedbacks = await Feedback.find()
+				.sort('-createdAt')
+				.populate(['type'])
+				.exec();
 
 			return res.status(Sc.OK).json(feedbacks);
+		}
+
+		if (type === FEEDBACK_TYPES.suggestion) {
+			const feedbackType = await FeedbackType.findOne({
+				name: FEEDBACK_TYPES.suggestion,
+			}).exec();
+			const suggestions = await Feedback.find({ type: feedbackType._id })
+				.sort('-createdAt')
+				.populate(['type'])
+				.exec();
+
+			return res.status(Sc.OK).json(suggestions);
 		}
 
 		if (type === FEEDBACK_TYPES.query) {
 			const feedbackType = await FeedbackType.findOne({
 				name: FEEDBACK_TYPES.query,
 			}).exec();
-			const queries = await Feedback.find({ type: feedbackType._id }).exec();
+			const queries = await Feedback.find({ type: feedbackType._id })
+				.sort('-createdAt')
+				.populate(['type'])
+				.exec();
 
 			return res.status(Sc.OK).json(queries);
 		}
@@ -29,7 +47,10 @@ module.exports = async (req, res) => {
 			}).exec();
 			const complements = await Feedback.find({
 				type: feedbackType._id,
-			}).exec();
+			})
+				.sort('-createdAt')
+				.populate(['type'])
+				.exec();
 
 			return res.status(Sc.OK).json(complements);
 		}
@@ -38,7 +59,10 @@ module.exports = async (req, res) => {
 			const feedbackType = await FeedbackType.findOne({
 				name: FEEDBACK_TYPES.complaint,
 			}).exec();
-			const complaints = await Feedback.find({ type: feedbackType._id }).exec();
+			const complaints = await Feedback.find({ type: feedbackType._id })
+				.sort('-createdAt')
+				.populate(['type'])
+				.exec();
 
 			return res.status(Sc.OK).json(complaints);
 		}

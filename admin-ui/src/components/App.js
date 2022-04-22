@@ -20,6 +20,7 @@ import { Bookings, CreateBooking, Invoices } from './bookings';
 import { Users } from './users';
 import { Payments } from './payments';
 import { Tickets } from './tickets';
+import { Feedbacks, Feedback, CreateFeedback } from './feedbacks';
 
 const queryClient = new QueryClient();
 
@@ -86,6 +87,12 @@ const App = () => {
 
 							<Route path='users'>
 								<Route index element={<Users />} />
+							</Route>
+
+							<Route path='feedbacks'>
+								<Route index element={<Feedbacks />} />
+								<Route path=':id' element={<Feedback />} />
+								<Route path='new' element={<CreateFeedback />} />
 							</Route>
 							<Route path='/*' element={<PageNotFound />} />
 						</Route>

@@ -113,6 +113,12 @@ const Navbar = () => {
 							Users
 						</Link>
 					</li>
+					<li className='nav-item'>
+						<Link to='/feedbacks' className='nav-link' href='#'>
+							<span data-feather='layers'></span>
+							Feedbacks
+						</Link>
+					</li>
 				</ul>
 			</div>
 		</nav>

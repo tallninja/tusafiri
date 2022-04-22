@@ -6,6 +6,7 @@ const FeedbackTypeSchema = new mongoose.Schema({
 });
 
 const FEEDBACK_TYPES = {
+	suggestion: 'suggestion',
 	query: 'query',
 	complaint: 'complaint',
 	complement: 'complement',
