@@ -80,15 +80,19 @@ export const Invoices = () => {
 										</td>
 										<td>
 											{invoice.settled ? (
-												<i
-													class='fa-solid fa-check'
-													style={{ color: 'green' }}
-												></i>
+												<h4>
+													<i
+														class='fa-solid fa-check'
+														style={{ color: 'green' }}
+													></i>
+												</h4>
 											) : (
-												<i
-													class='fa-solid fa-xmark'
-													style={{ color: 'red' }}
-												></i>
+												<h4>
+													<i
+														class='fa-solid fa-xmark'
+														style={{ color: 'red' }}
+													></i>
+												</h4>
 											)}
 										</td>
 										<td>

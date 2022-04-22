@@ -82,7 +82,11 @@ export const Feedbacks = () => {
 									<tr key={idx}>
 										<td>{idx + 1}</td>
 										<td>{feedback.type?.name || '-'}</td>
-										<td>{feedback.title.slice(0, 11) + '...' || '-'}</td>
+										<td>
+											{feedback.title.length > 10
+												? feedback.title.slice(0, 11) + '...'
+												: feedback.title || '-'}
+										</td>
 										<td>{feedback.firstName || '-'}</td>
 										<td>{feedback.lastName || '-'}</td>
 										<td>{feedback.phoneNo || '-'}</td>

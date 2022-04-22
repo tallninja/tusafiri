@@ -51,6 +51,11 @@ const Navbar = () => {
 								FAQs
 							</Link>
 						</li>
+						<li className='nav-item'>
+							<Link to='/feedback' className='nav-link'>
+								Feedback
+							</Link>
+						</li>
 					</ul>
 					{auth.accessToken ? (
 						<>

@@ -80,15 +80,19 @@ export const Bookings = () => {
 										<td>{booking.seats.map((seat) => seat.number + ', ')}</td>
 										<td>
 											{booking.paid ? (
-												<i
-													className='fa-solid fa-check'
-													style={{ color: 'green' }}
-												></i>
+												<h4>
+													<i
+														className='fa-solid fa-check'
+														style={{ color: 'green' }}
+													></i>
+												</h4>
 											) : (
-												<i
-													className='fa-solid fa-xmark'
-													style={{ color: 'red' }}
-												></i>
+												<h4>
+													<i
+														className='fa-solid fa-xmark'
+														style={{ color: 'red' }}
+													></i>
+												</h4>
 											)}
 										</td>
 										<td>

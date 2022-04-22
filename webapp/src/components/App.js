@@ -19,6 +19,7 @@ import Tickets from './Tickets';
 import TicketView from './TicketView';
 import UserBookings from './UserBookings';
 import UserInvoices from './UserInvoices';
+import Feedback from './Feedback';
 
 toast.configure({ pauseOnHover: false, limit: 3 });
 
@@ -49,6 +50,7 @@ const App = () => {
 
 						<Route path='tickets/:booking' element={<Tickets />} />
 					</Route>
+					<Route path='feedback' element={<Feedback />} />
 					<Route path='/*' element={<PageNotFound />} />
 					<Route path='/tickets/:id' element={<TicketView />} />
 				</Route>
