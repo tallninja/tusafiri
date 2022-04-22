@@ -3,10 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { User, SystemRole } = require('../../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 exports.getUsers = async (req, res) => {
 	try {

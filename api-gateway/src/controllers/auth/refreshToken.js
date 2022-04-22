@@ -4,10 +4,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 const { RefreshToken, User } = require('../../models');
 const { auth } = require('../../../config');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 module.exports = async (req, res) => {
 	try {

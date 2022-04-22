@@ -2,10 +2,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Location } = require('../../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
-};
+const handleError = require('../../utils/handleError');
 
 module.exports = async (req, res) => {
 	const { count } = req.query;

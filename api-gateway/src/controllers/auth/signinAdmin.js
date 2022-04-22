@@ -6,13 +6,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 const { User, SYSTEM_ROLES, RefreshToken } = require('../../models');
 const { auth } = require('../../../config');
 
-const handleError = (err, res) => {
-	if (err.isJoi) {
-		return res.status(Sc.BAD_REQUEST).json({ message: err.details[0].message });
-	}
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 const SigninSchema = Joi.object({
 	email: Joi.string().email({ allowFullyQualified: ['.com'] }),

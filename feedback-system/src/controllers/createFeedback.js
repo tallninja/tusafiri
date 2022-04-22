@@ -3,10 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Feedback, FeedbackType, FEEDBACK_TYPES } = require('../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../utils/handleError');
 
 const FeedbackSchema = Joi.object({
 	type: Joi.string(),

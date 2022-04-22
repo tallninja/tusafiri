@@ -3,10 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Employee } = require('../../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json({ error: err });
-};
+const handleError = require('../../utils/handleError');
 
 const EditEmployeeSchema = Joi.object({
 	firstName: Joi.string(),

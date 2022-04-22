@@ -11,10 +11,7 @@ const {
 	Invoice,
 } = require('../../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 const CreateBookingSchema = Joi.object({
 	journey: Joi.string(),

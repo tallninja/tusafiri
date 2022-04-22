@@ -4,10 +4,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { User, SystemRole, SYSTEM_ROLES } = require('../../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 const SignupSchema = Joi.object({
 	firstName: Joi.string(),

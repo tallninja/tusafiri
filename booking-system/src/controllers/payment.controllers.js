@@ -4,10 +4,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 const { Payment, Invoice, Booking, User } = require('../models');
 const { intersection } = require('lodash');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../utils/handleError');
 
 const PaymentSchema = Joi.object({
 	amountPaid: Joi.number(),

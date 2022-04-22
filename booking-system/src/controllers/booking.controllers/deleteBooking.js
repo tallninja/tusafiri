@@ -3,10 +3,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Booking, Invoice } = require('../../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 module.exports = async (req, res) => {
 	const { id } = req.params;

@@ -4,10 +4,7 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Journey, Bus, Route, Role, Employee, Seat } = require('../../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 const CreateJourneySchema = Joi.object({
 	bus: Joi.string(),

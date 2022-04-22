@@ -3,10 +3,7 @@ const { StatusCodes: Sc, METHOD_FAILURE } = require('http-status-codes');
 
 const { Journey, Route, Location } = require('../../models');
 
-const handleError = (err, res) => {
-	console.log('Error:', err);
-	return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 const SearchSchema = Joi.object({
 	from: Joi.string().length(3),

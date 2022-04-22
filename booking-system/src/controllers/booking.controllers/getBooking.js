@@ -2,25 +2,22 @@ const { StatusCodes: Sc } = require('http-status-codes');
 
 const { Booking } = require('../../models');
 
-const handleError = (err, res) => {
-  console.log('Error:', err);
-  return res.status(Sc.INTERNAL_SERVER_ERROR).json(err);
-};
+const handleError = require('../../utils/handleError');
 
 module.exports = async (req, res) => {
-  const { id } = req.params;
+	const { id } = req.params;
 
-  try {
-    let booking = await Booking.findById(id)
-      .populate(['journey', 'seats'])
-      .exec();
+	try {
+		let booking = await Booking.findById(id)
+			.populate(['journey', 'seats'])
+			.exec();
 
-    if (!booking) {
-      return res.status(Sc.BAD_REQUEST).json({ message: 'Booking not found.' });
-    }
+		if (!booking) {
+			return res.status(Sc.BAD_REQUEST).json({ message: 'Booking not found.' });
+		}
 
-    return res.status(Sc.OK).json(booking);
-  } catch (err) {
-    return handleError(err, res);
-  }
+		return res.status(Sc.OK).json(booking);
+	} catch (err) {
+		return handleError(err, res);
+	}
 };
