@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './index.css';
 import AppWrapper from './AppWrapper';
@@ -17,6 +19,8 @@ import Tickets from './Tickets';
 import TicketView from './TicketView';
 import UserBookings from './UserBookings';
 import UserInvoices from './UserInvoices';
+
+toast.configure({ pauseOnHover: false, limit: 3 });
 
 const App = () => {
 	return (

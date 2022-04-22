@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { searchJourneys } from '../api';
 import useQuery from '../hooks/useQuery';
@@ -29,9 +30,10 @@ const SearchResults = () => {
 				setJourneys(results);
 				setIsLoading(false);
 			} catch (err) {
-				console.error(err);
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		};
 

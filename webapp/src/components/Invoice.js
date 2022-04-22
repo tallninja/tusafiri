@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import useAuth from '../hooks/useAuth';
 import { deleteInvoice } from '../api';
@@ -26,7 +27,8 @@ const Invoice = () => {
 				if (res.data) setInvoice(res.data);
 				else navigate('/');
 			} catch (err) {
-				console.error(err);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		};
 
@@ -37,8 +39,10 @@ const Invoice = () => {
 		try {
 			await deleteInvoice(invoice._id);
 			navigate('/');
+			toast.info('Your booking has been cancelled.');
 		} catch (err) {
-			console.error(err);
+			console.error(err?.response?.data);
+			toast.error(err?.response?.data?.message || 'An error occured.');
 		}
 	};
 
@@ -48,9 +52,13 @@ const Invoice = () => {
 				`/booking-system/invoices/booking/${booking}`
 			);
 			if (res.data.settled) navigate(`/user/tickets/${invoice.booking._id}`);
-			else navigate('/home');
+			else {
+				navigate('/home');
+				toast.info('Your booking has expired.');
+			}
 		} catch (err) {
-			console.error(err);
+			console.error(err?.response?.data);
+			toast.error(err?.response?.data?.message || 'An error occured.');
 		}
 	};
 

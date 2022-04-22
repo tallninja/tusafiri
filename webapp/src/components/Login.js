@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { signin } from '../api';
 import useAuth from '../hooks/useAuth';
@@ -20,11 +21,11 @@ const Login = () => {
 		try {
 			const res = await signin({ email, password });
 			setAuth(res.data);
-			setEmail('');
-			setPassword('');
 			navigate(from, { replace: true });
+			toast.success('Login successful.');
 		} catch (err) {
-			console.error(err);
+			console.error(err?.response?.data);
+			toast.error(err?.response?.data?.message || 'An error occured.');
 		}
 	};
 

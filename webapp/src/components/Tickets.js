@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import useApiAuth from '../hooks/useApiAuth';
 
@@ -29,9 +30,10 @@ const Tickets = () => {
 					setIsLoading(false);
 				}
 			} catch (err) {
-				console.error(err);
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [booking, apiAuth, navigate]);

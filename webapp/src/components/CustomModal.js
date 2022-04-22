@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Modal } from 'react-bootstrap';
 
@@ -10,7 +10,11 @@ const CustomModal = ({
 	showModal,
 	size,
 }) => {
-	const [show, setShow] = useState(showModal || false);
+	const [show, setShow] = useState(false);
+
+	useEffect(() => {
+		setShow(showModal);
+	}, [showModal]);
 
 	return (
 		<Modal

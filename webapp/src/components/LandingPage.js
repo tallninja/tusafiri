@@ -61,7 +61,7 @@ const LandingPage = () => {
 							<div className='card bg-dark text-light'>
 								<div className='card-body text-center'>
 									<div className='h1 mb-3'>
-										<i class='fa-solid fa-map-location-dot'></i>
+										<i className='fa-solid fa-map-location-dot'></i>
 									</div>
 									<h3 className='card-title'>Travel</h3>
 									<p className='card-text'>

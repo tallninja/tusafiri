@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import LocationsSelect from './LocationsSelect';
 import { getLocations } from '../api';
@@ -23,7 +24,8 @@ const Search = ({ defaultValues }) => {
 				const locations = await getLocations();
 				setLocations(locations);
 			} catch (err) {
-				console.error(err);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [defaultValues]);

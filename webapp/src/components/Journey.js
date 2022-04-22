@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api/api';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
+import { api } from '../api/api';
 import useBooking from '../hooks/useBooking';
 import useAuth from '../hooks/useAuth';
-import { useParams } from 'react-router-dom';
 
 import Seats from './Seats';
 import JourneyDetails from './JourneyDetails';
@@ -27,7 +28,8 @@ const Journey = () => {
 				const res = await api.get(`/fleets/journeys/${params.id}`);
 				setJourney(res.data);
 			} catch (err) {
-				console.error(err);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [params]);

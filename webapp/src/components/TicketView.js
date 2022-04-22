@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -21,7 +22,8 @@ const TicketView = () => {
 				const res = await apiAuth.get(`/booking-system/tickets/${id}`);
 				setTicket(res.data);
 			} catch (err) {
-				console.error(err);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 				navigate(-1);
 			}
 		})();

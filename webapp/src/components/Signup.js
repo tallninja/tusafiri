@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { signup } from '../api';
 
 const Signup = () => {
-	const [firstName, setFirstName] = useState(null);
-	const [lastName, setLastName] = useState(null);
-	const [email, setEmail] = useState(null);
-	const [phoneNo, setPhoneNo] = useState(null);
-	const [password, setPassword] = useState(null);
-	const [disabled, setDisabled] = useState(false);
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [email, setEmail] = useState('');
+	const [phoneNo, setPhoneNo] = useState('');
+	const [password, setPassword] = useState('');
+	const [disabled, setDisabled] = useState(true);
 
 	const navigate = useNavigate();
 
@@ -17,11 +18,18 @@ const Signup = () => {
 		e.preventDefault();
 		try {
 			await signup({ firstName, lastName, email, phoneNo, password });
+			toast.success('Account created successfully.');
 			navigate('/login');
 		} catch (err) {
-			console.error(err);
+			console.error(err?.response?.data);
+			toast.error(err?.response?.data?.message || 'An error occured.');
 		}
 	};
+
+	useEffect(() => {
+		if (firstName && lastName && email && phoneNo && password)
+			setDisabled(false);
+	}, [firstName, lastName, email, phoneNo, password]);
 
 	return (
 		<div className='wrap-login container d-flex align-items-center justify-content-center'>

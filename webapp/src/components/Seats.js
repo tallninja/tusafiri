@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { api } from '../api/api';
 
@@ -19,9 +20,10 @@ const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 					const res = await api.get(`/fleets/buses/seats/${journey.bus._id}`);
 					setSeats(res.data);
 				} catch (err) {
-					console.error(err);
 					setIsLoading(false);
 					setIsError(true);
+					console.error(err?.response?.data);
+					toast.error(err?.response?.data?.message || 'An error occured.');
 				}
 			})();
 		}
@@ -36,9 +38,10 @@ const Seats = ({ journey, onSeatClicked, selectedSeats }) => {
 					);
 					setBookedSeats(res.data);
 				} catch (err) {
-					console.err(err);
 					setIsLoading(false);
 					setIsError(true);
+					console.error(err?.response?.data);
+					toast.error(err?.response?.data?.message || 'An error occured.');
 				}
 			})();
 		}
