@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getBookings, deleteBooking } from '../../api';
 
@@ -14,25 +15,28 @@ export const Bookings = () => {
 
 	useEffect(() => {
 		(async () => {
-			let res = await getBookings();
-			if (res.status === 200) {
+			try {
+				const res = await getBookings();
 				setBookings(res.data);
 				setIsLoading(false);
-			} else {
-				console.log(res.data);
+			} catch (err) {
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, []);
 
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure you want to delete this record ?')) {
-			let res = await deleteBooking(id);
-			if (res.status === 200) {
+			try {
+				const res = await deleteBooking(id);
+				toast.success('Booking was deleted.');
 				setBookings(bookings.filter((booking) => booking._id !== res.data._id));
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

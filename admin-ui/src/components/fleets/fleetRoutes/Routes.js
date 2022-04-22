@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getRoutes, deleteRoute } from '../../../api';
 
@@ -17,13 +18,14 @@ export const FleetRoutes = () => {
 	useEffect(() => {
 		(async () => {
 			try {
-				let res = await getRoutes();
+				const res = await getRoutes();
 				setRoutes(res.data);
 				setIsLoading(false);
 			} catch (err) {
-				console.error(err);
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, []);
@@ -34,8 +36,14 @@ export const FleetRoutes = () => {
 
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure you want to delete this record ?')) {
-			let deletedRoute = await deleteRoute(id);
-			setRoutes(routes.filter((route) => route._id !== deletedRoute._id));
+			try {
+				const res = await deleteRoute(id);
+				setRoutes(routes.filter((route) => route._id !== res.data._id));
+				toast.success(`${res.data.name} was deleted.`);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
+			}
 		}
 	};
 

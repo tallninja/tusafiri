@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getJourneys, getJourney } from '../../api';
 import JourneySelect from './JourneySelect';
@@ -26,18 +27,24 @@ export const BookingForm = ({ onSubmit, initialValues, action }) => {
 
 	useEffect(() => {
 		(async () => {
-			let res = await getJourneys();
-			if (res.status === 200) {
+			try {
+				const res = await getJourneys();
 				setJourneys(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, []);
 
 	useEffect(() => {
 		(async () => {
-			let res = await getJourney(bookingData.journey);
-			if (res.status === 200) {
+			try {
+				const res = await getJourney(bookingData.journey);
 				setSelectedJourney(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [bookingData.journey]);

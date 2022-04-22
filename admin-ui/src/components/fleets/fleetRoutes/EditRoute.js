@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getRoute, editRoute } from '../../../api';
 import { RouteForm } from './RouteForm';
@@ -12,15 +13,16 @@ export const EditRoute = () => {
 
 	useEffect(() => {
 		(async () => {
-			let res = await getRoute(id);
-			if (res.status === 200) {
+			try {
+				const res = await getRoute(id);
 				setRouteData({
 					...res.data,
 					from: res.data.from.code,
 					to: res.data.to.code,
 				});
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [id]);
@@ -31,11 +33,13 @@ export const EditRoute = () => {
 				data,
 				Object.keys(data).filter((k) => data[k] !== routeData[k])
 			); // get only the updated fields
-			let res = await editRoute(routeData._id, updateData);
-			if (res.status === 200) {
+			try {
+				const res = await editRoute(routeData._id, updateData);
+				toast.success(`${res.data.name} was updated.`);
 				navigate(-1);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.message);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 import { getInvoices, deleteInvoice } from '../../api';
 
@@ -13,25 +14,28 @@ export const Invoices = () => {
 
 	useEffect(() => {
 		(async () => {
-			let res = await getInvoices();
-			if (res.status === 200) {
+			try {
+				const res = await getInvoices();
 				setInvoices(res.data);
 				setIsLoading(false);
-			} else {
-				console.log(res.data);
+			} catch (err) {
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, []);
 
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure you want to delete this record ?')) {
-			let res = await deleteInvoice(id);
-			if (res.status === 200) {
+			try {
+				const res = await deleteInvoice(id);
 				setInvoices(invoices.filter((invoice) => invoice._id !== res.data._id));
-			} else {
-				console.log(res.data);
+				toast.success('Invoice was deleted.');
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

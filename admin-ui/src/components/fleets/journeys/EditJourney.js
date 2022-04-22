@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getJourney, editJourney } from '../../../api';
 import { JourneyForm } from './JourneyForm';
@@ -32,7 +33,8 @@ export const EditJourney = () => {
 					drivers: drivers,
 				});
 			} catch (err) {
-				console.error(err);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [id]);
@@ -43,12 +45,13 @@ export const EditJourney = () => {
 				data,
 				Object.keys(data).filter((k) => data[k] !== journeyData[k])
 			); // get only the updated fields
-
-			let res = await editJourney(journeyData._id, updateData);
-			if (res.status === 200) {
+			try {
+				await editJourney(journeyData._id, updateData);
+				toast.success('Journey was updated');
 				navigate(-1);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

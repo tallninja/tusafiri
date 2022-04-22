@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 import useApiAuth from '../../hooks/useApiAuth';
 import useAuth from '../../hooks/useAuth';
@@ -22,9 +23,10 @@ export const Tickets = () => {
 				setTickets(res.data);
 				setIsLoading(false);
 			} catch (err) {
-				console.error(err);
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [apiAuth]);
@@ -38,8 +40,10 @@ export const Tickets = () => {
 				setTickets(
 					tickets.filter((ticket) => ticket._id !== deletedTicket._id)
 				);
+				toast.success('Ticket was deleted.');
 			} catch (err) {
-				console.error(err);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

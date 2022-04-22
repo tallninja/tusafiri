@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 import useApiAuth from '../../hooks/useApiAuth';
 import useAuth from '../../hooks/useAuth';
@@ -22,9 +23,10 @@ export const Users = () => {
 				setUsers(res.data);
 				setIsLoading(false);
 			} catch (err) {
-				console.error(err);
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [apiAuth]);
@@ -34,8 +36,10 @@ export const Users = () => {
 			try {
 				const res = await apiAuth.delete(`/api/users/${id}`);
 				setUsers(users.filter((user) => user._id !== res.data._id));
+				toast.success('User was deleted.');
 			} catch (err) {
-				console.error(err);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getLocations } from '../../../api';
 import LocationSelect from './LocationSelect';
@@ -19,7 +20,8 @@ export const RouteForm = ({ onSubmit, initialValues, action }) => {
 				const res = await getLocations();
 				setLocations(res.data);
 			} catch (err) {
-				console.error(err);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, []);

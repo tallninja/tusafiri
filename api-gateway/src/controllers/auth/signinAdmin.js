@@ -25,13 +25,7 @@ module.exports = async (req, res) => {
 		if (!user) {
 			return res
 				.status(Sc.BAD_REQUEST)
-				.json({ message: 'User does not exist.' });
-		}
-
-		if (user.systemRole.name !== SYSTEM_ROLES.admin) {
-			return res
-				.status(Sc.UNAUTHORIZED)
-				.json({ message: 'Admin role required.' });
+				.json({ message: 'Invalid email or password.' });
 		}
 
 		const passwordIsValid = bcrypt.compareSync(
@@ -42,7 +36,13 @@ module.exports = async (req, res) => {
 		if (!passwordIsValid) {
 			return res
 				.status(Sc.BAD_REQUEST)
-				.json({ message: 'Password is invalid.' });
+				.json({ message: 'Invalid email or password.' });
+		}
+
+		if (user.systemRole.name !== SYSTEM_ROLES.admin) {
+			return res
+				.status(Sc.UNAUTHORIZED)
+				.json({ message: 'You are not authorized to access this site !' });
 		}
 
 		const token = jwt.sign({ id: user._id }, auth.jwtSecret, {

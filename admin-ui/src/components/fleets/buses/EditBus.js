@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getBus, editBus } from '../../../api';
 import { BusForm } from './BusForm';
@@ -12,11 +13,12 @@ export const EditBus = () => {
 
 	useEffect(() => {
 		(async () => {
-			let res = await getBus(id);
-			if (res.status === 200) {
+			try {
+				const res = await getBus(id);
 				setBusData(res.data);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [id]);
@@ -27,11 +29,13 @@ export const EditBus = () => {
 				data,
 				Object.keys(data).filter((k) => data[k] !== busData[k])
 			); // get only the updated fields
-			let res = await editBus(busData._id, updateData);
-			if (res.status === 200) {
+			try {
+				const res = await editBus(busData._id, updateData);
+				toast.success(`${res.data.regNo} was updated.`);
 				navigate(-1);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

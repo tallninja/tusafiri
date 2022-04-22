@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getLocations, deleteLocation } from '../../../api';
 
@@ -21,9 +22,10 @@ export const Locations = () => {
 				setLocations(res.data);
 				setIsLoading(false);
 			} catch (err) {
-				console.error(err);
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, []);
@@ -34,13 +36,15 @@ export const Locations = () => {
 
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure you want to delete this record ?')) {
-			let res = await deleteLocation(id);
-			if (res.status === 200) {
+			try {
+				const res = await deleteLocation(id);
 				setLocations(
 					locations.filter((location) => location._id !== res.data._id)
 				);
-			} else {
-				console.log(res.data);
+				toast.success(`${res.data.name} was deleted.`);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

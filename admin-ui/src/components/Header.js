@@ -31,7 +31,7 @@ const Header = ({ title }) => {
 			/>
 			<div className='navbar-nav'>
 				<div className='nav-item text-nowrap'>
-					<a className='nav-link px-3' onClick={() => logout()}>
+					<a className='nav-link px-3' onClick={logout}>
 						Sign out
 					</a>
 				</div>

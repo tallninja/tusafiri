@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getEmployee, editEmployee } from '../../api';
 import { EmployeeForm } from './EmployeeForm';
@@ -12,11 +13,12 @@ export const EditEmployee = () => {
 
 	useEffect(() => {
 		(async () => {
-			let res = await getEmployee(id);
-			if (res.status === 200) {
+			try {
+				const res = await getEmployee(id);
 				setEmployeeData(res.data);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [id]);
@@ -27,11 +29,13 @@ export const EditEmployee = () => {
 				data,
 				Object.keys(data).filter((k) => data[k] !== employeeData[k])
 			); // get only the updated fields
-			let res = await editEmployee(employeeData._id, updateData);
-			if (res.status === 200) {
+			try {
+				const res = await editEmployee(employeeData._id, updateData);
+				toast.success(`${res.data.employeeId} was updated`);
 				navigate(-1);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

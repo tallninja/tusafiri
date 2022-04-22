@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 import useApiAuth from '../../hooks/useApiAuth';
 
@@ -20,9 +21,10 @@ export const Payments = () => {
 				setPayments(res.data);
 				setIsLoading(false);
 			} catch (err) {
-				console.error(err);
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [apiAuth]);

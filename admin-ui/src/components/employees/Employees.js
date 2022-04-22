@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import {
 	getDrivers,
 	getFleetManagers,
@@ -48,14 +50,15 @@ export const Employees = () => {
 				}
 			};
 
-			let res = await getEmployees();
-			if (res.status === 200) {
+			try {
+				const res = await getEmployees();
 				setEmployees(res.data);
 				setIsLoading(false);
-			} else {
-				console.log(res.data);
+			} catch (err) {
 				setIsLoading(false);
 				setIsError(true);
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [role]);
@@ -66,13 +69,15 @@ export const Employees = () => {
 
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure you want to delete this record ?')) {
-			let res = await deleteEmployee(id);
-			if (res.status === 200) {
+			try {
+				const res = await deleteEmployee(id);
 				setEmployees(
 					employees.filter((employee) => employee._id !== res.data._id)
 				);
-			} else {
-				console.log(res.data);
+				toast.success(`${res.data.employeeId} was deleted.`);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

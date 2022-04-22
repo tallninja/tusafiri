@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 import { getRoutes } from '../../../api';
 
@@ -7,9 +8,12 @@ const RouteSelect = ({ id, handleSelect, defaultValue }) => {
 
 	useEffect(() => {
 		(async () => {
-			const res = await getRoutes();
-			if (res.status === 200) {
+			try {
+				const res = await getRoutes();
 				setRoutes(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, []);

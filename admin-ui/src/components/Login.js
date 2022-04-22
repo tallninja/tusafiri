@@ -21,14 +21,10 @@ const Login = () => {
 		try {
 			const userDetails = await signin({ email, password });
 			setAuth(userDetails);
-			setEmail('');
-			setPassword('');
 			navigate(from, { replace: true });
+			toast.success('Login successful.');
 		} catch (err) {
-			setEmail('');
-			setPassword('');
-			console.error(err);
-			toast.error(err.response.data);
+			toast.error(err.response.data.message);
 		}
 	};
 

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { getLocation, editLocation } from '../../../api';
 import { LocationForm } from './LocationForm';
@@ -12,11 +13,12 @@ export const EditLocation = () => {
 
 	useEffect(() => {
 		(async () => {
-			let res = await getLocation(id);
-			if (res.status === 200) {
+			try {
+				const res = await getLocation(id);
 				setLocationData(res.data);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		})();
 	}, [id]);
@@ -27,11 +29,13 @@ export const EditLocation = () => {
 				data,
 				Object.keys(data).filter((k) => data[k] !== locationData[k])
 			); // get only the updated fields
-			let res = await editLocation(locationData._id, updateData);
-			if (res.status === 200) {
+			try {
+				const res = await editLocation(locationData._id, updateData);
+				toast.success(`${res.data.name} was updated.`);
 				navigate(-1);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.message);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};

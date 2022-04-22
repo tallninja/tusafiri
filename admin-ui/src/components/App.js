@@ -1,6 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './index.css';
 import PageNotFound from './PageNotFound';
@@ -20,6 +22,8 @@ import { Payments } from './payments';
 import { Tickets } from './tickets';
 
 const queryClient = new QueryClient();
+
+toast.configure();
 
 const App = () => {
 	return (

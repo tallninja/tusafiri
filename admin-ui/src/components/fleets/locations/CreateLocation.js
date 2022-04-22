@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { createLocation } from '../../../api';
 import { LocationForm } from './LocationForm';
@@ -9,11 +10,13 @@ export const CreateLocation = () => {
 
 	const handleSubmit = async (locationData) => {
 		if (window.confirm('Are you sure you want to add this record ?')) {
-			let res = await createLocation(locationData);
-			if (res.status === 200) {
+			try {
+				const res = await createLocation(locationData);
+				toast.success(`${res.data.name} was created.`);
 				navigate(-1);
-			} else {
-				console.log(res.data);
+			} catch (err) {
+				console.error(err?.response?.data);
+				toast.error(err?.response?.data?.message || 'An error occured.');
 			}
 		}
 	};
