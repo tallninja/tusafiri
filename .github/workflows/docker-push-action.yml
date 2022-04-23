@@ -42,7 +42,7 @@ jobs:
       - name: Build and Push Feedback System
         uses: docker/build-push-action@v2
         with:
-          context: ./fleet-management
+          context: ./feedback-system
           push: true
           tags: ernestwambua/tusafiri-feedback-system:latest
 
