@@ -10,9 +10,9 @@ const AdCards = () => {
 					iconClass='fa-solid fa-globe'
 				/>
 				<AdCard
-					title='BEST PRICE GUARANTEE'
-					text='Price match within 48 hours of order confirmation'
-					iconClass='fa-solid fa-dollar-sign'
+					title='PACKAGE DELIVERIES'
+					text='We ensure packages reach their destinations in less than 24 hours'
+					iconClass='fa-solid fa-truck-fast'
 				/>
 				<AdCard
 					title='TOP NOTCH SUPPORT'

@@ -1,23 +1,23 @@
 version: '3.1'
 services:
-  # db:
-  #   image: mongo
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: oldVlZKeoyVpJzHPyIhi
-  #   volumes:
-  #     - /data/db
+  db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: oldVlZKeoyVpJzHPyIhi
+    volumes:
+      - /data/db
 
-  # mongo-express:
-  #   image: mongo-express
-  #   restart: always
-  #   ports:
-  #     - 5006:8081
-  #   environment:
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: oldVlZKeoyVpJzHPyIhi
-  #     ME_CONFIG_MONGODB_URL: mongodb://root:oldVlZKeoyVpJzHPyIhi@mongo:27017/
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 5006:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: oldVlZKeoyVpJzHPyIhi
+      ME_CONFIG_MONGODB_URL: ${DB_URI}
 
   employee-man:
     image: ernestwambua/tusafiri-employee-management:latest
@@ -27,8 +27,8 @@ services:
     ports:
       - 5005:5005
     restart: always
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
 
   fleet-man:
     image: ernestwambua/tusafiri-fleet-management:latest
@@ -38,8 +38,8 @@ services:
     ports:
       - 5004:5004
     restart: always
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
 
   booking:
     image: ernestwambua/tusafiri-booking-system:latest
@@ -49,8 +49,8 @@ services:
     ports:
       - 5003:5003
     restart: always
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
 
   feedback:
     image: ernestwambua/tusafiri-feedback-system:latest
@@ -60,8 +60,8 @@ services:
     ports:
       - 5002:5002
     restart: always
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
 
   api-gateway:
     image: ernestwambua/tusafiri-api-gateway:latest
@@ -71,8 +71,8 @@ services:
     ports:
       - 5000:5000
     restart: always
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
 
   admin-ui:
     image: ernestwambua/tusafiri-admin-ui:latest
