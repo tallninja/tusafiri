@@ -53,5 +53,3 @@ docker-compose --env-file .env.local ...
 Note by default docker compose will use .env file to inject environment variables in this case we add ```--env-file``` which specify an alternate environment file.
 
 Enjoy :D
-
-HAPPY HACKING! :D
